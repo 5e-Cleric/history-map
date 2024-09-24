@@ -99,7 +99,7 @@ function Edit() {
 	const saveNewEvent = async (event) => {
 		try {
 			const response = await fetch(
-				`http://127.0.0.1:3050/api/event/${urlId}`,
+				`${import.meta.env.VITE_API_URL}/api/event/${urlId}`,
 				{
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
@@ -116,7 +116,7 @@ function Edit() {
 	const updateEventPosition = async (event) => {
 		try {
 			const response = await fetch(
-				`http://127.0.0.1:3050/api/event/${urlId}/${event.eventId}`, // Ensure the correct endpoint for updating
+				`${import.meta.env.VITE_API_URL}/api/event/${urlId}/${event.eventId}`, // Ensure the correct endpoint for updating
 				{
 					method: 'PUT', // Assuming you're using PUT for updating
 					headers: { 'Content-Type': 'application/json' },
