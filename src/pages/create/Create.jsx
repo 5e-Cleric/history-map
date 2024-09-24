@@ -29,8 +29,6 @@ function Create() {
 			
 		}
 
-		console.log(map);
-
 		try {
             const response = await fetch('http://localhost:3050/api/map/new', {
                 method: 'POST',
@@ -39,6 +37,7 @@ function Create() {
             });
             const data = await response.json();
             console.log('map created:', data);
+			window.location.href = '/all'
         } catch (error) {
             console.error('Error creating map:', error);
             console.error(map);
