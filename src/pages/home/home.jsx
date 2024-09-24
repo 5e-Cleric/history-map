@@ -2,7 +2,6 @@ import mapLogo from '@assets/map.jpg';
 import './home.css';
 import Nav from '@components/nav/Nav';
 
-
 function Home() {
 	return (
 		<div className="page home">
@@ -10,7 +9,7 @@ function Home() {
 			<main className="content">
 				<div>
 					<img
-                        className="logo"
+						className="logo"
 						src={mapLogo}
 						alt="map logo"
 						width="500px"
@@ -21,7 +20,11 @@ function Home() {
 				<div className="card">
 					<a href="/create">Create your map</a>
 					<br />
-					<a href={`http://naturalcrit.com/login?redirect=${window.location.href}`}>Sign up</a>
+					<a
+						href={`http://naturalcrit.com/login?redirect=${window.location.href}`}
+					>
+						Sign up
+					</a>
 				</div>
 			</main>
 		</div>

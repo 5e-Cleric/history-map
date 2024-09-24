@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Home from '@pages/home/home';
-import Create from "@pages/create/create";
-import All from "@pages/all";
-import Edit from "@pages/editMap/editMap";
+import Home from '@pages/home/Home';
+import Create from "@pages/create/Create";
+import All from "@pages/All";
+import Edit from "@pages/editMap/EditMap";
 
 const AppRoutes = () => {
   return (

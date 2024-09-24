@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import Nav from '@components/nav/Nav';
 import './editMap.css';
-import Toolbar from '@components/toolbar/toolbar';
-import EventPin from '@components/event/eventPin';
+import Nav from '@components/nav/Nav';
+import Toolbar from '@components/toolbar/Toolbar';
+import EventPin from '@components/event/EventPin';
 import Sidebar from '@components/sidebar/Sidebar';
-import Timeline from '../../components/timeline/timeline';
+import Timeline from '../../components/timeline/Timeline';
 
 function Edit() {
 	const [map, setMap] = useState(null);

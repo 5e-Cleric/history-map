@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './sidebar.css'; // Change the stylesheet name accordingly
-import CustomDate from '@components/customDate/customDate'; // Import the custom date component
+import CustomDate from '@components/customDate/CustomDate'; // Import the custom date component
 
 function Sidebar({ onSubmit, mode, event, map, onSidebarToggle, onDelete }) {
 	const [title, setTitle] = useState('');

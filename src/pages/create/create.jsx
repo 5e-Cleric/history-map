@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import './create.css';
 import Nav from '@components/nav/Nav';
-import CustomDate from '@components/customDate/customDate';
+import CustomDate from '@components/customDate/CustomDate';
 
 function Create() {
 	const titleRef = useRef(null);
