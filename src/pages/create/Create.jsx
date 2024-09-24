@@ -18,30 +18,32 @@ function Create() {
 		}
 
 		const map = {
-			title : titleRef.current.value,
-			description : descriptionRef.current.value,
-			map : mapRef.current.value,
-			dateSystem : {
-				dateNames : dateNamesRef.current.getValues(),
-				dateEquivalences : dateEquivalencesRef.current.getValues(),
-				dateStart : dateStartRef.current.getValues()
-			}
-			
-		}
+			title: titleRef.current.value,
+			description: descriptionRef.current.value,
+			map: mapRef.current.value,
+			dateSystem: {
+				dateNames: dateNamesRef.current.getValues(),
+				dateEquivalences: dateEquivalencesRef.current.getValues(),
+				dateStart: dateStartRef.current.getValues(),
+			},
+		};
 
 		try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/map/new`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(map),
-            });
-            const data = await response.json();
-            console.log('map created:', data);
-			window.location.href = '/all'
-        } catch (error) {
-            console.error('Error creating map:', error);
-            console.error(map);
-        }
+			const response = await fetch(
+				`${import.meta.env.VITE_API_URL}/api/map/new`,
+				{
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify(map),
+				}
+			);
+			const data = await response.json();
+			console.log('map created:', data);
+			window.location.href = '/all';
+		} catch (error) {
+			console.error('Error creating map:', error);
+			console.error(map);
+		}
 	};
 
 	const validateForm = () => {
@@ -83,13 +85,15 @@ function Create() {
 							dataType="equivalences"
 						/>
 					</label>
-					<small>
+					{/*
+						<small>
 						Tip! if you need a group to have different number, you
 						can do <br />
 						<code>30 || 31</code> to get the first number to odd
 						elements, <br />
 						and the second for even ones
 					</small>
+					*/}
 					<label className="fieldGroup">
 						Starting Date:
 						<CustomDate ref={dateStartRef} dataType="date" />

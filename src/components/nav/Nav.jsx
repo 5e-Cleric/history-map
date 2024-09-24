@@ -24,7 +24,7 @@ const HamburgerMenu = () => {
 						<a href="/create">Create</a>
 					</li>
 					<li>
-						<a href="/all">User page</a>
+						<a href="/all">All events</a>
 					</li>
 				</ul>
 			</nav>

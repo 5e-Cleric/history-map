@@ -1,4 +1,4 @@
-import mapLogo from '@assets/map.jpg';
+import mapLogo from '@assets/mapIcon.svg';
 import './home.css';
 import Nav from '@components/nav/Nav';
 

@@ -16,6 +16,7 @@ const Toolbar = ({ onSidebarToggle, onTimelineToggle }) => {
 			<ul>
 				<li>
 					<button
+						title="open map sidebar"
 						className="sidebarButton"
 						onClick={() =>
 							onSidebarToggle({ mode: 'map', event: null })
@@ -26,6 +27,7 @@ const Toolbar = ({ onSidebarToggle, onTimelineToggle }) => {
 				</li>
 				<li>
 					<button
+						title="drag to add an event"
 						draggable
 						onDragStart={handleDragStart}
 						onDragEnd={handleDragEnd}
@@ -35,13 +37,14 @@ const Toolbar = ({ onSidebarToggle, onTimelineToggle }) => {
 				</li>
 				<li>
 					<div className="layers">
-						<button>
+						<button title="this is not ready yet">
 							<i className="fa-solid fa-layer-group"></i>
 						</button>
 					</div>
 				</li>
 				<li>
 					<button
+						title="open timeline"
 						className="timelineButton"
 						onClick={onTimelineToggle}
 					>

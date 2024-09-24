@@ -93,6 +93,10 @@ function All() {
 			<Nav />
 			<main className="content">
 				<h1>All maps</h1>
+				<small>
+					This page is temporary and will be replaced by a userpage
+					whenever i add users.
+				</small>
 				{rendermaps()}
 			</main>
 		</div>
