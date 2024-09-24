@@ -35,7 +35,7 @@ function Sidebar({ onSubmit, mode, event, map, onSidebarToggle, onDelete }) {
 
 		if (mode === 'editEvent' && event) {
 			// Pass the event id if editing
-			onSubmit({ ...eventData, id: event.eventId });
+			onSubmit({ ...eventData, eventId: event.eventId });
 		} else {
 			// Handle create event if no event object is passed
 			onSubmit(eventData);
