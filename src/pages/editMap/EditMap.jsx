@@ -87,12 +87,14 @@ function Edit() {
 			position: newPosition,
 		};
 		setEvents(updatedEvents);
-		updateEventPosition(updatedEvents[index]);
+		updateEvent(updatedEvents[index]);
 	};
 
-	const createEvent = async (newEvent) => {
+	const handleEvent = async (newEvent) => {
 		console.log(newEvent);
-		await saveNewEvent(newEvent);
+		if (!newEvent.eventId) await saveNewEvent(newEvent);
+		else await updateEvent(newEvent);
+		
 		fetchEvents();
 	};
 
@@ -113,7 +115,7 @@ function Edit() {
 		}
 	};
 
-	const updateEventPosition = async (event) => {
+	const updateEvent = async (event) => {
 		try {
 			const response = await fetch(
 				`${import.meta.env.VITE_API_URL}/api/event/${urlId}/${event.eventId}`, // Ensure the correct endpoint for updating
@@ -194,7 +196,7 @@ function Edit() {
 
 				{renderMap()}
 				<Sidebar
-					onSubmit={createEvent}
+					onSubmit={handleEvent}
 					mode={sidebarState.mode}
 					event={sidebarState.event}
 					map={map}
