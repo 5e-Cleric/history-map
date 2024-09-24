@@ -96,6 +96,9 @@ function All() {
 				<small>
 					This page is temporary and will be replaced by a userpage
 					whenever i add users.
+					<br />
+					<br />
+					<br />
 				</small>
 				{rendermaps()}
 			</main>
