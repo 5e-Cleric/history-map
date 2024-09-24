@@ -2,6 +2,7 @@ import './timeline.css';
 
 const convertToTotalDays = (date, equivalences) => {
     if (!date) return 0;
+    console.log(equivalences);
 
     const daysInYear = equivalences.month * equivalences.week * equivalences.day; // Total days in one year
     const daysInMonth = equivalences.week * equivalences.day; // Total days in one month
