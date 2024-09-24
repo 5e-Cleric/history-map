@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Home from '@pages/home/Home';
+import Home from '@pages/home/home';
 import Create from "@pages/create/create";
 import All from "@pages/all";
 import Edit from "@pages/editMap/editMap";
