@@ -23,7 +23,7 @@ function Home() {
 					<a
 						href={`http://naturalcrit.com/login?redirect=${window.location.href}`}
 					>
-						Sign up
+						Sign up (not ready yet)
 					</a>
 				</div>
 			</main>
