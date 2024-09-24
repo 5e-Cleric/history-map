@@ -81,7 +81,7 @@ const CustomDate = forwardRef(({ dataType }, ref) => {
 						ref={dateRefs[key]}
 						type="text"
 						pattern={
-							dataType === 'names' ? '^[A-Za-z]+$' : '^\\d{1,4}$'
+							dataType === 'names' ? '^[A-Za-z]+$' : '^[0-9]{1,4}$'
 						}
 						placeholder={getPlaceholder(key)}
 					/>
