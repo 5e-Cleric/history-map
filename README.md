@@ -1,8 +1,18 @@
-# React + Vite
+# Welcome to my project, historyMap
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+HistoryMap is a web tool to register events in timelines and maps, using your own data, including your own custom date system!
 
-Currently, two official plugins are available:
+It is built with the MERN stack, current temporarily hosted in Netlify + Render + Mongodb Atlas
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Work In Progress
+
+Right now, i am workin towards completing the MVP of this app, which includes:
+
+-   [x] Have different worlds, a world should include: map, timeline, events, factions?
+-   [x] In every world, add events to map, automatically added to timeline
+-   [x] For every event, add date, position, title, and description
+-   [x] Consult events based on map position, and world date in a timeline
+-   [ ] CRUD events and worlds
+
+
+Even this readme is in progress...
