@@ -102,7 +102,7 @@ function Timeline({ timelineState, map, mapEvents }) {
         !map.dateSystem.dateStart ||
         !map.dateSystem.dateEquivalences ||
         !mapEvents ||
-        mapEvents.length === 0
+        mapEvents.length < 2
     ) {
         return <div>Error: Missing required data for the timeline.</div>;
     }

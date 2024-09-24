@@ -25,7 +25,7 @@
     .sidebarContent {
         height: 100%;
         border: 30px solid;
-        border-image: url('http://localhost:8081/src/assets/codeBorder.png') 40;
+        border-image: url('/assets/codeBorder.png') 40;
 
         .deleteMap {
             font-size: 16px;
