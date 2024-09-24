@@ -124,6 +124,8 @@ function Timeline({ timelineState, map, mapEvents }) {
         convertToTotalDays(lastDate, equivalences) -
         convertToTotalDays(startDate, equivalences);
 
+    console.log(totalTimelineDays);
+
     const getDivisionsArray = () => {
         const divisions = [];
         const intervalDays = calculateDynamicInterval(totalTimelineDays, equivalences);
