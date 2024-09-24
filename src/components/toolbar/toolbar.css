@@ -1,0 +1,43 @@
+.toolbar {
+    width: fit-content;
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    translate: -50%;
+    background: #e3c79d;
+    padding: 5px 15px;
+    border-radius: 10px;
+    z-index: 1;
+    box-shadow: 0 0 5px black;
+
+    ul {
+        display: flex;
+        align-items: center;
+        gap: 40px;
+
+        li {
+            background: unset;
+            height: 100%;
+
+            button {
+                background: unset;
+                color: var(--color-secondary);
+                transform: translate(0, 0);
+
+                &:hover i {
+                    scale: 2;
+                }
+
+                &:hover, &:focus-within {
+                    background: transparent;
+                    outline: none;
+                }
+
+                i {
+                    transition: scale 0.3s;
+                    background: unset;
+                }
+            }
+        }
+    }
+}

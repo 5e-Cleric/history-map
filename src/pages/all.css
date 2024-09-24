@@ -1,0 +1,11 @@
+.all {
+    .mapList {
+        display: flex;
+        flex-direction: column;
+
+        .mapItem {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+    }
+}
