@@ -12,7 +12,7 @@ function All() {
 	}, []);
 
 	const fetchMaps = () => {
-		fetch('http://localhost:3050/api/map/all')
+		fetch('/api/map/all')
 			.then((response) => response.json())
 			.then((data) => {
 				setmaps(data);
@@ -28,7 +28,7 @@ function All() {
 
 	const deleteMap = async (id) => {
 		try {
-			await fetch(`http://localhost:3050/api/map/${id}`, {
+			await fetch(`/api/map/${id}`, {
 				method: 'DELETE',
 				headers: {
 					'Content-Type': 'application/json',
