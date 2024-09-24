@@ -13,7 +13,6 @@ function Home() {
 						src={mapLogo}
 						alt="map logo"
 						width="500px"
-						style={{ boxShadow: ' 0 0 10px black' }}
 					/>
 				</div>
 				<h1>History Map Creator</h1>
