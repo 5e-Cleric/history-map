@@ -22,7 +22,7 @@ function Edit() {
 			if (urlId) {
 				try {
 					const mapResponse = await fetch(
-						`http://localhost:3050/api/map/${urlId}`
+						`${import.meta.env.VITE_API_URL}/api/map/${urlId}`
 					);
 					const mapData = await mapResponse.json();
 					setMap(mapData);
@@ -39,7 +39,7 @@ function Edit() {
 	const fetchEvents = async () => {
 		try {
 			const eventResponse = await fetch(
-				`http://localhost:3050/api/event/${urlId}`
+				`${import.meta.env.VITE_API_URL}/api/event/${urlId}`
 			);
 			const eventData = await eventResponse.json();
 			setEvents(eventData);
