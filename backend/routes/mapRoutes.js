@@ -40,9 +40,7 @@ router.post('/new', async (req, res) => {
 		description,
 		map,
 		author,
-		dateNames,
-		dateEquivalences,
-		dateStart,
+		dateSystem
 	} = req.body;
 
 	console.log(req.body);
@@ -52,11 +50,7 @@ router.post('/new', async (req, res) => {
 			description,
 			map,
 			author: author || 'noAuthor',
-			dateSystem: {
-				dateNames,
-				dateEquivalences,
-				dateStart,
-			},
+			dateSystem,
 		});
 
 		const savedMap = await newMap.save();
