@@ -5,6 +5,7 @@ import Toolbar from '@components/toolbar/Toolbar';
 import EventPin from '@components/event/EventPin';
 import Sidebar from '@components/sidebar/Sidebar';
 import Timeline from '../../components/timeline/Timeline';
+import defaultMap from '@assets/defaultMap.jpg';
 
 function Edit() {
 	const [map, setMap] = useState(null);
@@ -94,7 +95,7 @@ function Edit() {
 		console.log(newEvent);
 		if (!newEvent.eventId) await saveNewEvent(newEvent);
 		else await updateEvent(newEvent);
-		
+
 		fetchEvents();
 	};
 
@@ -118,7 +119,9 @@ function Edit() {
 	const updateEvent = async (event) => {
 		try {
 			const response = await fetch(
-				`${import.meta.env.VITE_API_URL}/api/event/${urlId}/${event.eventId}`, // Ensure the correct endpoint for updating
+				`${import.meta.env.VITE_API_URL}/api/event/${urlId}/${
+					event.eventId
+				}`, // Ensure the correct endpoint for updating
 				{
 					method: 'PUT', // Assuming you're using PUT for updating
 					headers: { 'Content-Type': 'application/json' },
@@ -132,6 +135,10 @@ function Edit() {
 		}
 	};
 
+	const handleImageError = (event) => {
+		event.target.src = defaultMap;
+	};
+
 	const renderMap = () => {
 		if (map) {
 			return (
@@ -140,7 +147,16 @@ function Edit() {
 					onDragOver={handleDragOver}
 					onDrop={handleDrop}
 				>
-					<img src={map.map} alt="your map" className="map" />
+					<img
+						src={map.map}
+						onError={handleImageError}
+						alt="your map"
+						className="map"
+					/>
+					<a className='defaultAttribution' href="https://www.freepik.com/free-vector/ancient-abstract-earth-relief-old-map-generated-conceptual-vector-elevation-map-fantasy-landscape_25145565.htm#query=fantasy%20map&position=0&from_view=keyword&track=ais_hybrid&uuid=1d282c7f-1ee4-42fc-b720-6086b25c7df6">
+						Default Image by GarryKillian on Freepik
+					</a>
+
 					<div className="events">{renderEvents(events)}</div>
 				</article>
 			);

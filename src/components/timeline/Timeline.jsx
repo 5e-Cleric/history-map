@@ -105,7 +105,11 @@ function Timeline({ timelineState, map, mapEvents }) {
         !mapEvents ||
         mapEvents.length < 2
     ) {
-        return <div>Error: Missing required data for the timeline.</div>;
+        return  <article className={`timeline ${timelineState ? 'open' : ''}`}>
+            <h2>You need at least two events to use the timeline</h2>
+        <div className="bar">
+        </div>
+    </article>
     }
     const events = mapEvents.filter((event) => event.date);
 

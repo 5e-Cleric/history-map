@@ -11,6 +11,14 @@
 				width: 100%;
 				max-height: 95vh;
 				object-fit: contain;
+
+				+.defaultAttribution {
+					display: none;
+				}
+
+				&[src*="defaultMap"]+.defaultAttribution {
+					display:inline;
+				}
 			}
 
 
