@@ -38,9 +38,9 @@ function Create() {
 					body: JSON.stringify(map),
 				}
 			);
-			const data = await response.json();
-			console.log('map created:', data);
-			//window.location.href = '/all';
+			const resultMap = await response.json();
+			console.log('map created:', resultMap);
+			window.location.href = `/map/${resultMap.id}`;
 		} catch (error) {
 			console.error('Error creating map:', error);
 			console.error(map);
