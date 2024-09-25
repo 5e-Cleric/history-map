@@ -13,7 +13,7 @@ dotenv.config({ path: `.env.${env}` }); // Load .env.local or .env.production ba
 console.log(process.env);
 const app = express();
 const PORT = process.env.PORT || 3050;
-const mongoURI = process.env.MONGO_URI;
+const mongoURI = process.env.MONGODB_URI;
 
 // Middleware to handle CORS
 app.use(cors());
