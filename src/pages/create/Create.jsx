@@ -28,9 +28,10 @@ function Create() {
 			},
 		};
 
+		console.log(map);
 		try {
 			const response = await fetch(
-				`${process.env.VITE_API_URL}/api/map/new`,
+				`${import.meta.env.VITE_API_URL}/api/map/new`,
 				{
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
@@ -39,7 +40,7 @@ function Create() {
 			);
 			const data = await response.json();
 			console.log('map created:', data);
-			window.location.href = '/all';
+			//window.location.href = '/all';
 		} catch (error) {
 			console.error('Error creating map:', error);
 			console.error(map);

@@ -12,8 +12,8 @@ function All() {
 	}, []);
 
 	const fetchMaps = () => {
-		console.log(`fetching to ${process.env.VITE_API_URL}/api/map/all`);
-		fetch(`${process.env.VITE_API_URL}/api/map/all`)
+		console.log(`fetching to ${import.meta.env.VITE_API_URL}/api/map/all`);
+		fetch(`${import.meta.env.VITE_API_URL}/api/map/all`)
 			.then((response) => response.json())
 			.then((data) => {
 				setmaps(data);
@@ -29,7 +29,7 @@ function All() {
 
 	const deleteMap = async (id) => {
 		try {
-			await fetch(`${process.env.VITE_API_URL}/api/map/${id}`, {
+			await fetch(`${import.meta.env.VITE_API_URL}/api/map/${id}`, {
 				method: 'DELETE',
 				headers: {
 					'Content-Type': 'application/json',
