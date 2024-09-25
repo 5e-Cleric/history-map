@@ -46,7 +46,7 @@ function Sidebar({ onSubmit, mode, event, map, onSidebarToggle, onDelete }) {
 	const deleteEvent = async () => {
 		try {
 			const eventResponse = await fetch(
-				`${import.meta.env.VITE_API_URL}/api/event/${event.mapId}/${event.eventId}`,
+				`${process.env.VITE_API_URL}/api/event/${event.mapId}/${event.eventId}`,
 				{ method: 'DELETE' }
 			);
 

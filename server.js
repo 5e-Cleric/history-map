@@ -1,15 +1,18 @@
 import express from 'express';
+// Load environment variables from .env
 import mongoose from 'mongoose';
 import cors from 'cors';
 import mapRoutes from './backend/routes/mapRoutes.js';
 import eventRoutes from './backend/routes/eventRoutes.js';
+import dotenv from 'dotenv';
+
+const env = process.env.NODE_ENV || 'development';
+
+dotenv.config({ path: `.env.${env}` }); // Load .env.local or .env.production based on NODE_ENV
 
 const app = express();
-const PORT = 3050;
-
-const dbCreds = { username: 'history-map' , password: 'QFIDyC22jHsR9ubj' };
-// MongoDB connection string with credentials and database name
-const mongoURI = `mongodb+srv://history-map:${dbCreds.password}@history-map.tjwf6.mongodb.net/historymap?retryWrites=true&w=majority`;
+const PORT = process.env.PORT || 3050;
+const mongoURI = process.env.MONGO_URI;
 
 // Middleware to handle CORS
 app.use(cors());
@@ -17,32 +20,24 @@ app.use(cors());
 // Middleware to parse JSON bodies
 app.use(express.json());
 
-// Handle connection errors with a custom function
-const handleConnectionError = (error) => {
-    if (error) {
-        console.error('Could not connect to MongoDB: \n');
-        console.error(error);
-        console.error('\nEnsure MongoDB URI is configured properly and MongoDB is running.');
-        process.exit(1); // non-zero exit code to indicate an error
-    }
-};
-
 // Connect to MongoDB using Mongoose
 mongoose
-    .connect(mongoURI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    })
-    .then(() => console.log('MongoDB connected'))
-    .catch((error) => handleConnectionError(error));
+	.connect(mongoURI, {
+		useNewUrlParser: true,
+		useUnifiedTopology: true,
+	})
+	.then(() => console.log('MongoDB connected'))
+	.catch((error) => {
+		console.error('Error connecting to MongoDB:', error);
+		console.error(
+			'Ensure MongoDB URI is configured properly and MongoDB is running.'
+		);
+		process.exit(1);
+	});
 
-// Define routes
+// Define a simple route
 app.get('/', (req, res) => {
-    res.send('Hello from Express!');
-});
-
-app.use((req, res, next) => {
-    next();
+	res.send('Hello from Express!');
 });
 
 // Use the map routes

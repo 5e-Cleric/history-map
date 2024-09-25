@@ -22,7 +22,7 @@ function Edit() {
 			if (urlId) {
 				try {
 					const mapResponse = await fetch(
-						`${import.meta.env.VITE_API_URL}/api/map/${urlId}`
+						`${process.env.VITE_API_URL}/api/map/${urlId}`
 					);
 					const mapData = await mapResponse.json();
 					setMap(mapData);
@@ -39,7 +39,7 @@ function Edit() {
 	const fetchEvents = async () => {
 		try {
 			const eventResponse = await fetch(
-				`${import.meta.env.VITE_API_URL}/api/event/${urlId}`
+				`${process.env.VITE_API_URL}/api/event/${urlId}`
 			);
 			const eventData = await eventResponse.json();
 			setEvents(eventData);
@@ -101,7 +101,7 @@ function Edit() {
 	const saveNewEvent = async (event) => {
 		try {
 			const response = await fetch(
-				`${import.meta.env.VITE_API_URL}/api/event/${urlId}`,
+				`${process.env.VITE_API_URL}/api/event/${urlId}`,
 				{
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
@@ -118,7 +118,7 @@ function Edit() {
 	const updateEvent = async (event) => {
 		try {
 			const response = await fetch(
-				`${import.meta.env.VITE_API_URL}/api/event/${urlId}/${event.eventId}`, // Ensure the correct endpoint for updating
+				`${process.env.VITE_API_URL}/api/event/${urlId}/${event.eventId}`, // Ensure the correct endpoint for updating
 				{
 					method: 'PUT', // Assuming you're using PUT for updating
 					headers: { 'Content-Type': 'application/json' },
