@@ -10,6 +10,7 @@ const env = process.env.NODE_ENV || 'development';
 
 dotenv.config({ path: `.env.${env}` }); // Load .env.local or .env.production based on NODE_ENV
 
+console.log(process.env);
 const app = express();
 const PORT = process.env.PORT || 3050;
 const mongoURI = process.env.MONGO_URI;
