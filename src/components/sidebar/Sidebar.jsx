@@ -1,12 +1,25 @@
-import React, { useEffect, useState, useRef } from 'react';
-import './sidebar.css'; // Change the stylesheet name accordingly
-import CustomDate from '@components/customDate/CustomDate'; // Import the custom date component
+import { useEffect, useState, useRef, useContext } from 'react';
+import './sidebar.css';
+import CustomDate from '@components/customDate/CustomDate';
+import { EditContext } from '../../pages/editMap/EditContext';
 
-function Sidebar({ onSubmit, mode, event, map, onSidebarToggle, onDelete }) {
+function Sidebar() {
+
+	const {
+		map,
+		sidebarState,
+		handleEvent,
+
+		toggleSidebar,
+	} = useContext(EditContext);
+
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
 	const [position, setPosition] = useState({ top: null, left: null });
 	const dateRef = useRef(null);
+
+	const mode = sidebarState.mode;
+	const event = sidebarState.event;
 
 	useEffect(() => {
 		if (mode === 'editEvent' && event) {
@@ -35,12 +48,12 @@ function Sidebar({ onSubmit, mode, event, map, onSidebarToggle, onDelete }) {
 
 		if (mode === 'editEvent' && event) {
 			// Pass the event id if editing
-			onSubmit({ ...eventData, eventId: event.eventId });
+			handleEvent({ ...eventData, eventId: event.eventId })
 		} else {
 			// Handle create event if no event object is passed
-			onSubmit(eventData);
+			handleEvent(eventData);
 		}
-		onSidebarToggle({ mode: mode, event: event })
+		toggleSidebar({ mode: mode, event: event })
 	};
 
 	const deleteEvent = async () => {
@@ -112,7 +125,7 @@ function Sidebar({ onSubmit, mode, event, map, onSidebarToggle, onDelete }) {
 							<button
 								className="green edit"
 								onClick={() =>
-									onSidebarToggle({
+									toggleSidebar({
 										mode: 'editEvent',
 										event: event,
 									})
@@ -176,7 +189,7 @@ function Sidebar({ onSubmit, mode, event, map, onSidebarToggle, onDelete }) {
 				<button
 					className="closeButton"
 					onClick={() =>
-						onSidebarToggle({ mode: mode, event: event })
+						toggleSidebar({ mode: mode, event: event })
 					}
 				>
 					X
