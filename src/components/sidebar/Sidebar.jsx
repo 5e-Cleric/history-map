@@ -1,12 +1,32 @@
-import React, { useEffect, useState, useRef } from 'react';
-import './sidebar.css'; // Change the stylesheet name accordingly
-import CustomDate from '@components/customDate/CustomDate'; // Import the custom date component
+import { useEffect, useState, useRef, useContext } from 'react';
+import './sidebar.css';
+import CustomDate from '@components/customDate/CustomDate';
+import { EditContext } from '../../pages/editMap/EditContext';
 
-function Sidebar({ onSubmit, mode, event, map, onSidebarToggle, onDelete }) {
+function Sidebar() {
+	const {
+		map,
+		sidebarState,
+		updateMap,
+		deleteMap,
+		updateEvent,
+		saveNewEvent,
+		deleteEvent,
+
+		toggleSidebar,
+	} = useContext(EditContext);
+
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
 	const [position, setPosition] = useState({ top: null, left: null });
+	const [mapLink, setMapLink] = useState('');
 	const dateRef = useRef(null);
+	const dateNamesRef = useRef(null);
+	const dateEquivalencesRef = useRef(null);
+	const dateStartRef = useRef(null);
+
+	const mode = sidebarState.mode;
+	const event = sidebarState.event;
 
 	useEffect(() => {
 		if (mode === 'editEvent' && event) {
@@ -16,49 +36,54 @@ function Sidebar({ onSubmit, mode, event, map, onSidebarToggle, onDelete }) {
 				dateRef.current.setValues(event.date);
 			}
 			setPosition(event.position);
-		} else if (mode === 'map') {
+		} else if (mode === 'editMap') {
 			// Reset fields for map mode
-			setTitle('');
-			setDescription('');
+			setTitle(map.title);
+			setDescription(map.description);
+			setMapLink(map.map);
+			dateNamesRef.current.setValues(map.dateSystem.dateNames);
+			dateEquivalencesRef.current.setValues(
+				map.dateSystem.dateEquivalences
+			);
+			dateStartRef.current.setValues(map.dateSystem.dateStart);
 		}
-	}, [mode, event]);
+	}, [mode, event, map]);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		const eventData = {
-			title,
-			description,
-			position,
-			date: dateRef.current.getValues(),
-		};
+		if (mode === 'editMap') {
+			const mapData = {
+				title,
+				author: map.author,
+				description,
+				map: mapLink,
+				id: map.id ,
+				dateSystem: {
+					dateNames: dateNamesRef.current.getValues(),
+					dateEquivalences: dateEquivalencesRef.current.getValues(),
+					dateStart: dateStartRef.current.getValues(),
+				},
+			};
 
-		if (mode === 'editEvent' && event) {
-			// Pass the event id if editing
-			onSubmit({ ...eventData, eventId: event.eventId });
+			updateMap(mapData);
+
+			toggleSidebar({ mode: 'map', event: null });
 		} else {
-			// Handle create event if no event object is passed
-			onSubmit(eventData);
-		}
-		onSidebarToggle({ mode: mode, event: event })
-	};
+			const eventData = {
+				eventId: event.eventId,
+				title,
+				description,
+				position,
+				date: dateRef.current.getValues(),
+			};
 
-	const deleteEvent = async () => {
-		try {
-			const eventResponse = await fetch(
-				`${import.meta.env.VITE_API_URL}/api/event/${event.mapId}/${event.eventId}`,
-				{ method: 'DELETE' }
-			);
-
-			if (!eventResponse.ok) {
-				throw new Error('Failed to delete event');
+			if (mode === 'editEvent' && event) {
+				updateEvent(eventData);
+			} else {
+				saveNewEvent(eventData);
 			}
-
-			const eventData = await eventResponse.json();
-			console.log('Event deleted successfully', eventData);
-			onDelete();
-		} catch (error) {
-			console.error('Error deleting event:', error);
+			toggleSidebar({ mode: mode, event: event });
 		}
 	};
 
@@ -92,7 +117,7 @@ function Sidebar({ onSubmit, mode, event, map, onSidebarToggle, onDelete }) {
 								<CustomDate ref={dateRef} dataType="date" />
 							</label>
 							<button type="submit" className="green">
-								{!event ? 'Create event' : 'Edit event'}
+								{!event ? 'Create event' : 'Save event'}
 							</button>
 						</form>
 					</div>
@@ -102,8 +127,8 @@ function Sidebar({ onSubmit, mode, event, map, onSidebarToggle, onDelete }) {
 					<div className="event view">
 						<h2 className="title">{event.title}</h2>
 						<small className="date">
-							{event.date.year}/{event.date.month}/
-							{event.date.week}/{event.date.day}
+							{event.date.year || '0'}/{event.date.month || '0'}/
+							{event.date.week || '0'}/{event.date.day || '0'}
 						</small>
 						<p className="description">
 							{event.description || 'No description.'}
@@ -112,7 +137,7 @@ function Sidebar({ onSubmit, mode, event, map, onSidebarToggle, onDelete }) {
 							<button
 								className="green edit"
 								onClick={() =>
-									onSidebarToggle({
+									toggleSidebar({
 										mode: 'editEvent',
 										event: event,
 									})
@@ -127,7 +152,7 @@ function Sidebar({ onSubmit, mode, event, map, onSidebarToggle, onDelete }) {
 											`Are you sure you want to delete ${event.title}?`
 										)
 									) {
-										deleteEvent();
+										deleteEvent(event);
 									}
 								}}
 								className="red delete"
@@ -137,6 +162,72 @@ function Sidebar({ onSubmit, mode, event, map, onSidebarToggle, onDelete }) {
 						</div>
 					</div>
 				);
+			case 'editMap':
+				return (
+					<div className="event editMap">
+						<form
+							className="form"
+							onSubmit={handleSubmit}
+							id="editmap"
+						>
+							<label className="fieldGroup">
+								Map title:
+								<input
+									value={title}
+									onChange={(e) => setTitle(e.target.value)}
+									type="text"
+								/>
+							</label>
+							<label className="fieldGroup">
+								Paste a link to your map:
+								<input
+									value={mapLink}
+									onChange={(e) => setMapLink(e.target.value)}
+									type="text"
+								/>
+							</label>
+							<label className="fieldGroup">
+								Date system names:
+								<CustomDate
+									ref={dateNamesRef}
+									dataType="names"
+								/>
+							</label>
+							<label className="fieldGroup">
+								Date system equivalences:
+								<CustomDate
+									ref={dateEquivalencesRef}
+									dataType="equivalences"
+								/>
+							</label>
+							<label className="fieldGroup">
+								Starting Date:
+								<CustomDate
+									ref={dateStartRef}
+									dataType="date"
+								/>
+							</label>
+							<label className="fieldGroup">
+								Map description:
+								<textarea
+									name="mapDescription"
+									value={description}
+									onChange={(e) =>
+										setDescription(e.target.value)
+									}
+								></textarea>
+							</label>
+							<button
+								type="submit"
+								onSubmit={handleSubmit}
+								className="green"
+							>
+								Save map
+							</button>
+						</form>
+					</div>
+				);
+				break;
 			default:
 				return (
 					<>
@@ -151,20 +242,33 @@ function Sidebar({ onSubmit, mode, event, map, onSidebarToggle, onDelete }) {
 								<p>{map.author || 'No Author.'}</p>
 							</dd>
 						</dl>
-						<button
-							onClick={() => {
-								if (
-									confirm(
-										'Are you sure you want to delete it? You will not be able to bring it back.'
-									)
-								) {
-									deleteMap(map.mapId);
-								}
-							}}
-							className="red deleteMap"
-						>
-							Delete world
-						</button>
+						<div className="sidebarActions">
+							<button
+								onClick={() => {
+									toggleSidebar({
+										mode: 'editMap',
+										event: null,
+									});
+								}}
+								className="green editMap"
+							>
+								Edit map
+							</button>
+							<button
+								onClick={() => {
+									if (
+										confirm(
+											'Are you sure you want to delete it? You will not be able to bring it back.'
+										)
+									) {
+										deleteMap(map.mapId);
+									}
+								}}
+								className="red deleteMap"
+							>
+								Delete map
+							</button>
+						</div>
 					</>
 				);
 		}
@@ -175,9 +279,7 @@ function Sidebar({ onSubmit, mode, event, map, onSidebarToggle, onDelete }) {
 			<div className="sidebarContent">
 				<button
 					className="closeButton"
-					onClick={() =>
-						onSidebarToggle({ mode: mode, event: event })
-					}
+					onClick={() => toggleSidebar({ mode: mode, event: event })}
 				>
 					X
 				</button>

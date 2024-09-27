@@ -1,6 +1,6 @@
 /* Sidebar styling */
 .sidebar {
-    --side-width: 300px;
+    --side-width: 350px;
     --time: 0.3s;
 
     width: var(--side-width);
@@ -11,15 +11,17 @@
     background-color: var(--color-primary);
     background-image: url('https://i.imgur.com/oTKpg48.png');
     background-size: 250%;
-    transition: all var(--time) ease-in-out;
+    transition: all var(--transition-dets);
     padding: 10px;
     z-index: 2;
     overflow: hidden;
 
-
     &:has(+ .timeline.open) {
         height: calc(100% - 200px);
-        box-shadow: 0 0 5px;
+
+        .fieldGroup textarea {
+            max-height: 200px;
+        }
     }
 
     .sidebarContent {
@@ -27,59 +29,65 @@
         border: 30px solid;
         border-image: url('../../assets/codeBorder.png') 40;
 
-        .deleteMap {
-            font-size: 16px;
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            translate: -50%;
-        }
-    }
-
-    &.open {
-        left: 0;
-    }
-
-    .closeButton {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: none;
-        border-radius: unset;
-        font-family: Merienda, sans-serif;
-        color: black;
-        font-size: 30px;
-        padding: 10px;
-        transition: scale 0.3s ease-in-out;
-
-        &:hover, &:focus-within {
-            background: none;
-            scale: 1.2;
-
-        }
-    }
-
-    .event {
-
-        &.view {
-
-            .date {
-                color: #555;
-            }
-        }
-
-        &.edit {
-            .fieldGroup {
-                display: flex;
-                flex-direction: column;
-            }
-        }
-
         .sidebarActions {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-top: 50px;
         }
+
+        .closeButton {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border-radius: unset;
+            font-family: Merienda, sans-serif;
+            color: black;
+            font-size: 30px;
+            padding: 10px;
+            transition: scale 0.3s ease-in-out;
+
+            &:hover, &:focus-within {
+                background: none;
+                scale: 1.2;
+
+            }
+        }
+
+        .event {
+
+            &.view {
+
+                .date {
+                    color: #555;
+                }
+            }
+
+        }
     }
+
+    &.open {
+        left: 0;
+        box-shadow: 0 0 5px;
+    }
+
+    .fieldGroup {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+
+        input, textarea {
+            width: 100%;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 70px;
+            max-width: 100%;
+            max-height: 400px;
+            transition: max-height var(--transition-dets);
+        }
+    }
+
 }

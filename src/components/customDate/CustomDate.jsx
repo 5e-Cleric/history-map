@@ -10,38 +10,20 @@ const CustomDate = forwardRef(({ dataType }, ref) => {
 		day: useRef(null),
 	};
 
-	const getPlaceholder = (key) => {
-		return dataType === 'names'
-			? key.charAt(0).toUpperCase() + key.slice(1)
-			: key === 'month'
-			? '12'
-			: key === 'year'
-			? '1'
-			: key === 'week'
-			? '4'
-			: '7';
-	};
-
 	const getDefaultValue = (key) => {
 		switch (dataType) {
 			case 'names':
-				return getPlaceholder(key);
+				return key.charAt(0) + key.slice(1);
 			case 'equivalences':
 				return key === 'year'
-					? '0001'
+					? '1'
 					: key === 'month'
-					? '0030'
+					? '30'
 					: key === 'week'
-					? '0004'
-					: '0007';
-			case 'start':
-				return key === 'year'
-					? '0000'
-					: key === 'month'
-					? '0000'
-					: key === 'week'
-					? '0000'
-					: '0000';
+					? '4'
+					: '7';
+			case 'date':
+				return '0';
 			default:
 				return '';
 		}
@@ -53,8 +35,8 @@ const CustomDate = forwardRef(({ dataType }, ref) => {
 			if (dataType !== 'names') {
 				for (const key in dateRefs) {
 					values[key] =
-						parseInt(dateRefs[key].current.value) ||
-						parseInt(getDefaultValue(key));
+						parseInt(dateRefs[key].current?.value || 0) ||
+						parseInt(getDefaultValue(key) || 0);
 				}
 			} else {
 				for (const key in dateRefs) {
@@ -66,12 +48,37 @@ const CustomDate = forwardRef(({ dataType }, ref) => {
 			return values;
 		},
 		setValues: (date) => {
-			dateRefs.year.current.value = date.year;
-			dateRefs.month.current.value = date.month;
-			dateRefs.week.current.value = date.week;
-			dateRefs.day.current.value = date.day;
+			dateRefs.year.current.value = date.year || '0';
+			dateRefs.month.current.value = date.month || '0';
+			dateRefs.week.current.value = date.week || '0';
+			dateRefs.day.current.value = date.day || '0';
 		},
 	}));
+
+	if (dataType === 'equivalences') {
+		return (
+			<div className="customDate">
+				<span className="year">
+					<input type="text" value='1' disabled/>/
+				</span>
+				{['month', 'week', 'day'].map((key) => (
+					<span key={key}>
+						<input
+							ref={dateRefs[key]}
+							type="text"
+							pattern={
+								dataType === 'names'
+									? '^[A-Za-z]+$'
+									: '^[0-9]{1,4}$'
+							}
+							defaultValue={getDefaultValue(key)}
+						/>
+						{key !== 'day' && '/'}
+					</span>
+				))}
+			</div>
+		);
+	}
 
 	return (
 		<div className="customDate">
@@ -81,9 +88,11 @@ const CustomDate = forwardRef(({ dataType }, ref) => {
 						ref={dateRefs[key]}
 						type="text"
 						pattern={
-							dataType === 'names' ? '^[A-Za-z]+$' : '^[0-9]{1,4}$'
+							dataType === 'names'
+								? '^[A-Za-z]+$'
+								: '^[0-9]{1,4}$'
 						}
-						placeholder={getPlaceholder(key)}
+						defaultValue={getDefaultValue(key)}
 					/>
 					{key !== 'day' && '/'}
 				</span>

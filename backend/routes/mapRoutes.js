@@ -14,7 +14,6 @@ router.get('/all', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
 	const { id } = req.params;
-	console.log(req.body);
 	try {
 		if (id.length !== 12) {
 			return res.status(400).json({ error: 'Invalid map ID length' });
@@ -35,13 +34,7 @@ router.get('/:id', async (req, res) => {
 
 // Create a new map
 router.post('/new', async (req, res) => {
-	const {
-		title,
-		description,
-		map,
-		author,
-		dateSystem
-	} = req.body;
+	const { title, description, map, author, dateSystem } = req.body;
 
 	console.log(req.body);
 	try {
@@ -57,6 +50,27 @@ router.post('/new', async (req, res) => {
 		res.status(201).json(savedMap);
 	} catch (error) {
 		res.status(400).json({ error: error.message });
+	}
+});
+
+//PUT route to update a map by ID
+router.put('/:id', async (req, res) => {
+	const { id } = req.params;
+	const updatedData = req.body;
+	console.log(`Updating map ${id}`);
+
+	try {
+		const map = await Map.findOne({ id: id });
+		if (!map) {
+			return res.status(404).json({ error: 'Map not found.' });
+		}
+		Object.assign(map, updatedData);
+		await map.save();
+
+		res.json(map);
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ error: error.message });
 	}
 });
 
