@@ -1,85 +1,87 @@
 /* Sidebar styling */
 .sidebar {
-    --side-width: 300px;
-    --time: 0.3s;
+	--side-width: 300px;
+	--time: 0.3s;
 
-    width: var(--side-width);
-    height: 100%;
-    position: fixed;
-    top: 0;
-    left: calc(-1 *var(--side-width));
-    background-color: var(--color-primary);
-    background-image: url('https://i.imgur.com/oTKpg48.png');
-    background-size: 250%;
-    transition: all var(--time) ease-in-out;
-    padding: 10px;
-    z-index: 2;
-    overflow: hidden;
+	width: var(--side-width);
+	height: 100%;
+	position: fixed;
+	top: 0;
+	left: calc(-1 *var(--side-width));
+	background-color: var(--color-primary);
+	background-image: url('https://i.imgur.com/oTKpg48.png');
+	background-size: 250%;
+	transition: all var(--time) ease-in-out;
+	padding: 10px;
+	z-index: 2;
+	overflow: hidden;
 
 
-    &:has(+ .timeline.open) {
-        height: calc(100% - 200px);
-    }
+	&:has(+ .timeline.open) {
+		height: calc(100% - 200px);
+	}
 
-    .sidebarContent {
-        height: 100%;
-        border: 30px solid;
-        border-image: url('../../assets/codeBorder.png') 40;
+	.sidebarActions {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-top: 50px;
+	}
 
-        .deleteMap {
-            font-size: 16px;
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            translate: -50%;
-        }
-    }
+	.sidebarContent {
+		height: 100%;
+		border: 30px solid;
+		border-image: url('../../assets/codeBorder.png') 40;
 
-    &.open {
-        left: 0;
-        box-shadow: 0 0 5px;
-    }
+		.deleteMap {
+			font-size: 16px;
+			position: absolute;
+			bottom: 30px;
+			left: 50%;
+			translate: -50%;
+		}
+	}
 
-    .closeButton {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: none;
-        border-radius: unset;
-        font-family: Merienda, sans-serif;
-        color: black;
-        font-size: 30px;
-        padding: 10px;
-        transition: scale 0.3s ease-in-out;
+	&.open {
+		left: 0;
+		box-shadow: 0 0 5px;
+	}
 
-        &:hover, &:focus-within {
-            background: none;
-            scale: 1.2;
+	.closeButton {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		background: none;
+		border-radius: unset;
+		font-family: Merienda, sans-serif;
+		color: black;
+		font-size: 30px;
+		padding: 10px;
+		transition: scale 0.3s ease-in-out;
 
-        }
-    }
+		&:hover, &:focus-within {
+			background: none;
+			scale: 1.2;
 
-    .event {
+		}
+	}
 
-        &.view {
+	.event {
 
-            .date {
-                color: #555;
-            }
-        }
+		&.view {
 
-        &.edit {
-            .fieldGroup {
-                display: flex;
-                flex-direction: column;
-            }
-        }
+			.date {
+				color: #555;
+			}
+		}
 
-        .sidebarActions {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: 50px;
-        }
-    }
+		&.edit {
+			.fieldGroup {
+				display: flex;
+				flex-direction: column;
+			}
+		}
+
+
+	}
 }
