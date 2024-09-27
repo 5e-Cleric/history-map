@@ -1,7 +1,41 @@
 .page.create {
 
-    #createmap {
 
-        
+    .tip {
+        position: relative;
+        width: 15px;
+        height: 15px;
+        margin-left: 15px;
+        display: grid;
+        place-items: center;
+        color: var(--color-primary);
+        font-size: 10px;
+        padding-bottom: 1px;
+        padding-right: 1px;
+        background: var(--color-secondary);
+        border-radius: 100px;
+
+        .tipDetails {
+            font-size: 13px;
+            font-family: 'Open Sans', sans-serif;
+            opacity: 0;
+            position: absolute;
+            width: 200px;
+            text-align: left;
+            text-wrap: pretty;
+            top: 0;
+            right: -10px;
+            translate: 100% -0.7em;
+            padding: 5px;
+            color: black;
+            background: #fff2e0;
+            border-radius: 10px;
+            filter: drop-shadow(0 0 2px);
+            transition: opacity var(--transition-dets);
+        }
+
+        &:hover .tipDetails {
+            opacity: 1;
+        }
     }
 }
