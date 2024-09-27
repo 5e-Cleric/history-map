@@ -87,7 +87,7 @@ function Sidebar() {
 								<CustomDate ref={dateRef} dataType="date" />
 							</label>
 							<button type="submit" className="green">
-								{!event ? 'Create event' : 'Edit event'}
+								{!event ? 'Create event' : 'Save event'}
 							</button>
 						</form>
 					</div>

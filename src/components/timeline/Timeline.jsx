@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import './timeline.css';
 import EventPin from '../event/EventPin';
 import { EditContext } from '../../pages/editMap/EditContext';
@@ -160,6 +160,12 @@ function Timeline() {
 		toggleTimeline,
 	} = useContext(EditContext);
 
+	const [timelineEvents, setTimelineEvents] = useState(events);
+
+	useEffect(() => {
+		if (events) setTimelineEvents(events.filter((event) => event.date));
+	}, [events]);
+
 	if (
 		!map ||
 		!map.dateSystem ||
@@ -171,21 +177,28 @@ function Timeline() {
 		return (
 			<article className={`timeline ${timelineState ? 'open' : ''}`}>
 				<h2>
-					You need at least two timelineEvents to use the timeline
+					You need at least two events to use the timeline
 				</h2>
 				<div className="bar"></div>
 			</article>
 		);
 	}
-	const timelineEvents = events.filter((event) => event.date);
 
 	const equivalences = map.dateSystem.dateEquivalences;
-
 	const getLastDate = () => {
-		const lastEvent = timelineEvents.reduce((latest, current) => {
-			return current.date.year > latest.date.year ? current : latest;
-		});
-		return lastEvent.date;
+		const eventsToCheck =
+			timelineEvents && timelineEvents.length > 0
+				? timelineEvents
+				: events;
+
+		const lastEvent = eventsToCheck.reduce((latest, current) =>
+			convertToTotalDays(current.date, equivalences) >
+			convertToTotalDays(latest.date, equivalences)
+				? current
+				: latest
+		);
+
+		return lastEvent?.date || null;
 	};
 
 	const startDate = map.dateSystem.dateStart;
@@ -267,7 +280,7 @@ function Timeline() {
 		};
 		updateEvent(events[index]);
 		setDraggingEvent(null);
-		if (sidebarState.event.eventId === events[index].eventId)
+		if (sidebarState?.event?.eventId === events[index].eventId)
 			toggleSidebar({ mode: 'viewEvent', event: events[index] });
 	};
 
@@ -284,35 +297,30 @@ function Timeline() {
 		<article className={`timeline ${timelineState ? 'open' : ''}`}>
 			<div className="bar">
 				<div className="years">
-					<div className="divisions">
-						{getDivisionsArray().map((division, index) => {
-							const divisionDays = convertToTotalDays(
-								division,
-								equivalences
-							);
-							const divisionPositionPercent =
-								((divisionDays -
-									convertToTotalDays(
-										startDate,
-										equivalences
-									)) /
-									totalTimelineDays) *
-								100;
+					{getDivisionsArray().map((division, index) => {
+						const divisionDays = convertToTotalDays(
+							division,
+							equivalences
+						);
+						const divisionPositionPercent =
+							((divisionDays -
+								convertToTotalDays(startDate, equivalences)) /
+								totalTimelineDays) *
+							100;
 
-							return (
-								<div
-									key={index}
-									className="division"
-									style={{
-										left: `${divisionPositionPercent}%`,
-									}}
-								>
-									{division.year}/{division.month}/
-									{division.week}/{division.day}
-								</div>
-							);
-						})}
-					</div>
+						return (
+							<div
+								key={index}
+								className="division"
+								style={{
+									left: `${divisionPositionPercent}%`,
+								}}
+							>
+								{division.year}/{division.month}/{division.week}
+								/{division.day}
+							</div>
+						);
+					})}
 				</div>
 			</div>
 			{rendertimelineEvents()}
