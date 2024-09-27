@@ -10,15 +10,10 @@ const CustomDate = forwardRef(({ dataType }, ref) => {
 		day: useRef(null),
 	};
 
-	const getPlaceholder = (key) => {
-		
-		return dataType === 'names' ? key.charAt(0) + key.slice(1) : key === 'month' ? '12' : key === 'year' ? '1' : key === 'week' ? '4' : '7';
-	};
-
 	const getDefaultValue = (key) => {
 		switch (dataType) {
 			case 'names':
-				return getPlaceholder(key);
+				return key.charAt(0) + key.slice(1);
 			case 'equivalences':
 				return key === 'year'
 					? '1'
@@ -27,14 +22,8 @@ const CustomDate = forwardRef(({ dataType }, ref) => {
 					: key === 'week'
 					? '4'
 					: '7';
-			case 'start':
-				return key === 'year'
-					? '0'
-					: key === 'month'
-					? '0'
-					: key === 'week'
-					? '0'
-					: '0';
+			case 'date':
+				return '0';
 			default:
 				return '';
 		}
@@ -46,7 +35,7 @@ const CustomDate = forwardRef(({ dataType }, ref) => {
 			if (dataType !== 'names') {
 				for (const key in dateRefs) {
 					values[key] =
-						parseInt(dateRefs[key].current.value || 0) ||
+						parseInt(dateRefs[key].current?.value || 0) ||
 						parseInt(getDefaultValue(key) || 0);
 				}
 			} else {
@@ -66,6 +55,31 @@ const CustomDate = forwardRef(({ dataType }, ref) => {
 		},
 	}));
 
+	if (dataType === 'equivalences') {
+		return (
+			<div className="customDate">
+				<span className="year">
+					<input type="text" value='1' disabled/>/
+				</span>
+				{['month', 'week', 'day'].map((key) => (
+					<span key={key}>
+						<input
+							ref={dateRefs[key]}
+							type="text"
+							pattern={
+								dataType === 'names'
+									? '^[A-Za-z]+$'
+									: '^[0-9]{1,4}$'
+							}
+							defaultValue={getDefaultValue(key)}
+						/>
+						{key !== 'day' && '/'}
+					</span>
+				))}
+			</div>
+		);
+	}
+
 	return (
 		<div className="customDate">
 			{['year', 'month', 'week', 'day'].map((key) => (
@@ -79,7 +93,6 @@ const CustomDate = forwardRef(({ dataType }, ref) => {
 								: '^[0-9]{1,4}$'
 						}
 						defaultValue={getDefaultValue(key)}
-						placeholder={getPlaceholder(key)}
 					/>
 					{key !== 'day' && '/'}
 				</span>

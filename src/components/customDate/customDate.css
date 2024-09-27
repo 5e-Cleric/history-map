@@ -1,5 +1,7 @@
 .customDate {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap:5px;
     height: 1.5em;
     border-radius: 5px;
     width: fit-content;

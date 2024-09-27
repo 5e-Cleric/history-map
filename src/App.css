@@ -120,6 +120,12 @@ button, input:is([type="submit"], [type="button"]) {
       padding: 5px;
       font-family: monospace;
       width: 100%;
+
+      &:disabled {
+        opacity: 0.5;
+        user-select: none;
+        pointer-events: none;
+      }
     }
 
     textarea {
