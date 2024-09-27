@@ -30,7 +30,7 @@ router.get('/:eventId', async (req, res) => {
 });
 router.put('/:mapId/:eventId', async (req, res) => {
 	const { mapId, eventId } = req.params;
-	const updateData = req.body;
+	const updatedData = req.body;
 	console.log(`Updating event ${eventId} for map ${mapId}`);
 
 	try {
@@ -41,7 +41,7 @@ router.put('/:mapId/:eventId', async (req, res) => {
 				.status(404)
 				.json({ error: 'Event not found for this map' });
 		}
-		Object.assign(event, updateData);
+		Object.assign(event, updatedData);
 		await event.save();
 
 		res.json(event);
