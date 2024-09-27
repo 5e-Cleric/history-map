@@ -1,7 +1,6 @@
 /* Sidebar styling */
 .sidebar {
     --side-width: 300px;
-    --time: 0.3s;
 
     width: var(--side-width);
     height: 100%;
@@ -11,7 +10,7 @@
     background-color: var(--color-primary);
     background-image: url('https://i.imgur.com/oTKpg48.png');
     background-size: 250%;
-    transition: all var(--time) ease-in-out;
+    transition: all var(--transition-dets) ease-in-out;
     padding: 10px;
     z-index: 2;
     overflow: hidden;

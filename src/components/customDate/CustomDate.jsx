@@ -11,15 +11,8 @@ const CustomDate = forwardRef(({ dataType }, ref) => {
 	};
 
 	const getPlaceholder = (key) => {
-		return dataType === 'names'
-			? key.charAt(0).toUpperCase() + key.slice(1)
-			: key === 'month'
-			? '12'
-			: key === 'year'
-			? '1'
-			: key === 'week'
-			? '4'
-			: '7';
+		
+		return dataType === 'names' ? key.charAt(0) + key.slice(1) : key === 'month' ? '12' : key === 'year' ? '1' : key === 'week' ? '4' : '7';
 	};
 
 	const getDefaultValue = (key) => {

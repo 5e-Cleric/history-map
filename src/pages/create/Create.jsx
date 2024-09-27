@@ -11,7 +11,9 @@ function Create() {
 	const dateEquivalencesRef = useRef(null);
 	const dateStartRef = useRef(null);
 
-	const handleSubmit = async () => {
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+
 		if (!validateForm()) {
 			console.error('invalid form');
 			return;
@@ -66,18 +68,37 @@ function Create() {
 				<div>
 					<h1>Create</h1>
 				</div>
-				<div className="form" id="createmap">
+				<form className="form" onSubmit={handleSubmit}>
 					<label className="fieldGroup">
 						Map title:
 						<input ref={titleRef} type="text" />
 					</label>
 					<label className="fieldGroup">
 						Paste a link to your map:
-						<input ref={mapRef} type="text" />
+						<input
+							ref={mapRef}
+							defaultValue={'default'}
+							type="text"
+						/>
+						<div className="tip">
+							<i className="fa-solid fa-question"></i>
+							<div className="tipDetails">
+								Enter a link to a map hosted on a supported
+								platform, or use our default map to try things
+								around
+							</div>
+						</div>
 					</label>
 					<label className="fieldGroup">
 						Date system names:
 						<CustomDate ref={dateNamesRef} dataType="names" />
+						<div className="tip">
+							<i className="fa-solid fa-question"></i>
+							<div className="tipDetails">
+								Here add the names of your calendar, such as
+								years, months, weeks and days
+							</div>
+						</div>
 					</label>
 					<label className="fieldGroup">
 						Date system equivalences:
@@ -85,6 +106,14 @@ function Create() {
 							ref={dateEquivalencesRef}
 							dataType="equivalences"
 						/>
+						<div className="tip">
+							<i className="fa-solid fa-question"></i>
+							<div className="tipDetails">
+								Here add the equivalences of your calendar, such
+								as how many months in a year, how many weeks in
+								a month, etcetera
+							</div>
+						</div>
 					</label>
 					{/*
 						<small>
@@ -98,6 +127,9 @@ function Create() {
 					<label className="fieldGroup">
 						Starting Date:
 						<CustomDate ref={dateStartRef} dataType="date" />
+						<div className="tip">
+							<i className="fa-solid fa-question"></i>
+						</div>
 					</label>
 					<label className="fieldGroup">
 						Map description:
@@ -106,14 +138,13 @@ function Create() {
 							name="mapDescription"
 						></textarea>
 					</label>
-					<button
-						type="button"
-						onClick={handleSubmit}
-						disabled={validateForm()}
-					>
-						Submit All
+					<small>
+						Note: you will be able to modify all of these later!
+					</small>
+					<button type="submit" className="green">
+						Create Map
 					</button>
-				</div>
+				</form>
 			</main>
 		</div>
 	);

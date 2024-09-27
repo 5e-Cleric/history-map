@@ -1,7 +1,7 @@
 :root {
   --color-primary: #ffe8c5;
   --color-secondary: #5f361f;
-  --transition-dets:0.3s ease-in-out;
+  --transition-dets: 0.3s ease-in-out;
 
   text-align: center;
   font-family: "Merienda", cursive;
@@ -101,7 +101,8 @@ button, input:is([type="submit"], [type="button"]) {
 
   :where(.fieldGroup) {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 3fr 3fr 1fr;
+    align-items: center;
     justify-items: start;
 
     :where(input:is([type="text"], [type="number"]), textarea) {
@@ -110,11 +111,13 @@ button, input:is([type="submit"], [type="button"]) {
       background: #fffaf3;
       padding: 5px;
       font-family: monospace;
+      width: 100%;
     }
 
     textarea {
+      min-height: 50px;
       max-height: 30ch;
-      max-width: 30ch;
+      resize: vertical;
     }
   }
 }
@@ -141,6 +144,6 @@ dl {
 }*/
 
 *::selection {
-  background:var(--color-secondary);
+  background: var(--color-secondary);
   color: var(--color-primary);
 }
