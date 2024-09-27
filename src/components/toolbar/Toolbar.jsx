@@ -1,6 +1,15 @@
+import { useContext } from 'react';
 import './toolbar.css';
+import { EditContext } from '../../pages/editMap/EditContext';
 
-const Toolbar = ({ onSidebarToggle, onTimelineToggle }) => {
+const Toolbar = () => {
+	const {
+
+		//other functions
+		toggleSidebar,
+		toggleTimeline,
+	} = useContext(EditContext);
+
 	const handleDragStart = (event) => {
 		// Optional: style adjustments for the drag image, like transparency.
 		// event.currentTarget.style.opacity = '1';
@@ -19,7 +28,7 @@ const Toolbar = ({ onSidebarToggle, onTimelineToggle }) => {
 						title="open map sidebar"
 						className="sidebarButton"
 						onClick={() =>
-							onSidebarToggle({ mode: 'map', event: null })
+							toggleSidebar({ mode: 'map', event: null })
 						}
 					>
 						<i className="fa-solid fa-earth-americas"></i>
@@ -46,7 +55,7 @@ const Toolbar = ({ onSidebarToggle, onTimelineToggle }) => {
 					<button
 						title="open timeline"
 						className="timelineButton"
-						onClick={onTimelineToggle}
+						onClick={toggleTimeline}
 					>
 						<i className="fa-solid fa-timeline"></i>
 					</button>

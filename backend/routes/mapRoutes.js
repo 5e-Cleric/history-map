@@ -14,7 +14,6 @@ router.get('/all', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
 	const { id } = req.params;
-	console.log(req.body);
 	try {
 		if (id.length !== 12) {
 			return res.status(400).json({ error: 'Invalid map ID length' });

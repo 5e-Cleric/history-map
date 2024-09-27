@@ -19,7 +19,6 @@
 
     &:has(+ .timeline.open) {
         height: calc(100% - 200px);
-        box-shadow: 0 0 5px;
     }
 
     .sidebarContent {
@@ -38,6 +37,7 @@
 
     &.open {
         left: 0;
+        box-shadow: 0 0 5px;
     }
 
     .closeButton {
