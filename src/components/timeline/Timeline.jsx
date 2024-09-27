@@ -21,6 +21,49 @@ const convertToTotalDays = (date, equivalences) => {
 	return totalDays;
 };
 
+const convertTotalDaysToDate = (totalDays, equivalences) => {
+	const daysInYear =
+		equivalences.month * equivalences.week * equivalences.day;
+	const daysInMonth = equivalences.week * equivalences.day;
+	const daysInWeek = equivalences.day;
+
+	let remainingDays = totalDays;
+	let date = { year: 0, month: 0, week: 0, day: 0 };
+
+	// Calculate the number of years
+	date.year = Math.floor(remainingDays / daysInYear);
+	remainingDays %= daysInYear;
+
+	// Calculate the number of months
+	date.month = Math.floor(remainingDays / daysInMonth);
+	remainingDays %= daysInMonth;
+
+	// Calculate the number of weeks
+	date.week = Math.floor(remainingDays / daysInWeek);
+	remainingDays %= daysInWeek;
+
+	// The remaining days
+	date.day = remainingDays;
+
+	return date;
+};
+
+const positionToTime = (
+	positionPercent,
+	startDate,
+	totalTimelineDays,
+	equivalences
+) => {
+	// Calculate the number of days from the start date corresponding to the position
+	const daysFromStart = (positionPercent / 100) * totalTimelineDays;
+
+	// Convert the total number of days back into a date
+	const startDateTotalDays = convertToTotalDays(startDate, equivalences);
+	const newTotalDays = startDateTotalDays + daysFromStart;
+
+	return convertTotalDaysToDate(newTotalDays, equivalences);
+};
+
 // Dynamic interval calculation based on equivalences
 const calculateDynamicInterval = (totalDays, equivalences) => {
 	const daysInYear =
@@ -106,9 +149,11 @@ function Timeline() {
 	const {
 		map,
 		events,
-		settimelineEvents,
+		sidebarState,
 		timelineState,
 		updateEvent,
+		draggingEvent,
+		setDraggingEvent,
 
 		//other functions
 		toggleSidebar,
@@ -157,7 +202,7 @@ function Timeline() {
 			equivalences
 		);
 
-		let currentDate = { ...startDate }; // Make a copy of startDate
+		let currentDate = { ...startDate };
 
 		while (
 			convertToTotalDays(currentDate, equivalences) <=
@@ -176,40 +221,63 @@ function Timeline() {
 
 	const rendertimelineEvents = () => {
 		return (
-			<div className="timelineEvents">
-				{timelineEvents.map((event, index) => {
-					const eventDays = convertToTotalDays(
-						event.date,
-						equivalences
-					);
-					const eventPositionPercent =
-						((eventDays -
-							convertToTotalDays(startDate, equivalences)) /
-							totalTimelineDays) *
-						100;
+			<div
+				className={`timelineDrop`}
+				onDragOver={(e) => {
+					e.preventDefault();
+				}}
+				onDrop={handleDrop}
+			>
+				<div className="events">
+					{timelineEvents.map((event, index) => {
+						const eventDays = convertToTotalDays(
+							event.date,
+							equivalences
+						);
+						const eventPositionPercent =
+							((eventDays -
+								convertToTotalDays(startDate, equivalences)) /
+								totalTimelineDays) *
+							100;
 
-					return (
-						<EventPin
-							key={index}
-							event={event}
-							timelineEventPosition={eventPositionPercent}
-							onDragStart={() => handleDragStart(event.eventId)}
-							onDragEnd={handleDragEnd}
-						/>
-					);
-				})}
+						return (
+							<EventPin
+								key={index}
+								event={event}
+								timelineEventPosition={eventPositionPercent}
+							/>
+						);
+					})}
+				</div>
 			</div>
 		);
 	};
 
-	const handleDragEnd = (index, newPosition) => {
-		const updatedtimelineEvents = [...timelineEvents];
-		updatedtimelineEvents[index] = {
-			...updatedtimelineEvents[index],
-			position: newPosition,
+	const handleDragEnd = (index, newPositionPercent) => {
+		const newDate = positionToTime(
+			newPositionPercent,
+			startDate,
+			totalTimelineDays,
+			equivalences
+		);
+
+		events[index] = {
+			...events[index],
+			date: newDate,
 		};
-		settimelineEvents(updatedtimelineEvents);
-		updateEvent(updatedtimelineEvents[index]);
+		updateEvent(events[index]);
+		setDraggingEvent(null);
+		if (sidebarState.event.eventId === events[index].eventId)
+			toggleSidebar({ mode: 'viewEvent', event: events[index] });
+	};
+
+	const handleDrop = (e) => {
+		e.preventDefault();
+		const timelineRect = e.currentTarget.getBoundingClientRect();
+		const newPosition =
+			((e.clientX - timelineRect.left) / timelineRect.width) * 100;
+		const index = events.findIndex((e) => e.eventId === draggingEvent);
+		handleDragEnd(index, newPosition);
 	};
 
 	return (
@@ -248,6 +316,12 @@ function Timeline() {
 				</div>
 			</div>
 			{rendertimelineEvents()}
+			<button
+				className="closeButton"
+				onClick={() => toggleTimeline(false)}
+			>
+				X
+			</button>
 		</article>
 	);
 }

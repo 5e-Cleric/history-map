@@ -33,6 +33,7 @@ export const EditProvider = ({ children }) => {
 	}, []);
 
 	const fetchEvents = async () => {
+		console.log('fetching');
 		try {
 			const eventResponse = await fetch(
 				`${import.meta.env.VITE_API_URL}/api/event/${urlId}`
@@ -47,8 +48,6 @@ export const EditProvider = ({ children }) => {
 	const handleEvent = async (newEvent) => {
 		if (!newEvent.eventId) await saveNewEvent(newEvent);
 		else await updateEvent(newEvent);
-
-		fetchEvents();
 	};
 
 	const saveNewEvent = async (event) => {
@@ -81,14 +80,47 @@ export const EditProvider = ({ children }) => {
 				}
 			);
 			const data = await response.json();
-			//console.log('moving element ', data);
+
+			fetchEvents();
 		} catch (error) {
 			console.error('Error updating event position:', error);
 		}
 	};
 
+	const deleteEvent = async (event) => {
+		try {
+			const eventResponse = await fetch(
+				`${import.meta.env.VITE_API_URL}/api/event/${event.mapId}/${
+					event.eventId
+				}`,
+				{ method: 'DELETE' }
+			);
+
+			if (!eventResponse.ok) {
+				throw new Error('Failed to delete event');
+			}
+
+			const eventData = await eventResponse.json();
+			console.log('Event deleted successfully', eventData);
+			fetchEvents();
+			setSidebar(false);
+		} catch (error) {
+			console.error('Error deleting event:', error);
+		}
+	};
+
+	const handleDragEnd = (index, newPosition) => {
+		const updatedEvents = [...events];
+		updatedEvents[index] = {
+			...updatedEvents[index],
+			position: newPosition,
+		};
+		setEvents(updatedEvents);
+		updateEvent(updatedEvents[index]);
+	};
+
 	const toggleSidebar = (newSidebarState) => {
-        if(sidebarState.mode === 'editEvent') fetchEvents();
+		if (sidebarState.mode === 'editEvent') fetchEvents();
 		if (JSON.stringify(newSidebarState) === JSON.stringify(sidebarState))
 			setSidebar(false);
 		else setSidebar(newSidebarState);
@@ -118,11 +150,14 @@ export const EditProvider = ({ children }) => {
 				draggingEvent,
 				setDraggingEvent,
 
+				handleDragEnd,
+
 				//CRUD functions
 				fetchEvents,
 				handleEvent,
 				saveNewEvent,
 				updateEvent,
+				deleteEvent,
 
 				//other functions
 				//other functions

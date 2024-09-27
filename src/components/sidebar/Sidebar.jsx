@@ -9,6 +9,7 @@ function Sidebar() {
 		map,
 		sidebarState,
 		handleEvent,
+		deleteEvent,
 
 		toggleSidebar,
 	} = useContext(EditContext);
@@ -54,25 +55,6 @@ function Sidebar() {
 			handleEvent(eventData);
 		}
 		toggleSidebar({ mode: mode, event: event })
-	};
-
-	const deleteEvent = async () => {
-		try {
-			const eventResponse = await fetch(
-				`${import.meta.env.VITE_API_URL}/api/event/${event.mapId}/${event.eventId}`,
-				{ method: 'DELETE' }
-			);
-
-			if (!eventResponse.ok) {
-				throw new Error('Failed to delete event');
-			}
-
-			const eventData = await eventResponse.json();
-			console.log('Event deleted successfully', eventData);
-			onDelete();
-		} catch (error) {
-			console.error('Error deleting event:', error);
-		}
 	};
 
 	const renderContent = () => {
@@ -140,7 +122,7 @@ function Sidebar() {
 											`Are you sure you want to delete ${event.title}?`
 										)
 									) {
-										deleteEvent();
+										deleteEvent(event);
 									}
 								}}
 								className="red delete"

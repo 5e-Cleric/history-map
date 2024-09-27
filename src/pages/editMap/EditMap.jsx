@@ -18,6 +18,7 @@ function Edit() {
 		setDropPosition,
 		draggingEvent,
 		setDraggingEvent,
+		handleDragEnd,
 
 		updateEvent,
 
@@ -52,15 +53,7 @@ function Edit() {
 		}
 	};
 
-	const handleDragEnd = (index, newPosition) => {
-		const updatedEvents = [...events];
-		updatedEvents[index] = {
-			...updatedEvents[index],
-			position: newPosition,
-		};
-		setEvents(updatedEvents);
-		updateEvent(updatedEvents[index]);
-	};
+
 
 	const handleImageError = (event) => {
 		event.target.src = defaultMap;
@@ -105,8 +98,6 @@ function Edit() {
 			<EventPin
 				key={index}
 				event={event}
-				onDragStart={() => setDraggingEvent(event.eventId)}
-				onDragEnd={handleDragEnd}
 			/>
 		));
 	};
