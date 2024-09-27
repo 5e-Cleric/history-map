@@ -87,10 +87,18 @@ button, input:is([type="submit"], [type="button"]) {
 
   &.red {
     background: #5e1414;
+
+    &:hover {
+      background: #b90707;
+    }
   }
 
   &.green {
     background: #164d24;
+
+    &:hover {
+      background: #0d6d25;
+    }
   }
 }
 
