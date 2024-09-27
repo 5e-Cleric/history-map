@@ -28,20 +28,20 @@ const CustomDate = forwardRef(({ dataType }, ref) => {
 				return getPlaceholder(key);
 			case 'equivalences':
 				return key === 'year'
-					? '0001'
+					? '1'
 					: key === 'month'
-					? '0030'
+					? '30'
 					: key === 'week'
-					? '0004'
-					: '0007';
+					? '4'
+					: '7';
 			case 'start':
 				return key === 'year'
-					? '0000'
+					? '0'
 					: key === 'month'
-					? '0000'
+					? '0'
 					: key === 'week'
-					? '0000'
-					: '0000';
+					? '0'
+					: '0';
 			default:
 				return '';
 		}
@@ -53,8 +53,8 @@ const CustomDate = forwardRef(({ dataType }, ref) => {
 			if (dataType !== 'names') {
 				for (const key in dateRefs) {
 					values[key] =
-						parseInt(dateRefs[key].current.value) ||
-						parseInt(getDefaultValue(key));
+						parseInt(dateRefs[key].current.value || 0) ||
+						parseInt(getDefaultValue(key) || 0);
 				}
 			} else {
 				for (const key in dateRefs) {
@@ -66,10 +66,10 @@ const CustomDate = forwardRef(({ dataType }, ref) => {
 			return values;
 		},
 		setValues: (date) => {
-			dateRefs.year.current.value = date.year;
-			dateRefs.month.current.value = date.month;
-			dateRefs.week.current.value = date.week;
-			dateRefs.day.current.value = date.day;
+			dateRefs.year.current.value = date.year || '0';
+			dateRefs.month.current.value = date.month || '0';
+			dateRefs.week.current.value = date.week || '0';
+			dateRefs.day.current.value = date.day || '0';
 		},
 	}));
 
@@ -81,8 +81,11 @@ const CustomDate = forwardRef(({ dataType }, ref) => {
 						ref={dateRefs[key]}
 						type="text"
 						pattern={
-							dataType === 'names' ? '^[A-Za-z]+$' : '^[0-9]{1,4}$'
+							dataType === 'names'
+								? '^[A-Za-z]+$'
+								: '^[0-9]{1,4}$'
 						}
+						defaultValue={getDefaultValue(key)}
 						placeholder={getPlaceholder(key)}
 					/>
 					{key !== 'day' && '/'}

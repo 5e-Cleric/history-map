@@ -316,8 +316,8 @@ function Timeline() {
 									left: `${divisionPositionPercent}%`,
 								}}
 							>
-								{division.year}/{division.month}/{division.week}
-								/{division.day}
+								{division.year || '0'}/{division.month || '0'}/{division.week || '0'}
+								/{division.day || '0'}
 							</div>
 						);
 					})}

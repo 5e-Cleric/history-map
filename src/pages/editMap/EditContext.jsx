@@ -14,26 +14,55 @@ export const EditProvider = ({ children }) => {
 	const urlId = window.location.pathname.match(/\/([^/]+)\/?$/)[1];
 
 	useEffect(() => {
-		const fetchMapData = async () => {
-			if (urlId) {
-				try {
-					const mapResponse = await fetch(
-						`${import.meta.env.VITE_API_URL}/api/map/${urlId}`
-					);
-					const mapData = await mapResponse.json();
-					setMap(mapData);
-				} catch (error) {
-					setError('Error fetching Maps');
-				}
-				fetchEvents();
-			}
-		};
-
-		fetchMapData();
+		fetchMap();
 	}, []);
 
+	const fetchMap = async () => {
+		if (urlId) {
+			try {
+				const mapResponse = await fetch(
+					`${import.meta.env.VITE_API_URL}/api/map/${urlId}`
+				);
+				const mapData = await mapResponse.json();
+				setMap(mapData);
+			} catch (error) {
+				setError('Error fetching Maps');
+			}
+			fetchEvents();
+		}
+	};
+
+	const updateMap = async (newMap) => {
+		console.log(newMap);
+		try {
+			await fetch(`${import.meta.env.VITE_API_URL}/api/map/${urlId}`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(newMap),
+			});
+			fetchMap();
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	const deleteMap = async () => {
+		try {
+			await fetch(`${import.meta.env.VITE_API_URL}/api/map/${map.id}`, {
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+			const data = await response.json();
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
 	const fetchEvents = async () => {
-		console.log('fetching');
 		try {
 			const eventResponse = await fetch(
 				`${import.meta.env.VITE_API_URL}/api/event/${urlId}`
@@ -43,11 +72,6 @@ export const EditProvider = ({ children }) => {
 		} catch (error) {
 			setError('Error fetching Events');
 		}
-	};
-
-	const handleEvent = async (newEvent) => {
-		if (!newEvent.eventId) await saveNewEvent(newEvent);
-		else await updateEvent(newEvent);
 	};
 
 	const saveNewEvent = async (event) => {
@@ -68,6 +92,7 @@ export const EditProvider = ({ children }) => {
 	};
 
 	const updateEvent = async (event) => {
+		console.log(event);
 		try {
 			const response = await fetch(
 				`${import.meta.env.VITE_API_URL}/api/event/${urlId}/${
@@ -153,8 +178,9 @@ export const EditProvider = ({ children }) => {
 				handleDragEnd,
 
 				//CRUD functions
+				updateMap,
+				deleteMap,
 				fetchEvents,
-				handleEvent,
 				saveNewEvent,
 				updateEvent,
 				deleteEvent,
