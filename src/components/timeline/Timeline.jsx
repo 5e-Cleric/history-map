@@ -247,17 +247,13 @@ function Timeline() {
 							event.date,
 							equivalences
 						);
-						const eventPositionPercent =
-							((eventDays -
-								convertToTotalDays(startDate, equivalences)) /
-								totalTimelineDays) *
-							100;
+						const eventPositionPercent = ((eventDays - convertToTotalDays(startDate, equivalences)) / totalTimelineDays) * 100;
 
 						return (
 							<EventPin
 								key={index}
 								event={event}
-								timelineEventPosition={eventPositionPercent}
+								timelineEventPosition={eventPositionPercent || 0}
 							/>
 						);
 					})}

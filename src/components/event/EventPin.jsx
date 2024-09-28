@@ -28,7 +28,7 @@ function EventPin({ event, timelineEventPosition }) {
 		setTimelinePosition(Math.max(0, Math.min(newPosition, 100)));
 	};
 
-	if (!timelineEventPosition) {
+	if (!timelineEventPosition && timelineEventPosition !== 0) {
 		if (!event.date) {
 			return (
 				<div
@@ -75,7 +75,7 @@ function EventPin({ event, timelineEventPosition }) {
 					}`}
 					style={{
 						top: `50%`,
-						left: `${timelineEventPosition}%`,
+						left: `${timelineEventPosition || 0}%`,
 						translate: `0 -50%`,
 					}}
 				>

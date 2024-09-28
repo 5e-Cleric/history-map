@@ -56,7 +56,8 @@ export const EditProvider = ({ children }) => {
 					'Content-Type': 'application/json',
 				},
 			});
-			const data = await response.json();
+			deleteEventsByMap();
+			window.location.href = `/`;
 		} catch (error) {
 			console.error(error);
 		}
@@ -92,7 +93,6 @@ export const EditProvider = ({ children }) => {
 	};
 
 	const updateEvent = async (event) => {
-		console.log(event);
 		try {
 			const response = await fetch(
 				`${import.meta.env.VITE_API_URL}/api/event/${urlId}/${
@@ -105,8 +105,6 @@ export const EditProvider = ({ children }) => {
 				}
 			);
 			const data = await response.json();
-
-			fetchEvents();
 		} catch (error) {
 			console.error('Error updating event position:', error);
 		}
@@ -114,23 +112,23 @@ export const EditProvider = ({ children }) => {
 
 	const deleteEvent = async (event) => {
 		try {
-			const eventResponse = await fetch(
+			await fetch(
 				`${import.meta.env.VITE_API_URL}/api/event/${event.mapId}/${
 					event.eventId
 				}`,
 				{ method: 'DELETE' }
 			);
-
-			if (!eventResponse.ok) {
-				throw new Error('Failed to delete event');
-			}
-
-			const eventData = await eventResponse.json();
-			console.log('Event deleted successfully', eventData);
 			fetchEvents();
 			setSidebar(false);
+		} catch (error) {}
+	};
+	const deleteEventsByMap = async () => {
+		try {
+			await fetch(`${import.meta.env.VITE_API_URL}/api/event/${map.id}`, {
+				method: 'DELETE',
+			});
 		} catch (error) {
-			console.error('Error deleting event:', error);
+			console.error('Error deleting events:', error);
 		}
 	};
 

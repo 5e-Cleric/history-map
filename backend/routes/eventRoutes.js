@@ -86,7 +86,20 @@ router.delete('/:mapId/:eventId', async (req, res) => {
 
 		res.json({ message: 'Event deleted successfully' });
 	} catch (error) {
-		console.log('Error:', error); // Log any errors
+		console.log('Error:', error);
+		res.status(500).json({ error: error.message });
+	}
+});
+
+router.delete('/:mapId', async (req, res) => {
+	const { mapId } = req.params;
+	console.log(`Attempting to delete ell events for map ${mapId}`);
+	try {
+		await Event.deleteMany({ mapId });
+
+		res.json({ message: 'Events deleted successfully' });
+	} catch (error) {
+		console.log('Error:', error);
 		res.status(500).json({ error: error.message });
 	}
 });

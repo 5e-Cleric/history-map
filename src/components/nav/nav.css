@@ -2,11 +2,12 @@
     position: fixed;
     top: 0;
     right: 0;
-    margin: 15px;
+    padding: 15px;
     display: flex;
     flex-direction: column;
     cursor: pointer;
     z-index: 5;
+    background:var(--color-primary);
 
     .line {
         width: 25px;
@@ -29,7 +30,6 @@
     }
 }
 
-
 .navbar {
     position: fixed;
     top: 0;
@@ -37,7 +37,7 @@
     width: 200px;
     height: max-content;
     color: var(--color-secondary);
-    padding-top: 50px;
+    padding-top: 60px;
     z-index: 1;
     translate: 100%;
     transition: all 0.3s;
