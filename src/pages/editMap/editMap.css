@@ -17,7 +17,7 @@
 				height: fit-content;
 
 				.map {
-					width: 100%;
+					width: 70vw;
 					object-fit: contain;
 					-webkit-user-drag: none;
 				}
