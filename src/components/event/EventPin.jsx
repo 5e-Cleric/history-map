@@ -3,7 +3,6 @@ import { EditContext } from '../../pages/editMap/EditContext';
 
 function EventPin({ event, timelineEventPosition }) {
 	const {
-		updateEvent,
 		draggingEvent,
 		setDraggingEvent,
 		sidebarState,
@@ -28,7 +27,7 @@ function EventPin({ event, timelineEventPosition }) {
 		setTimelinePosition(Math.max(0, Math.min(newPosition, 100)));
 	};
 
-	if (!timelineEventPosition) {
+	if (!timelineEventPosition && timelineEventPosition !== 0) {
 		if (!event.date) {
 			return (
 				<div
@@ -44,8 +43,9 @@ function EventPin({ event, timelineEventPosition }) {
 			);
 		}
 
-		const handleDragStart = () => {
+		const handleDragStart = (e) => {
 			setDraggingEvent(event.eventId);
+			e.stopPropagation();
 		};
 
 		return (
@@ -59,9 +59,10 @@ function EventPin({ event, timelineEventPosition }) {
 				}}
 				draggable
 				onDragStart={handleDragStart}
-				onClick={() =>
-					toggleSidebar({ mode: 'viewEvent', event: event })
-				}
+				onClick={(e) => {
+					toggleSidebar({ mode: 'viewEvent', event: event });
+					e.stopPropagation();
+				}}
 			>
 				<i className="fa-solid fa-location-dot"></i>
 			</div>
@@ -75,7 +76,7 @@ function EventPin({ event, timelineEventPosition }) {
 					}`}
 					style={{
 						top: `50%`,
-						left: `${timelineEventPosition}%`,
+						left: `${timelineEventPosition || 0}%`,
 						translate: `0 -50%`,
 					}}
 				>
