@@ -4,7 +4,6 @@ import { EditContext } from '../../pages/editMap/EditContext';
 
 const Toolbar = () => {
 	const {
-
 		//other functions
 		toggleSidebar,
 		toggleTimeline,
@@ -25,6 +24,19 @@ const Toolbar = () => {
 			<ul>
 				<li>
 					<button
+						className="eventDrag"
+						title="drag to add an event"
+						draggable
+						onDragStart={handleDragStart}
+						onDragEnd={handleDragEnd}
+					>
+						<i className="fa-solid fa-location-dot"></i>
+					</button>
+				</li>
+			</ul>
+			<ul>
+				<li>
+					<button
 						title="open map sidebar"
 						className="sidebarButton"
 						onClick={() =>
@@ -32,16 +44,6 @@ const Toolbar = () => {
 						}
 					>
 						<i className="fa-solid fa-earth-americas"></i>
-					</button>
-				</li>
-				<li>
-					<button
-						title="drag to add an event"
-						draggable
-						onDragStart={handleDragStart}
-						onDragEnd={handleDragEnd}
-					>
-						<i className="fa-solid fa-location-dot"></i>
 					</button>
 				</li>
 				<li>

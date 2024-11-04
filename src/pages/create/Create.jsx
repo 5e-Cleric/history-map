@@ -24,13 +24,12 @@ function Create() {
 			const map = mapRef.current.value;
 			const pattern = /\.\w+$/;
 			const isLink = pattern.test(map);
-		
+
 			if (!map || !isLink) {
 				return 'default';
 			}
 			return map;
 		};
-		
 
 		const map = {
 			title: titleRef.current.value,
@@ -42,8 +41,6 @@ function Create() {
 				dateStart: dateStartRef.current.getValues(),
 			},
 		};
-
-		console.log(map);
 		try {
 			const response = await fetch(
 				`${import.meta.env.VITE_API_URL}/api/map/new`,
@@ -55,7 +52,7 @@ function Create() {
 			);
 			const resultMap = await response.json();
 			console.log('map created:', resultMap);
-			//window.location.href = `/map/${resultMap.id}`;
+			window.location.href = `/map/${resultMap.id}`;
 		} catch (error) {
 			setError(error);
 			console.error('Error creating map:', error);
@@ -85,9 +82,9 @@ function Create() {
 						<div className="tip">
 							<i className="fa-solid fa-question"></i>
 							<div className="tipDetails">
-								Enter a link to a map hosted on a supported
-								platform, or use our default map to try things
-								around
+								Enter a link to a map hosted online (sites like
+								imgur or imgbb are best), or use our default map
+								to try things around
 							</div>
 						</div>
 					</label>

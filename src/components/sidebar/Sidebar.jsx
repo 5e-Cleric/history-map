@@ -7,6 +7,7 @@ function Sidebar() {
 	const {
 		map,
 		sidebarState,
+		fetchEvents,
 		updateMap,
 		deleteMap,
 		updateEvent,
@@ -78,11 +79,12 @@ function Sidebar() {
 				date: dateRef.current.getValues(),
 			};
 
-			if (mode === 'editEvent' && event) {
+			if (mode === 'editEvent' && event.eventId) {
 				updateEvent(eventData);
 			} else {
 				saveNewEvent(eventData);
 			}
+			fetchEvents();
 			toggleSidebar({ mode: mode, event: event });
 		}
 	};

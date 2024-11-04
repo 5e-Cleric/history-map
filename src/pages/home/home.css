@@ -2,16 +2,64 @@
     --logo: url('');
 }
 
-body {
+body:has(.home) {
     height: 100vh;
     width: 100vw;
-    background: #eee;
+
+
+    .carousel {
+        display: flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 100vw;
+        z-index: -1;
+
+        img {
+            height: 100vh;
+            width: auto;
+            object-fit: cover;
+            animation: background 300s linear infinite;
+        }
+    }
+
+    .page.home {
+        background: #00000039;
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: url('@assets/parchment2.png');
+            background-repeat: no-repeat;
+            background-size: 800px;
+            background-position: center;
+
+            h1 {
+                color: var(--color-secondary);
+                filter: drop-shadow(-2px -2px rgba(255, 255, 255, 0.598));
+            }
+
+            .logoWrapper {
+                height: 200px;
+
+                .logo {
+                    height: 200px;
+                    fill: #25130a;
+                }
+            }
+
+            a {
+                font-size:18px;
+            }
+        }
+    }
 }
 
-
-.content {
-    display:flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+@keyframes background {
+    to {
+        translate: -100%;
+    }
 }

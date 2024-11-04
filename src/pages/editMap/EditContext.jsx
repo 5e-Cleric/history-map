@@ -5,16 +5,18 @@ export const EditContext = createContext();
 export const EditProvider = ({ children }) => {
 	const [map, setMap] = useState(null);
 	const [events, setEvents] = useState([]);
-	const [error, setError] = useState('');
+	const [error, setError] = useState(null);
 	const [sidebarState, setSidebar] = useState(false);
 	const [timelineState, setTimeline] = useState(false);
 	const [dropPosition, setDropPosition] = useState(null);
 	const [draggingEvent, setDraggingEvent] = useState(null);
+	const [zoomLevel, setZoomLevel] = useState(null);
 
 	const urlId = window.location.pathname.match(/\/([^/]+)\/?$/)[1];
 
 	useEffect(() => {
 		fetchMap();
+		setZoomLevel(100);
 	}, []);
 
 	const fetchMap = async () => {
@@ -56,7 +58,8 @@ export const EditProvider = ({ children }) => {
 					'Content-Type': 'application/json',
 				},
 			});
-			const data = await response.json();
+			deleteEventsByMap();
+			window.location.href = `/`;
 		} catch (error) {
 			console.error(error);
 		}
@@ -85,14 +88,12 @@ export const EditProvider = ({ children }) => {
 				}
 			);
 			const data = await response.json();
-			console.log('Event created:', data);
 		} catch (error) {
 			console.error('Error creating event:', error);
 		}
 	};
 
 	const updateEvent = async (event) => {
-		console.log(event);
 		try {
 			const response = await fetch(
 				`${import.meta.env.VITE_API_URL}/api/event/${urlId}/${
@@ -105,8 +106,6 @@ export const EditProvider = ({ children }) => {
 				}
 			);
 			const data = await response.json();
-
-			fetchEvents();
 		} catch (error) {
 			console.error('Error updating event position:', error);
 		}
@@ -114,23 +113,23 @@ export const EditProvider = ({ children }) => {
 
 	const deleteEvent = async (event) => {
 		try {
-			const eventResponse = await fetch(
+			await fetch(
 				`${import.meta.env.VITE_API_URL}/api/event/${event.mapId}/${
 					event.eventId
 				}`,
 				{ method: 'DELETE' }
 			);
-
-			if (!eventResponse.ok) {
-				throw new Error('Failed to delete event');
-			}
-
-			const eventData = await eventResponse.json();
-			console.log('Event deleted successfully', eventData);
 			fetchEvents();
 			setSidebar(false);
+		} catch (error) {}
+	};
+	const deleteEventsByMap = async () => {
+		try {
+			await fetch(`${import.meta.env.VITE_API_URL}/api/event/${map.id}`, {
+				method: 'DELETE',
+			});
 		} catch (error) {
-			console.error('Error deleting event:', error);
+			console.error('Error deleting events:', error);
 		}
 	};
 
@@ -156,6 +155,14 @@ export const EditProvider = ({ children }) => {
 		setTimeline(!timelineState);
 	};
 
+	const zoomIn = () => {
+		setZoomLevel(zoomLevel + 10);
+		setZoomLevel(Math.min(700, zoomLevel + 10));
+	};
+	const zoomOut = () => {
+		setZoomLevel(Math.max(100, zoomLevel - 10));
+	};
+
 	return (
 		<EditContext.Provider
 			value={{
@@ -174,6 +181,10 @@ export const EditProvider = ({ children }) => {
 				setDropPosition,
 				draggingEvent,
 				setDraggingEvent,
+				zoomLevel,
+				setZoomLevel,
+				zoomIn,
+				zoomOut,
 
 				handleDragEnd,
 
