@@ -22,6 +22,7 @@ function Edit() {
 		zoomLevel,
 		zoomIn,
 		zoomOut,
+		setZoomLevel,
 
 		toggleSidebar,
 	} = useContext(EditContext);
@@ -38,24 +39,30 @@ function Edit() {
 		if (draggingEvent) setIsDragging(false);
 	}, [draggingEvent]);
 
-	useMemo(() => {
+	useEffect(() => {
+		updateMapPosition();
+	}, [sidebarState.event]);
+	
+	const updateMapPosition = () => {
 		if (sidebarState.event && mapArticleRef.current) {
 			const mapWrapper =
 				mapArticleRef.current.querySelector('.mapWrapper');
 			const { width, height } = mapWrapper.getBoundingClientRect();
+			
 			const wrapperWidth = Math.round(width);
 			const wrapperHeight = Math.round(height);
 
 			const eventX = sidebarState.event.position.left;
 			const eventY = sidebarState.event.position.top;
 
-			//move top left mapwrapper corner into the center of the page
+			//move top left mapwrapper corner into the center of the page (accounting for zoom)
 			//then apply the percentual translation
+			setZoomLevel(150);
 
-			setMapPosition({ x: wrapperWidth / 2, y: wrapperHeight / 2 });
-			setMapTranslation({ x: -eventX, y: -eventY });
+			setMapPosition({ x: (wrapperWidth / (2*1.5)) + 100, y: (wrapperHeight / (2*1.5))});
+			setMapTranslation({ x: -eventX, y: -eventY, });
 		}
-	}, [sidebarState.event]);
+	};
 
 	const handleWheel = (e) => {
 		if (e.deltaY > 0) {
@@ -133,7 +140,7 @@ function Edit() {
 						onMouseMove={handleMouseMove}
 						onMouseUp={handleMouseUp}
 						style={{
-							transition: `${isDragging ? 'unset' : 'all 0.3s'}`,
+							transition: `${isDragging ? '' : 'transform 0.3s'}`,
 							scale: `${zoomLevel / 100}`,
 							transform: `translate(${mapPosition.x}px, ${mapPosition.y}px) translate(${mapTranslation.x}%, ${mapTranslation.y}%) `,
 						}}
