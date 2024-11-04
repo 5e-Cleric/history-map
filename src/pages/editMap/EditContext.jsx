@@ -11,6 +11,8 @@ export const EditProvider = ({ children }) => {
 	const [dropPosition, setDropPosition] = useState(null);
 	const [draggingEvent, setDraggingEvent] = useState(null);
 	const [zoomLevel, setZoomLevel] = useState(null);
+	const [mapPosition, setMapPosition] = useState({ x: 0, y: 0 });
+	const [mapTranslation, setMapTranslation] = useState({ x: 0, y: 0 });
 
 	const urlId = window.location.pathname.match(/\/([^/]+)\/?$/)[1];
 
@@ -160,7 +162,7 @@ export const EditProvider = ({ children }) => {
 		setZoomLevel(Math.min(700, zoomLevel + 10));
 	};
 	const zoomOut = () => {
-		setZoomLevel(Math.max(100, zoomLevel - 10));
+		setZoomLevel(Math.max(10, zoomLevel - 10));
 	};
 
 	return (
@@ -185,6 +187,10 @@ export const EditProvider = ({ children }) => {
 				setZoomLevel,
 				zoomIn,
 				zoomOut,
+				mapPosition,
+				setMapPosition,
+				mapTranslation,
+				setMapTranslation,
 
 				handleDragEnd,
 

@@ -151,6 +151,7 @@ function Timeline() {
 	const {
 		map,
 		events,
+		fetchEvents,
 		sidebarState,
 		timelineState,
 		updateEvent,
@@ -280,6 +281,9 @@ function Timeline() {
 		setDraggingEvent(null);
 		if (sidebarState?.event?.eventId === events[index].eventId)
 			toggleSidebar({ mode: 'viewEvent', event: events[index] });
+
+		console.log('dragend');
+		fetchEvents();
 	};
 
 	const handleDrop = (e) => {

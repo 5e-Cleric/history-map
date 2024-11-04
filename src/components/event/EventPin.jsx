@@ -6,12 +6,11 @@ function EventPin({ event, timelineEventPosition }) {
 		draggingEvent,
 		setDraggingEvent,
 		sidebarState,
+		setZoomLevel,
 
 		toggleSidebar,
 	} = useContext(EditContext);
-	const [timelinePosition, setTimelinePosition] = useState(
-		timelineEventPosition
-	);
+	const [timelinePosition, setTimelinePosition] = useState(timelineEventPosition);
 
 	const active =
 		JSON.stringify(event.eventId) ===
@@ -61,6 +60,7 @@ function EventPin({ event, timelineEventPosition }) {
 				onDragStart={handleDragStart}
 				onClick={(e) => {
 					toggleSidebar({ mode: 'viewEvent', event: event });
+					setZoomLevel(150);
 					e.stopPropagation();
 				}}
 			>
@@ -104,9 +104,10 @@ function EventPin({ event, timelineEventPosition }) {
 				draggable
 				onDrag={handleDrag}
 				onDragStart={handleDragStart}
-				onClick={() =>
-					toggleSidebar({ mode: 'viewEvent', event: event })
-				}
+				onClick={() => {
+					toggleSidebar({ mode: 'viewEvent', event: event });
+					setZoomLevel(150);
+				}}
 			>
 				<i className="fa-solid fa-sun"></i>
 			</div>

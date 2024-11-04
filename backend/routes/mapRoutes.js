@@ -86,7 +86,6 @@ router.delete('/:id', async (req, res) => {
 		}
 
 		const map = await Map.findOne({ id });
-		console.log('Map found:', map); // Log the found map
 
 		if (!map) {
 			console.log('Map not found'); // Log if map is not found

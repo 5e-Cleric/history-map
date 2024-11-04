@@ -23,13 +23,16 @@ function Edit() {
 		zoomIn,
 		zoomOut,
 		setZoomLevel,
+		mapPosition,
+		setMapPosition,
+		mapTranslation,
+		setMapTranslation,
 
 		toggleSidebar,
 	} = useContext(EditContext);
 
 	// State to handle the map's position
-	const [mapPosition, setMapPosition] = useState({ x: 0, y: 0 });
-	const [mapTranslation, setMapTranslation] = useState({ x: 0, y: 0 });
+
 	const [isDragging, setIsDragging] = useState(false);
 	const [lastMousePosition, setLastMousePosition] = useState({ x: 0, y: 0 });
 
@@ -42,13 +45,14 @@ function Edit() {
 	useEffect(() => {
 		updateMapPosition();
 	}, [sidebarState.event]);
-	
+
 	const updateMapPosition = () => {
 		if (sidebarState.event && mapArticleRef.current) {
+
 			const mapWrapper =
 				mapArticleRef.current.querySelector('.mapWrapper');
 			const { width, height } = mapWrapper.getBoundingClientRect();
-			
+
 			const wrapperWidth = Math.round(width);
 			const wrapperHeight = Math.round(height);
 
@@ -57,10 +61,12 @@ function Edit() {
 
 			//move top left mapwrapper corner into the center of the page (accounting for zoom)
 			//then apply the percentual translation
-			setZoomLevel(150);
 
-			setMapPosition({ x: (wrapperWidth / (2*1.5)) + 100, y: (wrapperHeight / (2*1.5))});
-			setMapTranslation({ x: -eventX, y: -eventY, });
+			setMapPosition({
+				x: wrapperWidth / (2 * 1.5),
+				y: wrapperHeight / (2 * 1.5),
+			});
+			setMapTranslation({ x: -eventX, y: -eventY });
 		}
 	};
 
@@ -80,21 +86,23 @@ function Edit() {
 			left: ((event.clientX - mapRect.left) / mapRect.width) * 100,
 		};
 		if (draggingEvent) {
-			const index = events.findIndex((e) => e.eventId === draggingEvent);
-			handleDragEnd(index, newPosition);
-			setDraggingEvent(null);
-		} else {
-			if (sidebarState.mode === 'editEvent') {
+			if (draggingEvent === 'new') {
+				// Handle creating a new event
+				setDropPosition(newPosition);
+				setEvents((prevEvents) => {
+					return [...prevEvents, { position: newPosition }];
+				});
+				toggleSidebar({
+					mode: 'editEvent',
+					event: { position: newPosition },
+				});
+			} else {
+				const index = events.findIndex(
+					(e) => e.eventId === draggingEvent
+				);
+				handleDragEnd(index, newPosition);
 			}
-			// Handle creating a new event
-			setDropPosition(newPosition);
-			setEvents((prevEvents) => {
-				return [...prevEvents, { position: newPosition }];
-			});
-			toggleSidebar({
-				mode: 'editEvent',
-				event: { position: newPosition },
-			});
+			setDraggingEvent(null);
 		}
 	};
 
@@ -133,6 +141,7 @@ function Edit() {
 					}}
 					onDrop={handleDrop}
 					onWheel={handleWheel}
+					onMouseUp={handleMouseUp}
 				>
 					<div
 						className="mapWrapper"
