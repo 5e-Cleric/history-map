@@ -5,16 +5,18 @@ export const EditContext = createContext();
 export const EditProvider = ({ children }) => {
 	const [map, setMap] = useState(null);
 	const [events, setEvents] = useState([]);
-	const [error, setError] = useState('');
+	const [error, setError] = useState(null);
 	const [sidebarState, setSidebar] = useState(false);
 	const [timelineState, setTimeline] = useState(false);
 	const [dropPosition, setDropPosition] = useState(null);
 	const [draggingEvent, setDraggingEvent] = useState(null);
+	const [zoomLevel, setZoomLevel] = useState(null);
 
 	const urlId = window.location.pathname.match(/\/([^/]+)\/?$/)[1];
 
 	useEffect(() => {
 		fetchMap();
+		setZoomLevel(150);
 	}, []);
 
 	const fetchMap = async () => {
@@ -86,7 +88,6 @@ export const EditProvider = ({ children }) => {
 				}
 			);
 			const data = await response.json();
-			console.log('Event created:', data);
 		} catch (error) {
 			console.error('Error creating event:', error);
 		}
@@ -154,6 +155,14 @@ export const EditProvider = ({ children }) => {
 		setTimeline(!timelineState);
 	};
 
+	const zoomIn = () => {
+		setZoomLevel(zoomLevel + 10);
+		setZoomLevel(Math.min(700, zoomLevel + 10));
+	};
+	const zoomOut = () => {
+		setZoomLevel(Math.max(100, zoomLevel - 10));
+	};
+
 	return (
 		<EditContext.Provider
 			value={{
@@ -172,6 +181,10 @@ export const EditProvider = ({ children }) => {
 				setDropPosition,
 				draggingEvent,
 				setDraggingEvent,
+				zoomLevel,
+				setZoomLevel,
+				zoomIn,
+				zoomOut,
 
 				handleDragEnd,
 

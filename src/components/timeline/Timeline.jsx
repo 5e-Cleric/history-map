@@ -56,10 +56,12 @@ const positionToTime = (
 ) => {
 	// Calculate the number of days from the start date corresponding to the position
 	const daysFromStart = (positionPercent / 100) * totalTimelineDays;
+	//round date to not use decimals
+	const roundedDaysFromStart = Math.floor(daysFromStart + 0.5);
 
 	// Convert the total number of days back into a date
 	const startDateTotalDays = convertToTotalDays(startDate, equivalences);
-	const newTotalDays = startDateTotalDays + daysFromStart;
+	const newTotalDays = startDateTotalDays + roundedDaysFromStart;
 
 	return convertTotalDaysToDate(newTotalDays, equivalences);
 };
