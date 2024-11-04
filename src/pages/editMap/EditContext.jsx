@@ -16,7 +16,7 @@ export const EditProvider = ({ children }) => {
 
 	useEffect(() => {
 		fetchMap();
-		setZoomLevel(150);
+		setZoomLevel(100);
 	}, []);
 
 	const fetchMap = async () => {

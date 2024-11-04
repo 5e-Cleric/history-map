@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import React, { useState, useEffect, useContext, useRef, useMemo } from 'react';
 import './editMap.css';
 import Nav from '@components/nav/Nav';
 import Toolbar from '@components/toolbar/Toolbar';
@@ -22,12 +22,14 @@ function Edit() {
 		zoomLevel,
 		zoomIn,
 		zoomOut,
+		setZoomLevel,
 
 		toggleSidebar,
 	} = useContext(EditContext);
 
 	// State to handle the map's position
 	const [mapPosition, setMapPosition] = useState({ x: 0, y: 0 });
+	const [mapTranslation, setMapTranslation] = useState({ x: 0, y: 0 });
 	const [isDragging, setIsDragging] = useState(false);
 	const [lastMousePosition, setLastMousePosition] = useState({ x: 0, y: 0 });
 
@@ -37,6 +39,31 @@ function Edit() {
 		if (draggingEvent) setIsDragging(false);
 	}, [draggingEvent]);
 
+	useEffect(() => {
+		updateMapPosition();
+	}, [sidebarState.event]);
+	
+	const updateMapPosition = () => {
+		if (sidebarState.event && mapArticleRef.current) {
+			const mapWrapper =
+				mapArticleRef.current.querySelector('.mapWrapper');
+			const { width, height } = mapWrapper.getBoundingClientRect();
+			
+			const wrapperWidth = Math.round(width);
+			const wrapperHeight = Math.round(height);
+
+			const eventX = sidebarState.event.position.left;
+			const eventY = sidebarState.event.position.top;
+
+			//move top left mapwrapper corner into the center of the page (accounting for zoom)
+			//then apply the percentual translation
+			setZoomLevel(150);
+
+			setMapPosition({ x: (wrapperWidth / (2*1.5)) + 100, y: (wrapperHeight / (2*1.5))});
+			setMapTranslation({ x: -eventX, y: -eventY, });
+		}
+	};
+
 	const handleWheel = (e) => {
 		if (e.deltaY > 0) {
 			zoomOut();
@@ -45,7 +72,6 @@ function Edit() {
 		}
 	};
 
-	// Handle drop events on the map
 	const handleDrop = (event) => {
 		event.preventDefault();
 		const mapRect = event.target.getBoundingClientRect();
@@ -114,10 +140,9 @@ function Edit() {
 						onMouseMove={handleMouseMove}
 						onMouseUp={handleMouseUp}
 						style={{
-							scale: zoomLevel / 100,
-							transform: `translate(${mapPosition.x}px, ${
-								mapPosition.y
-							}px) scale(${zoomLevel / 100})`,
+							transition: `${isDragging ? '' : 'transform 0.3s'}`,
+							scale: `${zoomLevel / 100}`,
+							transform: `translate(${mapPosition.x}px, ${mapPosition.y}px) translate(${mapTranslation.x}%, ${mapTranslation.y}%) `,
 						}}
 					>
 						<img
@@ -142,7 +167,6 @@ function Edit() {
 		}
 	};
 
-	// Render events as pins on the map
 	const renderEvents = (events) => {
 		if (!events.length) {
 			return null;
