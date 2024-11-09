@@ -12,6 +12,7 @@ function All() {
 	}, []);
 
 	const fetchMaps = () => {
+		setSearching(true);
 		console.log(`fetching to ${import.meta.env.VITE_API_URL}/api/map/all`);
 		fetch(`${import.meta.env.VITE_API_URL}/api/map/all`)
 			.then((response) => response.json())
