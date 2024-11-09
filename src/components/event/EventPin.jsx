@@ -50,6 +50,7 @@ function EventPin({ event, timelineEventPosition }) {
 		return (
 			<div
 				id={`event-${event.eventId}`}
+				data-title={event.title}
 				className={`eventPin${active ? ' active' : ''}`}
 				style={{
 					top: `${event.position.top}%`,

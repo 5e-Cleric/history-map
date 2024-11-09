@@ -152,6 +152,7 @@ function Edit() {
 							transition: `${isDragging ? '' : 'transform 0.3s'}`,
 							scale: `${zoomLevel / 100}`,
 							transform: `translate(${mapPosition.x}px, ${mapPosition.y}px) translate(${mapTranslation.x}%, ${mapTranslation.y}%) `,
+							cursor: `${isDragging ? 'grabbing' : 'grab'}`,
 						}}
 					>
 						<img
