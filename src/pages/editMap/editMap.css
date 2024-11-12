@@ -71,17 +71,8 @@
 						top:-10px;
 					}
 
-					i {
-						filter: drop-shadow(0 0 2px #000);
-						transition: all var(--transition-dets);
-
-					}
-
-					&.active i {
-						transform-origin: bottom center;
-						scale: 1.5;
-						color: #e22626;
-						filter: drop-shadow(0 0 2px #fff) drop-shadow(0 0 2px #fff) drop-shadow(0 0 10px #fff);
+					&.dragging {
+						pointer-events: none;
 					}
 				}
 			}

@@ -146,7 +146,7 @@ export const EditProvider = ({ children }) => {
 	};
 
 	const toggleSidebar = (newSidebarState) => {
-		if (sidebarState.mode === 'editEvent') fetchEvents();
+		if (sidebarState.mode === 'edit' && sidebarState.event) fetchEvents();
 		if (JSON.stringify(newSidebarState) === JSON.stringify(sidebarState))
 			setSidebar(false);
 		else setSidebar(newSidebarState);

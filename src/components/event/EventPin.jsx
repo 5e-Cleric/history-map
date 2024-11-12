@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { EditContext } from '../../pages/editMap/EditContext';
+import { EditContext } from '@pages/editMap/EditContext';
 
 function EventPin({ event, timelineEventPosition }) {
 	const {
@@ -32,8 +32,8 @@ function EventPin({ event, timelineEventPosition }) {
 				<div
 					className={`eventPin${active ? ' active' : ''}`}
 					style={{
-						top: `${event.position.top}%`,
-						left: `${event.position.left}%`,
+						top: `${event.position.y}%`,
+						left: `${event.position.x}%`,
 						translate: `-50% -80%`,
 					}}
 				>
@@ -44,6 +44,9 @@ function EventPin({ event, timelineEventPosition }) {
 
 		const handleDragStart = (e) => {
 			setDraggingEvent(event.eventId);
+			document.querySelectorAll(`.mapWrapper .eventPin:not(#event-${event.eventId})`).forEach((ev) => {
+				ev.classList.add('dragging');
+			});
 			e.stopPropagation();
 		};
 
@@ -53,14 +56,14 @@ function EventPin({ event, timelineEventPosition }) {
 				data-title={event.title}
 				className={`eventPin${active ? ' active' : ''}`}
 				style={{
-					top: `${event.position.top}%`,
-					left: `${event.position.left}%`,
+					top: `${event.position.y}%`,
+					left: `${event.position.x}%`,
 					translate: `-50% -80%`,
 				}}
 				draggable
 				onDragStart={handleDragStart}
 				onClick={(e) => {
-					toggleSidebar({ mode: 'viewEvent', event: event });
+					toggleSidebar({ mode: 'view', event: event });
 					setZoomLevel(150);
 					e.stopPropagation();
 				}}

@@ -3,7 +3,7 @@ import Home from '@pages/home/Home';
 import Create from '@pages/create/Create';
 import All from '@pages/All';
 import Edit from '@pages/editMap/EditMap';
-import EditProvider from './pages/editMap/EditContext';
+import EditProvider from '@pages/editMap/EditContext';
 
 const AppRoutes = () => {
 	return (

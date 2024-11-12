@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import './timeline.css';
 import EventPin from '../event/EventPin';
-import { EditContext } from '../../pages/editMap/EditContext';
+import { EditContext } from '@pages/editMap/EditContext';
 import {
 	convertToTotalDays,
 	positionToTime,

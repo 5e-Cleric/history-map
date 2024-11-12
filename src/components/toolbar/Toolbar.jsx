@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import './toolbar.css';
-import { EditContext } from '../../pages/editMap/EditContext';
+import { EditContext } from '@pages/editMap/EditContext';
 
 const Toolbar = () => {
 	const {
@@ -80,7 +80,7 @@ const Toolbar = () => {
 						title="open map sidebar"
 						className="sidebarButton"
 						onClick={() =>
-							toggleSidebar({ mode: 'map', event: null })
+							toggleSidebar({ mode: 'view', event: null })
 						}
 					>
 						<i className="fa-solid fa-earth-americas"></i>

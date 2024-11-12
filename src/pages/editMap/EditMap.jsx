@@ -3,6 +3,7 @@ import './editMap.css';
 import Nav from '@components/nav/Nav';
 import Toolbar from '@components/toolbar/Toolbar';
 import EventPin from '@components/event/EventPin';
+import Location from '../../components/event/Location';
 import Sidebar from '@components/sidebar/Sidebar';
 import Timeline from '../../components/timeline/Timeline';
 import defaultMap from '@assets/defaultMap.jpg';
@@ -44,23 +45,27 @@ function Edit() {
 
 	useEffect(() => {
 		updateMapPosition();
-	}, [sidebarState.event]);
+	}, [sidebarState]);
 
 	const updateMapPosition = () => {
-		if (sidebarState.event && mapArticleRef.current) {
-
+		if (
+			(sidebarState.event || sidebarState.location) &&
+			mapArticleRef.current
+		) {
 			const mapWrapper =
 				mapArticleRef.current.querySelector('.mapWrapper');
 			const { width, height } = mapWrapper.getBoundingClientRect();
-
 			const wrapperWidth = Math.round(width);
 			const wrapperHeight = Math.round(height);
 
-			const eventX = sidebarState.event.position.left;
-			const eventY = sidebarState.event.position.top;
-
-			//move top left mapwrapper corner into the center of the page (accounting for zoom)
-			//then apply the percentual translation
+			const eventX =
+				sidebarState.event?.position?.x ??
+				sidebarState.location?.position?.x ??
+				0;
+			const eventY =
+				sidebarState.event?.position?.y ??
+				sidebarState.location?.position?.y ??
+				0;
 
 			setMapPosition({
 				x: wrapperWidth / (2 * 1.5),
@@ -78,27 +83,54 @@ function Edit() {
 		}
 	};
 
-	const handleDrop = (event) => {
-		event.preventDefault();
-		const mapRect = event.target.getBoundingClientRect();
+	const checkIfEventClose = (newPosition) => {
+		//check if the new position for this event coincides with the position of another event, with a changeable margin of error
+
+		const marginOfError = 5;
+		const otherEvents = events.filter(
+			(event) => event.eventId !== draggingEvent
+		);
+		const coincidingEvent = otherEvents.find((otherEvent) => {
+			const distance = Math.sqrt(
+				Math.pow(newPosition.y - otherEvent.position.y, 2) +
+					Math.pow(newPosition.x - otherEvent.position.x, 2)
+			);
+			return distance < marginOfError;
+		});
+		return coincidingEvent;
+	};
+
+	const handleDrop = (e) => {
+		e.preventDefault();
+
+		document.querySelectorAll('.mapWrapper .eventPin').forEach((ev) => {
+			ev.classList.remove('dragging');
+		});
+		const mapRect = e.target.getBoundingClientRect();
 		const newPosition = {
-			top: ((event.clientY - mapRect.top) / mapRect.height) * 100,
-			left: ((event.clientX - mapRect.left) / mapRect.width) * 100,
+			x: ((e.clientX - mapRect.left) / mapRect.width) * 100,
+			y: ((e.clientY - mapRect.top) / mapRect.height) * 100,
 		};
+
 		if (draggingEvent) {
 			if (draggingEvent === 'new') {
 				// Handle creating a new event
 				setDropPosition(newPosition);
+				
 				setEvents((prevEvents) => {
-					return [...prevEvents, { position: newPosition }];
+					return [
+						...prevEvents,
+						{ position: newPosition },
+					];
 				});
+				console.log(events);
 				toggleSidebar({
-					mode: 'editEvent',
+					mode: 'edit',
 					event: { position: newPosition },
 				});
 			} else {
 				const index = events.findIndex(
-					(e) => e.eventId === draggingEvent
+					(ev) => ev.eventId === draggingEvent
 				);
 				handleDragEnd(index, newPosition);
 			}
@@ -161,7 +193,7 @@ function Edit() {
 							alt="your map"
 							className="map"
 						/>
-						{renderEvents(events)}
+						{renderEvents()}
 					</div>
 
 					<a
@@ -177,13 +209,11 @@ function Edit() {
 		}
 	};
 
-	const renderEvents = (events) => {
+	const renderEvents = () => {
 		if (!events.length) {
 			return null;
 		}
-		return events.map((event, index) => (
-			<EventPin key={index} event={event} />
-		));
+		return events.map((ev, index) =><EventPin key={index} event={ev} />);
 	};
 
 	if (!map) {
