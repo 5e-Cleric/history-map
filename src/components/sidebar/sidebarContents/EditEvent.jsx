@@ -7,13 +7,14 @@ function EditEvent() {
 		sidebarState,
 		fetchEvents,
 		updateEvent,
+		saveNewEvent,
 
 		toggleSidebar,
 	} = useContext(EditContext);
 
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
-    const [position, setPosition] = useState({ y: null, x: null });
+	const [position, setPosition] = useState({ y: null, x: null });
 	const dateRef = useRef(null);
 
 	const event = sidebarState.event;
@@ -30,7 +31,7 @@ function EditEvent() {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-        const eventData = {
+		const eventData = {
 			eventId: event.eventId,
 			title,
 			description,
@@ -38,7 +39,12 @@ function EditEvent() {
 			date: dateRef.current.getValues(),
 		};
 
-		updateEvent(eventData);
+		if (event.eventId) {
+			updateEvent(eventData);
+		} else {
+			saveNewEvent(eventData);
+		}
+
 		fetchEvents();
 		toggleSidebar({ mode: sidebarState.mode, event: event });
 	};

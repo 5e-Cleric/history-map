@@ -41,9 +41,7 @@ function Timeline() {
 	) {
 		return (
 			<article className={`timeline ${timelineState ? 'open' : ''}`}>
-				<h2>
-					You need at least two events to use the timeline
-				</h2>
+				<h2>You need at least two events to use the timeline</h2>
 				<div className="bar"></div>
 			</article>
 		);
@@ -104,21 +102,26 @@ function Timeline() {
 				onDragOver={(e) => {
 					e.preventDefault();
 				}}
-				onDrop={handleDrop}
-			>
+				onDrop={handleDrop}>
 				<div className="events">
 					{timelineEvents.map((event, index) => {
 						const eventDays = convertToTotalDays(
 							event.date,
 							equivalences
 						);
-						const eventPositionPercent = ((eventDays - convertToTotalDays(startDate, equivalences)) / totalTimelineDays) * 100;
+						const eventPositionPercent =
+							((eventDays -
+								convertToTotalDays(startDate, equivalences)) /
+								totalTimelineDays) *
+							100;
 
 						return (
 							<EventPin
 								key={index}
 								event={event}
-								timelineEventPosition={eventPositionPercent || 0}
+								timelineEventPosition={
+									eventPositionPercent || 0
+								}
 							/>
 						);
 					})}
@@ -142,9 +145,7 @@ function Timeline() {
 		updateEvent(events[index]);
 		setDraggingEvent(null);
 		if (sidebarState?.event?.eventId === events[index].eventId)
-			toggleSidebar({ mode: 'viewEvent', event: events[index] });
-
-		console.log('dragend');
+			toggleSidebar({ mode: 'view', event: events[index] });
 		fetchEvents();
 	};
 
@@ -178,10 +179,9 @@ function Timeline() {
 								className="division"
 								style={{
 									left: `${divisionPositionPercent}%`,
-								}}
-							>
-								{division.year || '0'}/{division.month || '0'}/{division.week || '0'}
-								/{division.day || '0'}
+								}}>
+								{division.year || '0'}/{division.month || '0'}/
+								{division.week || '0'}/{division.day || '0'}
 							</div>
 						);
 					})}
@@ -190,8 +190,7 @@ function Timeline() {
 			{rendertimelineEvents()}
 			<button
 				className="closeButton"
-				onClick={() => toggleTimeline(false)}
-			>
+				onClick={() => toggleTimeline(false)}>
 				X
 			</button>
 		</article>

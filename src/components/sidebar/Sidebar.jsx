@@ -1,4 +1,4 @@
-import {  useContext } from 'react';
+import { useContext } from 'react';
 import './sidebar.css';
 import { EditContext } from '@pages/editMap/EditContext';
 import EditEvent from './sidebarContents/EditEvent';
@@ -14,15 +14,13 @@ function Sidebar() {
 	const event = sidebarState.event;
 	const folder = sidebarState.folder;
 
-	console.log(sidebarState);
-
 	const renderContent = () => {
 		if (mode === 'edit') {
 			if (event) return <EditEvent />;
 			return <EditMap />;
-		} else if(mode === 'view') {
+		} else if (mode === 'view') {
 			if (event) return <ViewEvent />;
-			if (folder) return <ViewFolder/>;
+			if (folder) return <ViewFolder />;
 			return <ViewMap />;
 		}
 		return null;

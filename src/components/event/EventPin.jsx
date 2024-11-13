@@ -7,14 +7,16 @@ function EventPin({ event, timelineEventPosition }) {
 		setDraggingEvent,
 		sidebarState,
 		setZoomLevel,
-
 		toggleSidebar,
 	} = useContext(EditContext);
-	const [timelinePosition, setTimelinePosition] = useState(timelineEventPosition);
 
+	const [timelinePosition, setTimelinePosition] = useState(
+		timelineEventPosition
+	);
 	const active =
 		JSON.stringify(event.eventId) ===
 		JSON.stringify(sidebarState.event?.eventId);
+	const isTimelineMode = timelineEventPosition !== undefined;
 
 	const handleDrag = (e) => {
 		e.preventDefault();
@@ -22,101 +24,47 @@ function EventPin({ event, timelineEventPosition }) {
 			e.currentTarget.parentElement.getBoundingClientRect();
 		const newPosition =
 			((e.clientX - timelineRect.left) / timelineRect.width) * 100;
-		//set min position at 0% and max at 100
-		setTimelinePosition(Math.max(0, Math.min(newPosition, 100)));
+		setTimelinePosition(Math.max(0, Math.min(newPosition, 100))); // Constrain position to 0-100%
 	};
 
-	if (!timelineEventPosition && timelineEventPosition !== 0) {
-		if (!event.date) {
-			return (
-				<div
-					className={`eventPin${active ? ' active' : ''}`}
-					style={{
-						top: `${event.position.y}%`,
-						left: `${event.position.x}%`,
-						translate: `-50% -80%`,
-					}}
-				>
-					<i className="fa-solid fa-location-dot"></i>
-				</div>
-			);
-		}
-
-		const handleDragStart = (e) => {
-			setDraggingEvent(event.eventId);
+	const handleDragStart = (e) => {
+		setDraggingEvent(event.eventId);
 			document.querySelectorAll(`.mapWrapper .eventPin:not(#event-${event.eventId})`).forEach((ev) => {
 				ev.classList.add('dragging');
 			});
 			e.stopPropagation();
-		};
+	};
 
-		return (
-			<div
-				id={`event-${event.eventId}`}
-				data-title={event.title}
-				className={`eventPin${active ? ' active' : ''}`}
-				style={{
-					top: `${event.position.y}%`,
-					left: `${event.position.x}%`,
-					translate: `-50% -80%`,
-				}}
-				draggable
-				onDragStart={handleDragStart}
-				onClick={(e) => {
-					toggleSidebar({ mode: 'view', event: event });
-					setZoomLevel(150);
-					e.stopPropagation();
-				}}
-			>
-				<i className="fa-solid fa-location-dot"></i>
-			</div>
-		);
-	} else {
-		if (!event.date) {
-			return (
-				<div
-					className={`eventPin${active ? ' active' : ''}${
-						draggingEvent ? dragging : ''
-					}`}
-					style={{
-						top: `50%`,
-						left: `${timelineEventPosition || 0}%`,
-						translate: `0 -50%`,
-					}}
-				>
-					<i className="fa-solid fa-sun"></i>
-				</div>
-			);
-		}
+	const handleClick = (e) => {
+		toggleSidebar({ mode: 'view', event });
+		setZoomLevel(150);
+		e.stopPropagation();
+	};
 
-		const handleDragStart = (e) => {
-			setDraggingEvent(event.eventId);
-			const img = new Image();
-			img.src = '';
-			e.dataTransfer.setDragImage(img, 0, 0);
-		};
+	const positionStyles = isTimelineMode
+		? { left: `${timelinePosition}%`, translate: '0 -50%' }
+		: {
+				top: `${event.position.y}%`,
+				left: `${event.position.x}%`,
+				translate: '-50% -80%',
+		  };
 
-		return (
-			<div
-				id={`event-${event.eventId}`}
-				className={`eventPin${active ? ' active' : ''}${
-					draggingEvent ? ' dragging' : ''
-				}`}
-				style={{
-					left: `${timelinePosition}%`,
-				}}
-				draggable
-				onDrag={handleDrag}
-				onDragStart={handleDragStart}
-				onClick={() => {
-					toggleSidebar({ mode: 'viewEvent', event: event });
-					setZoomLevel(150);
-				}}
-			>
-				<i className="fa-solid fa-sun"></i>
-			</div>
-		);
-	}
+	return (
+		<div
+			id={`event-${event.eventId}`}
+			data-title={event.title}
+			className={`eventPin${active ? ' active' : ''} `}
+			style={positionStyles}
+			draggable
+			onDrag={isTimelineMode ? handleDrag : undefined}
+			onDragStart={handleDragStart}
+			onClick={handleClick}>
+			<i
+				className={`fa-solid ${
+					isTimelineMode ? 'fa-sun' : 'fa-location-dot'
+				}`}></i>
+		</div>
+	);
 }
 
 export default EventPin;

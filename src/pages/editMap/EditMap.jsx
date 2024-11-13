@@ -116,12 +116,9 @@ function Edit() {
 			if (draggingEvent === 'new') {
 				// Handle creating a new event
 				setDropPosition(newPosition);
-				
+
 				setEvents((prevEvents) => {
-					return [
-						...prevEvents,
-						{ position: newPosition },
-					];
+					return [...prevEvents, { position: newPosition }];
 				});
 				console.log(events);
 				toggleSidebar({
@@ -173,8 +170,7 @@ function Edit() {
 					}}
 					onDrop={handleDrop}
 					onWheel={handleWheel}
-					onMouseUp={handleMouseUp}
-				>
+					onMouseUp={handleMouseUp}>
 					<div
 						className="mapWrapper"
 						onMouseDown={handleMouseDown}
@@ -185,8 +181,7 @@ function Edit() {
 							scale: `${zoomLevel / 100}`,
 							transform: `translate(${mapPosition.x}px, ${mapPosition.y}px) translate(${mapTranslation.x}%, ${mapTranslation.y}%) `,
 							cursor: `${isDragging ? 'grabbing' : 'grab'}`,
-						}}
-					>
+						}}>
 						<img
 							src={map.map}
 							onError={handleImageError}
@@ -198,8 +193,7 @@ function Edit() {
 
 					<a
 						className="defaultAttribution"
-						href="https://www.freepik.com/free-vector/ancient-abstract-earth-relief-old-map-generated-conceptual-vector-elevation-map-fantasy-landscape_25145565.htm#query=fantasy%20map&position=0&from_view=keyword&track=ais_hybrid&uuid=1d282c7f-1ee4-42fc-b720-6086b25c7df6"
-					>
+						href="https://www.freepik.com/free-vector/ancient-abstract-earth-relief-old-map-generated-conceptual-vector-elevation-map-fantasy-landscape_25145565.htm#query=fantasy%20map&position=0&from_view=keyword&track=ais_hybrid&uuid=1d282c7f-1ee4-42fc-b720-6086b25c7df6">
 						Default Image by GarryKillian on Freepik
 					</a>
 				</article>
@@ -213,7 +207,7 @@ function Edit() {
 		if (!events.length) {
 			return null;
 		}
-		return events.map((ev, index) =><EventPin key={index} event={ev} />);
+		return events.map((ev, index) => <EventPin key={index} event={ev} />);
 	};
 
 	if (!map) {
