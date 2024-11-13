@@ -28,6 +28,7 @@ router.get('/:eventId', async (req, res) => {
 		res.status(500).json({ error: error.message });
 	}
 });
+
 router.put('/:mapId/:eventId', async (req, res) => {
 	const { mapId, eventId } = req.params;
 	const updatedData = req.body;

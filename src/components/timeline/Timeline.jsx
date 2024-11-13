@@ -130,9 +130,15 @@ function Timeline() {
 		);
 	};
 
-	const handleDragEnd = (index, newPositionPercent) => {
+	const handleDrop = (e) => {
+		e.preventDefault();
+		const timelineRect = e.currentTarget.getBoundingClientRect();
+		const newPosition =
+			((e.clientX - timelineRect.left) / timelineRect.width) * 100;
+		const index = events.findIndex((e) => e.eventId === draggingEvent);
+
 		const newDate = positionToTime(
-			newPositionPercent,
+			newPosition,
 			startDate,
 			totalTimelineDays,
 			equivalences
@@ -147,15 +153,6 @@ function Timeline() {
 		if (sidebarState?.event?.eventId === events[index].eventId)
 			toggleSidebar({ mode: 'view', event: events[index] });
 		fetchEvents();
-	};
-
-	const handleDrop = (e) => {
-		e.preventDefault();
-		const timelineRect = e.currentTarget.getBoundingClientRect();
-		const newPosition =
-			((e.clientX - timelineRect.left) / timelineRect.width) * 100;
-		const index = events.findIndex((e) => e.eventId === draggingEvent);
-		handleDragEnd(index, newPosition);
 	};
 
 	return (

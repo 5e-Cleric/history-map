@@ -3,7 +3,7 @@ import './editMap.css';
 import Nav from '@components/nav/Nav';
 import Toolbar from '@components/toolbar/Toolbar';
 import EventPin from '@components/event/EventPin';
-import Location from '../../components/event/Location';
+import LocationPin from '../../components/event/LocationPin';
 import Sidebar from '@components/sidebar/Sidebar';
 import Timeline from '../../components/timeline/Timeline';
 import defaultMap from '@assets/defaultMap.jpg';
@@ -14,12 +14,15 @@ function Edit() {
 		map,
 		events,
 		setEvents,
+		updateEvent,
+		locations,
+		setLocations,
+		updateLocation,
+
 		error,
 		sidebarState,
-		setDropPosition,
 		draggingEvent,
 		setDraggingEvent,
-		handleDragEnd,
 		zoomLevel,
 		zoomIn,
 		zoomOut,
@@ -106,6 +109,9 @@ function Edit() {
 		document.querySelectorAll('.mapWrapper .eventPin').forEach((ev) => {
 			ev.classList.remove('dragging');
 		});
+		document.querySelectorAll('.mapWrapper .locationPin').forEach((ev) => {
+			ev.classList.remove('dragging');
+		});
 		const mapRect = e.target.getBoundingClientRect();
 		const newPosition = {
 			x: ((e.clientX - mapRect.left) / mapRect.width) * 100,
@@ -113,24 +119,55 @@ function Edit() {
 		};
 
 		if (draggingEvent) {
-			if (draggingEvent === 'new') {
-				// Handle creating a new event
-				setDropPosition(newPosition);
-
-				setEvents((prevEvents) => {
-					return [...prevEvents, { position: newPosition }];
-				});
-				console.log(events);
-				toggleSidebar({
-					mode: 'edit',
-					event: { position: newPosition },
-				});
+			if (draggingEvent[0] === 'location') {
+				if (draggingEvent[1] === 'new') {
+					// Handle creating a new location
+					setLocations((prevLocations) => [
+						...prevLocations,
+						{ position: newPosition },
+					]);
+					toggleSidebar({
+						mode: 'edit',
+						location: { position: newPosition },
+					});
+				} else {
+					// Handle editing an existing location
+					const index = locations.findIndex(
+						(ev) => ev.locationId === draggingEvent[1]
+					);
+					const updatedLocations = [...locations];
+					updatedLocations[index] = {
+						...updatedLocations[index],
+						position: newPosition,
+					};
+					setLocations(updatedLocations);
+					updateLocation(updatedLocations[index]);
+				}
 			} else {
-				const index = events.findIndex(
-					(ev) => ev.eventId === draggingEvent
-				);
-				handleDragEnd(index, newPosition);
+				if (draggingEvent[1] === 'new') {
+					// Handle creating a new event
+					setEvents((prevEvents) => [
+						...prevEvents,
+						{ position: newPosition },
+					]);
+					toggleSidebar({
+						mode: 'edit',
+						event: { position: newPosition },
+					});
+				} else {
+					const index = events.findIndex(
+						(ev) => ev.eventId === draggingEvent[1]
+					);
+					const updatedEvents = [...events];
+					updatedEvents[index] = {
+						...updatedEvents[index],
+						position: newPosition,
+					};
+					setEvents(updatedEvents);
+					updateEvent(updatedEvents[index]);
+				}
 			}
+
 			setDraggingEvent(null);
 		}
 	};
@@ -188,6 +225,7 @@ function Edit() {
 							alt="your map"
 							className="map"
 						/>
+						{renderLocations()}
 						{renderEvents()}
 					</div>
 
@@ -208,6 +246,15 @@ function Edit() {
 			return null;
 		}
 		return events.map((ev, index) => <EventPin key={index} event={ev} />);
+	};
+
+	const renderLocations = () => {
+		if (!locations.length) {
+			return null;
+		}
+		return locations.map((location, index) => (
+			<LocationPin key={index} location={location} />
+		));
 	};
 
 	if (!map) {

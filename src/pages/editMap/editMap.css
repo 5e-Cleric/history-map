@@ -38,8 +38,7 @@
 					display: inline;
 				}
 
-				.eventPin {
-					color: #da3d3d;
+				.mapPoint {
 					font-size: 25px;
 					position: absolute;
 					cursor: pointer;
@@ -70,11 +69,21 @@
 					&.active::after {
 						top:-10px;
 					}
-
+					
 					&.dragging {
 						pointer-events: none;
 					}
+
+					&.locationPin {
+						color:rgb(138, 1, 141);
+					}
+	
+					&.eventPin {
+						color: #da3d3d;
+					}
 				}
+
+				
 			}
 		}
 	}

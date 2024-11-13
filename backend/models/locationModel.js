@@ -12,5 +12,5 @@ const locationSchema = new mongoose.Schema({
 	},
 });
 
-const Event = mongoose.model('Event', locationSchema);
-export default Event;
+const Location = mongoose.model('Location', locationSchema);
+export default Location;

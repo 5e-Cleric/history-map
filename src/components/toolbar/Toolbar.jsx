@@ -15,8 +15,8 @@ const Toolbar = () => {
 		toggleTimeline,
 	} = useContext(EditContext);
 
-	const handleDragStart = (event) => {
-		setDraggingEvent('new');
+	const handleDragStart = (type) => {
+		setDraggingEvent([type, 'new']);
 		// Optional: style adjustments for the drag image, like transparency.
 		// event.currentTarget.style.opacity = '1';
 	};
@@ -26,28 +26,41 @@ const Toolbar = () => {
 		// event.currentTarget.style.opacity = '';
 	};
 
-	return (
-		<div className="toolbar">
+	const renderDraggables = () => {
+		return (
 			<ul>
+				<li>
+					<button
+						className="locationDrag"
+						title="drag to add a location"
+						draggable
+						onDragStart={()=>handleDragStart('location')}
+						onDragEnd={handleDragEnd}>
+						<i className="fa-solid fa-map-pin"></i>
+					</button>
+				</li>
 				<li>
 					<button
 						className="eventDrag"
 						title="drag to add an event"
 						draggable
-						onDragStart={handleDragStart}
-						onDragEnd={handleDragEnd}
-					>
+						onDragStart={()=>handleDragStart('event')}
+						onDragEnd={handleDragEnd}>
 						<i className="fa-solid fa-location-dot"></i>
 					</button>
 				</li>
 			</ul>
+		);
+	};
+
+	const renderZoom = () => {
+		return (
 			<ul>
 				<li>
 					<button
 						className="zoomOut"
 						title="zoom out"
-						onClick={() => zoomOut()}
-					>
+						onClick={() => zoomOut()}>
 						<i className="fa-solid fa-magnifying-glass-minus"></i>
 					</button>
 				</li>
@@ -59,8 +72,7 @@ const Toolbar = () => {
 							setZoomLevel(100);
 							setMapPosition({ x: 0, y: 0 });
 							setMapTranslation({ x: 0, y: 0 });
-						}}
-					>
+						}}>
 						<i className="fa-solid fa-expand"></i>
 					</button>
 				</li>
@@ -68,12 +80,16 @@ const Toolbar = () => {
 					<button
 						className="zoomIn"
 						title="zoom in"
-						onClick={() => zoomIn()}
-					>
+						onClick={() => zoomIn()}>
 						<i className="fa-solid fa-magnifying-glass-plus"></i>
 					</button>
 				</li>
 			</ul>
+		);
+	};
+
+	const renderLayers = () => {
+		return (
 			<ul>
 				<li>
 					<button
@@ -81,8 +97,7 @@ const Toolbar = () => {
 						className="sidebarButton"
 						onClick={() =>
 							toggleSidebar({ mode: 'view', event: null })
-						}
-					>
+						}>
 						<i className="fa-solid fa-earth-americas"></i>
 					</button>
 				</li>
@@ -97,12 +112,19 @@ const Toolbar = () => {
 					<button
 						title="open timeline"
 						className="timelineButton"
-						onClick={toggleTimeline}
-					>
+						onClick={toggleTimeline}>
 						<i className="fa-solid fa-timeline"></i>
 					</button>
 				</li>
 			</ul>
+		);
+	};
+
+	return (
+		<div className="toolbar">
+			{renderDraggables()}
+			{renderZoom()}
+			{renderLayers()}
 		</div>
 	);
 };

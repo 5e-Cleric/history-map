@@ -4,11 +4,11 @@ export const EditContext = createContext();
 
 export const EditProvider = ({ children }) => {
 	const [map, setMap] = useState(null);
+	const [locations, setLocations] = useState([]);
 	const [events, setEvents] = useState([]);
 	const [error, setError] = useState(null);
 	const [sidebarState, setSidebar] = useState(false);
 	const [timelineState, setTimeline] = useState(false);
-	const [dropPosition, setDropPosition] = useState(null);
 	const [draggingEvent, setDraggingEvent] = useState(null);
 	const [zoomLevel, setZoomLevel] = useState(null);
 	const [mapPosition, setMapPosition] = useState({ x: 0, y: 0 });
@@ -32,7 +32,7 @@ export const EditProvider = ({ children }) => {
 			} catch (error) {
 				setError('Error fetching Maps');
 			}
-			fetchEvents();
+			fetchMapContents();
 		}
 	};
 
@@ -64,6 +64,51 @@ export const EditProvider = ({ children }) => {
 			window.location.href = `/`;
 		} catch (error) {
 			console.error(error);
+		}
+	};
+
+	const fetchLocations = async () => {
+		try {
+			const locationResponse = await fetch(
+				`${import.meta.env.VITE_API_URL}/api/location/${urlId}`
+			);
+			const locationData = await locationResponse.json();
+			setLocations(locationData);
+		} catch (error) {
+			setError('Error fetching locations');
+		}
+	};
+
+	const updateLocation = async (location) => {
+		try {
+			const response = await fetch(
+				`${import.meta.env.VITE_API_URL}/api/location/${urlId}/${
+					location.locationId
+				}`,
+				{
+					method: 'PUT',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify(location),
+				}
+			);
+			const data = await response.json();
+		} catch (error) {
+			console.error('Error updating location position:', error);
+		}
+	};
+
+	const deleteLocation = async () => {
+		try {
+			await fetch(
+				`${import.meta.env.VITE_API_URL}/api/event/${location.mapId}/${
+					location.locationId
+				}`,
+				{ method: 'DELETE' }
+			);
+			fetchLocations();
+			setSidebar(false);
+		} catch (error) {
+			setError('Error deleting location');
 		}
 	};
 
@@ -100,9 +145,9 @@ export const EditProvider = ({ children }) => {
 			const response = await fetch(
 				`${import.meta.env.VITE_API_URL}/api/event/${urlId}/${
 					event.eventId
-				}`, // Ensure the correct endpoint for updating
+				}`,
 				{
-					method: 'PUT', // Assuming you're using PUT for updating
+					method: 'PUT',
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify(event),
 				}
@@ -123,8 +168,11 @@ export const EditProvider = ({ children }) => {
 			);
 			fetchEvents();
 			setSidebar(false);
-		} catch (error) {}
+		} catch (error) {
+			setError('Error deleting event');
+		}
 	};
+
 	const deleteEventsByMap = async () => {
 		try {
 			await fetch(`${import.meta.env.VITE_API_URL}/api/event/${map.id}`, {
@@ -135,22 +183,15 @@ export const EditProvider = ({ children }) => {
 		}
 	};
 
-	const handleDragEnd = (index, newPosition) => {
-		const updatedEvents = [...events];
-		updatedEvents[index] = {
-			...updatedEvents[index],
-			position: newPosition,
-		};
-		setEvents(updatedEvents);
-		updateEvent(updatedEvents[index]);
-	};
+	const fetchMapContents = async () => {
+		fetchEvents();
+		fetchLocations();
+	}
 
 	const toggleSidebar = (newSidebarState) => {
-		if (sidebarState.mode === 'edit' && sidebarState.event) fetchEvents();
 		if (JSON.stringify(newSidebarState) === JSON.stringify(sidebarState))
 			setSidebar(false);
 		else setSidebar(newSidebarState);
-		setDropPosition(null);
 	};
 
 	const toggleTimeline = () => {
@@ -161,6 +202,7 @@ export const EditProvider = ({ children }) => {
 		setZoomLevel(zoomLevel + 10);
 		setZoomLevel(Math.min(700, zoomLevel + 10));
 	};
+
 	const zoomOut = () => {
 		setZoomLevel(Math.max(10, zoomLevel - 10));
 	};
@@ -173,14 +215,17 @@ export const EditProvider = ({ children }) => {
 				setMap,
 				events,
 				setEvents,
+				locations,
+				setLocations,
+				fetchLocations,
+				updateLocation,
+				deleteLocation,
 				error,
 				setError,
 				sidebarState,
 				setSidebar,
 				timelineState,
 				setTimeline,
-				dropPosition,
-				setDropPosition,
 				draggingEvent,
 				setDraggingEvent,
 				zoomLevel,
@@ -192,12 +237,11 @@ export const EditProvider = ({ children }) => {
 				mapTranslation,
 				setMapTranslation,
 
-				handleDragEnd,
-
 				//CRUD functions
 				updateMap,
 				deleteMap,
 				fetchEvents,
+				fetchMapContents,
 				saveNewEvent,
 				updateEvent,
 				deleteEvent,
@@ -206,8 +250,7 @@ export const EditProvider = ({ children }) => {
 				//other functions
 				toggleSidebar,
 				toggleTimeline,
-			}}
-		>
+			}}>
 			{children}
 		</EditContext.Provider>
 	);
