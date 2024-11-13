@@ -2,17 +2,17 @@ import { useContext } from 'react';
 import { EditContext } from '@pages/editMap/EditContext';
 import EventPin from '@components/event/EventPin';
 
-function ViewFolder() {
+function ViewLocation() {
 	const { sidebarState } = useContext(EditContext);
 
-	const folder = sidebarState.folder;
+	const location = sidebarState.location;
 
 	return (
-		<div className="folder view">
-			<h2 className="title">{folder.title}</h2>
+		<div className="location view">
+			<h2 className="title">{location.title}</h2>
 
 			<div className="events">
-				{folder.events?.map((ev, index) => (
+				{location.events?.map((ev, index) => (
 					<div className="event" key={index}>
 						<EventPin event={ev} />
                         {ev.title}
@@ -23,4 +23,4 @@ function ViewFolder() {
 	);
 }
 
-export default ViewFolder;
+export default ViewLocation;

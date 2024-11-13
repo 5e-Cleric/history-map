@@ -1,5 +1,5 @@
 import express from 'express';
-import Location from '../models/locationModel';
+import Location from '../models/locationModel.js';
 
 const router = express.Router();
 
@@ -57,6 +57,7 @@ router.post('/:mapId', async (req, res) => {
 	const { title, description, position } = req.body;
 	const { mapId } = req.params;
 
+	console.log(req.body);
 	console.log(`Creating location for map ${mapId}`);
 	try {
 		const newLocation = new Location({

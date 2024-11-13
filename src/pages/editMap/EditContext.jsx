@@ -75,7 +75,26 @@ export const EditProvider = ({ children }) => {
 			const locationData = await locationResponse.json();
 			setLocations(locationData);
 		} catch (error) {
+			console.error(error);
 			setError('Error fetching locations');
+		}
+	};
+
+	const saveNewLocation = async (location) => {
+		console.log(`${import.meta.env.VITE_API_URL}/api/location/${urlId}`);
+		try {
+			const response = await fetch(
+				`${import.meta.env.VITE_API_URL}/api/location/${urlId}`,
+				{
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify(location),
+				}
+			);
+			const data = await response.json();
+		} catch (error) {
+			console.log(error);
+			console.error('Error creating location:', error);
 		}
 	};
 
@@ -109,6 +128,16 @@ export const EditProvider = ({ children }) => {
 			setSidebar(false);
 		} catch (error) {
 			setError('Error deleting location');
+		}
+	};
+
+	const deleteLocationsByMap = async () => {
+		try {
+			await fetch(`${import.meta.env.VITE_API_URL}/api/location/${map.id}`, {
+				method: 'DELETE',
+			});
+		} catch (error) {
+			console.error('Error deleting locations:', error);
 		}
 	};
 
@@ -218,8 +247,10 @@ export const EditProvider = ({ children }) => {
 				locations,
 				setLocations,
 				fetchLocations,
+				saveNewLocation,
 				updateLocation,
 				deleteLocation,
+				deleteLocationsByMap,
 				error,
 				setError,
 				sidebarState,

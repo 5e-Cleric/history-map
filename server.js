@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import mapRoutes from './backend/routes/mapRoutes.js';
 import eventRoutes from './backend/routes/eventRoutes.js';
+import locationRoutes from './backend/routes/locationRoutes.js';
 import dotenv from 'dotenv';
 
 const env = process.env.NODE_ENV || 'development';
@@ -45,6 +46,9 @@ app.use('/api/map', mapRoutes);
 
 // Use the event routes
 app.use('/api/event', eventRoutes);
+
+// Use the locaiton routes
+app.use('/api/location', locationRoutes);
 
 // Start the server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -32,7 +32,7 @@ router.get('/:eventId', async (req, res) => {
 router.put('/:mapId/:eventId', async (req, res) => {
 	const { mapId, eventId } = req.params;
 	const updatedData = req.body;
-	console.log(`Updating event ${eventId} for map ${mapId}`);
+	//console.log(`Updating event ${eventId} for map ${mapId}`);
 
 	try {
 		// Find the event by eventId and mapId
@@ -57,7 +57,7 @@ router.post('/:mapId', async (req, res) => {
 	const { title, description, date, position } = req.body;
 	const { mapId } = req.params;
 
-	console.log(`Creating event for map ${mapId}`);
+	//console.log(`Creating event for map ${mapId}`);
 	try {
 		const newEvent = new Event({
 			mapId,
@@ -76,7 +76,7 @@ router.post('/:mapId', async (req, res) => {
 
 router.delete('/:mapId/:eventId', async (req, res) => {
 	const { mapId, eventId } = req.params;
-	console.log(`Attempting to delete event ${eventId} for map ${mapId}`);
+	//console.log(`Attempting to delete event ${eventId} for map ${mapId}`);
 	try {
 		const event = await Event.findOne({ eventId, mapId });
 		if (!event) {
@@ -94,7 +94,7 @@ router.delete('/:mapId/:eventId', async (req, res) => {
 
 router.delete('/:mapId', async (req, res) => {
 	const { mapId } = req.params;
-	console.log(`Attempting to delete ell events for map ${mapId}`);
+	//console.log(`Attempting to delete ell events for map ${mapId}`);
 	try {
 		await Event.deleteMany({ mapId });
 
