@@ -36,13 +36,14 @@ function EditLocation() {
 		};
 
 		if (location.locationId) {
+            console.log(locationData);
 			updateLocation(locationData);
 		} else {
 			saveNewLocation(locationData);
 		}
 
 		fetchLocations();
-		toggleSidebar({ mode: sidebarState.mode, location: location });
+		toggleSidebar({ mode: 'view', location: location });
 	};
 
 	return (

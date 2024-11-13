@@ -106,70 +106,81 @@ function Edit() {
 	const handleDrop = (e) => {
 		e.preventDefault();
 
-		document.querySelectorAll('.mapWrapper .eventPin').forEach((ev) => {
-			ev.classList.remove('dragging');
+		document.querySelectorAll('.mapWrapper .mapPoint').forEach((el) => {
+			el.classList.remove('dragging');
 		});
-		document.querySelectorAll('.mapWrapper .locationPin').forEach((ev) => {
-			ev.classList.remove('dragging');
-		});
-		const mapRect = e.target.getBoundingClientRect();
+
+		const { left, top, width, height } = e.target.getBoundingClientRect();
 		const newPosition = {
-			x: ((e.clientX - mapRect.left) / mapRect.width) * 100,
-			y: ((e.clientY - mapRect.top) / mapRect.height) * 100,
+			x: ((e.clientX - left) / width) * 100,
+			y: ((e.clientY - top) / height) * 100,
 		};
 
 		if (draggingEvent) {
-			if (draggingEvent[0] === 'location') {
-				if (draggingEvent[1] === 'new') {
-					// Handle creating a new location
-					setLocations((prevLocations) => [
-						...prevLocations,
-						{ position: newPosition },
-					]);
-					toggleSidebar({
-						mode: 'edit',
-						location: { position: newPosition },
-					});
+			const [type, id] = draggingEvent;
+
+			if (type === 'location') {
+				if (id === 'new') {
+					addNewLocation(newPosition);
 				} else {
-					// Handle editing an existing location
-					const index = locations.findIndex(
-						(ev) => ev.locationId === draggingEvent[1]
-					);
-					const updatedLocations = [...locations];
-					updatedLocations[index] = {
-						...updatedLocations[index],
-						position: newPosition,
-					};
-					setLocations(updatedLocations);
-					updateLocation(updatedLocations[index]);
+					updateExistingLocation(id, newPosition);
 				}
-			} else {
-				if (draggingEvent[1] === 'new') {
-					// Handle creating a new event
-					setEvents((prevEvents) => [
-						...prevEvents,
-						{ position: newPosition },
-					]);
-					toggleSidebar({
-						mode: 'edit',
-						event: { position: newPosition },
-					});
+			} else if (type === 'event') {
+				if (id === 'new') {
+					addNewEvent(newPosition);
 				} else {
-					const index = events.findIndex(
-						(ev) => ev.eventId === draggingEvent[1]
-					);
-					const updatedEvents = [...events];
-					updatedEvents[index] = {
-						...updatedEvents[index],
-						position: newPosition,
-					};
-					setEvents(updatedEvents);
-					updateEvent(updatedEvents[index]);
+					updateExistingEvent(id, newPosition);
 				}
 			}
 
 			setDraggingEvent(null);
 		}
+	};
+
+	// Helper functions
+
+	const addNewLocation = (position) => {
+		setLocations((prevLocations) => [...prevLocations, { position }]);
+		toggleSidebar({
+			mode: 'edit',
+			location: { position },
+		});
+	};
+
+	const updateExistingLocation = (locationId, position) => {
+		const index = locations.findIndex(
+			(loc) => loc.locationId === locationId
+		);
+		if (index === -1) return; // Safety check
+
+		const updatedLocations = [...locations];
+		updatedLocations[index] = {
+			...updatedLocations[index],
+			position,
+		};
+		setLocations(updatedLocations);
+		updateLocation(updatedLocations[index]);
+	};
+
+	const addNewEvent = (position) => {
+		setEvents((prevEvents) => [...prevEvents, { position }]);
+		toggleSidebar({
+			mode: 'edit',
+			event: { position },
+		});
+	};
+
+	const updateExistingEvent = (eventId, position) => {
+		const index = events.findIndex((ev) => ev.eventId === eventId);
+		if (index === -1) return; // Safety check
+
+		const updatedEvents = [...events];
+		updatedEvents[index] = {
+			...updatedEvents[index],
+			position,
+		};
+		setEvents(updatedEvents);
+		updateEvent(updatedEvents[index]);
 	};
 
 	const handleImageError = (event) => {

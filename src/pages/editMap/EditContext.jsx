@@ -92,10 +92,12 @@ export const EditProvider = ({ children }) => {
 				}
 			);
 			const data = await response.json();
+			fetchMapContents();
 		} catch (error) {
 			console.log(error);
 			console.error('Error creating location:', error);
 		}
+		
 	};
 
 	const updateLocation = async (location) => {
@@ -111,6 +113,7 @@ export const EditProvider = ({ children }) => {
 				}
 			);
 			const data = await response.json();
+			fetchLocations();
 		} catch (error) {
 			console.error('Error updating location position:', error);
 		}
@@ -164,6 +167,7 @@ export const EditProvider = ({ children }) => {
 				}
 			);
 			const data = await response.json();
+			fetchEvents();
 		} catch (error) {
 			console.error('Error creating event:', error);
 		}
@@ -182,6 +186,7 @@ export const EditProvider = ({ children }) => {
 				}
 			);
 			const data = await response.json();
+			fetchEvents();
 		} catch (error) {
 			console.error('Error updating event position:', error);
 		}

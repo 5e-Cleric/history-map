@@ -38,7 +38,7 @@ function EditMap() {
 			},
 		};
 		updateMap(mapData);
-		toggleSidebar({ mode: 'map', event: null });
+		toggleSidebar({ mode: 'view', event: null });
 	};
 
 	return (

@@ -46,7 +46,7 @@ function EditEvent() {
 		}
 
 		fetchEvents();
-		toggleSidebar({ mode: sidebarState.mode, event: event });
+		toggleSidebar({ mode: 'view', event: event });
 	};
 
 	return (

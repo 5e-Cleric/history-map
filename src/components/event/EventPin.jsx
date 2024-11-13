@@ -2,13 +2,8 @@ import { useState, useContext } from 'react';
 import { EditContext } from '@pages/editMap/EditContext';
 
 function EventPin({ event, timelineEventPosition }) {
-	const {
-		draggingEvent,
-		setDraggingEvent,
-		sidebarState,
-		setZoomLevel,
-		toggleSidebar,
-	} = useContext(EditContext);
+	const { setDraggingEvent, sidebarState, setZoomLevel, toggleSidebar } =
+		useContext(EditContext);
 
 	const [timelinePosition, setTimelinePosition] = useState(
 		timelineEventPosition
@@ -29,7 +24,11 @@ function EventPin({ event, timelineEventPosition }) {
 
 	const handleDragStart = (e) => {
 		setDraggingEvent(['event', event.eventId]);
-			document.querySelectorAll(`.mapWrapper .eventPin:not(#event-${event.eventId})`).forEach((ev) => {
+		document
+			.querySelectorAll(
+				`.mapWrapper .mapPoint:not(#event-${event.eventId})`
+			)
+			.forEach((ev) => {
 				ev.classList.add('dragging');
 			});
 		e.stopPropagation();
@@ -54,13 +53,12 @@ function EventPin({ event, timelineEventPosition }) {
 			id={`event-${event.eventId}`}
 			data-title={event.title}
 			className={`mapPoint eventPin${active ? ' active' : ''} `}
-			style={positionStyles}
 			draggable
 			onDrag={isTimelineMode ? handleDrag : undefined}
 			onDragStart={handleDragStart}
-			onClick={handleClick}>
-			<i
-				className='fa-solid fa-sun'></i>
+			onClick={handleClick}
+			style={positionStyles}>
+			<i className="fa-solid fa-sun"></i>
 		</div>
 	);
 }

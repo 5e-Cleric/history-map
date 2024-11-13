@@ -43,6 +43,7 @@
 					position: absolute;
 					cursor: pointer;
 					z-index: 5;
+					transition: all var(--transition-dets);
 
 					&::after {
 						position: absolute;
@@ -63,27 +64,39 @@
 						paint-order: stroke;
 					}
 
-					&:hover::after,&.active::after {
+					i {
+						filter: drop-shadow(0 0 2px #000);
+						transition: all 0.3s ease-in-out;
+					}
+
+					&.active i {
+						transform-origin: bottom center;
+						scale: 1.5;
+						filter: drop-shadow(0 0 2px #fff) drop-shadow(0 0 2px #fff) drop-shadow(0 0 10px #fff);
+					}
+
+					&:hover::after, &.active::after {
 						opacity: 1;
 					}
+
 					&.active::after {
-						top:-10px;
+						top: -10px;
 					}
-					
+
 					&.dragging {
 						pointer-events: none;
 					}
 
 					&.locationPin {
-						color:rgb(138, 1, 141);
+						color: #b522b5;
 					}
-	
+
 					&.eventPin {
 						color: #da3d3d;
 					}
 				}
 
-				
+
 			}
 		}
 	}
