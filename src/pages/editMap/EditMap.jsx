@@ -6,6 +6,7 @@ import EventPin from '@components/event/EventPin';
 import LocationPin from '../../components/event/LocationPin';
 import Sidebar from '@components/sidebar/Sidebar';
 import Timeline from '../../components/timeline/Timeline';
+import ErrorWarning from '../../components/errorWarning/ErrorWarning';
 import defaultMap from '@assets/defaultMap.jpg';
 import { EditContext } from './EditContext';
 
@@ -13,6 +14,7 @@ function Edit() {
 	const {
 		map,
 		events,
+		renderableEvents,
 		setEvents,
 		updateEvent,
 		locations,
@@ -20,13 +22,13 @@ function Edit() {
 		updateLocation,
 
 		error,
+		setError,
 		sidebarState,
 		draggingEvent,
 		setDraggingEvent,
 		zoomLevel,
 		zoomIn,
 		zoomOut,
-		setZoomLevel,
 		mapPosition,
 		setMapPosition,
 		mapTranslation,
@@ -39,6 +41,7 @@ function Edit() {
 
 	const [isDragging, setIsDragging] = useState(false);
 	const [lastMousePosition, setLastMousePosition] = useState({ x: 0, y: 0 });
+	const [renderableLocations, setRenderableLocations] = useState(null);
 
 	const mapArticleRef = useRef(null);
 
@@ -84,23 +87,6 @@ function Edit() {
 		} else {
 			zoomIn();
 		}
-	};
-
-	const checkIfEventClose = (newPosition) => {
-		//check if the new position for this event coincides with the position of another event, with a changeable margin of error
-
-		const marginOfError = 5;
-		const otherEvents = events.filter(
-			(event) => event.eventId !== draggingEvent
-		);
-		const coincidingEvent = otherEvents.find((otherEvent) => {
-			const distance = Math.sqrt(
-				Math.pow(newPosition.y - otherEvent.position.y, 2) +
-					Math.pow(newPosition.x - otherEvent.position.x, 2)
-			);
-			return distance < marginOfError;
-		});
-		return coincidingEvent;
 	};
 
 	const handleDrop = (e) => {
@@ -151,15 +137,21 @@ function Edit() {
 		const index = locations.findIndex(
 			(loc) => loc.locationId === locationId
 		);
-		if (index === -1) return; // Safety check
-
-		const updatedLocations = [...locations];
-		updatedLocations[index] = {
-			...updatedLocations[index],
-			position,
-		};
-		setLocations(updatedLocations);
-		updateLocation(updatedLocations[index]);
+		console.log(locations[index].events);
+		if (locations[index].events && locations[index].events?.length !== 0) {
+			console.log('a')
+			setError({
+				errorCode: 10,
+				errorText: 'Locations with events cannot be moved!',
+			});
+		} else {
+			const updatedLocations = [...locations];
+			updatedLocations[index] = {
+				...updatedLocations[index],
+				position,
+			};
+			updateLocation(updatedLocations[index]);
+		}
 	};
 
 	const addNewEvent = (position) => {
@@ -179,7 +171,6 @@ function Edit() {
 			...updatedEvents[index],
 			position,
 		};
-		setEvents(updatedEvents);
 		updateEvent(updatedEvents[index]);
 	};
 
@@ -248,15 +239,17 @@ function Edit() {
 				</article>
 			);
 		} else {
-			return <p>{error}</p>;
+			return <p>Oops, where is the map?</p>;
 		}
 	};
 
 	const renderEvents = () => {
-		if (!events.length) {
+		if (!renderableEvents.length) {
 			return null;
 		}
-		return events.map((ev, index) => <EventPin key={index} event={ev} />);
+		return renderableEvents.map((ev, index) => (
+			<EventPin key={index} event={ev} />
+		));
 	};
 
 	const renderLocations = () => {
@@ -276,6 +269,7 @@ function Edit() {
 		<div className="page edit">
 			<Nav />
 			<main className="content">
+				<ErrorWarning error={error} />
 				<Toolbar />
 				{renderMap()}
 				<Sidebar />

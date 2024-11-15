@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react';
 import { EditContext } from '@pages/editMap/EditContext';
 
-function EventPin({ event, timelineEventPosition }) {
+function EventPin({ event, timelineEventPosition, inLocation }) {
 	const { setDraggingEvent, sidebarState, setZoomLevel, toggleSidebar } =
 		useContext(EditContext);
 
@@ -34,8 +34,11 @@ function EventPin({ event, timelineEventPosition }) {
 		e.stopPropagation();
 	};
 
+	
 	const handleClick = (e) => {
-		toggleSidebar({ mode: 'view', event });
+		console.log(inLocation);
+		if(inLocation) toggleSidebar({ mode: 'view', event, location : inLocation }) 
+			else toggleSidebar({ mode: 'view', event });
 		setZoomLevel(150);
 		e.stopPropagation();
 	};

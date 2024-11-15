@@ -9,7 +9,8 @@ import EditLocation from './sidebarContents/EditLocation';
 import ViewLocation from './sidebarContents/ViewLocation';
 
 function Sidebar() {
-	const { sidebarState, toggleSidebar } = useContext(EditContext);
+	const { sidebarState, toggleSidebar } =
+		useContext(EditContext);
 
 	const mode = sidebarState.mode;
 	const event = sidebarState.event;

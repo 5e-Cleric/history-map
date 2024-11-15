@@ -1,11 +1,16 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { EditContext } from '@pages/editMap/EditContext';
 import EventPin from '@components/event/EventPin';
 
 function ViewLocation() {
-	const { sidebarState, deleteLocation, toggleSidebar } = useContext(EditContext);
+	const { events, sidebarState, deleteLocation, toggleSidebar } =
+		useContext(EditContext);
 
 	const location = sidebarState.location;
+
+	const locationEvents = events.filter((ev) => {
+		return location.events?.some((locEv) => locEv === ev.eventId);
+	});
 
 	return (
 		<div className="location view">
@@ -15,17 +20,19 @@ function ViewLocation() {
 			</p>
 			<h3>Events in this location:</h3>
 			<div className="events">
-				{location.events?.map((ev, index) => (
+				{locationEvents?.map((ev, index) => (
 					<div className="event" key={index}>
-						<EventPin event={ev} />
-                        {ev.title}
+						<EventPin event={ev} inLocation={location} />
+						{ev.title}
 					</div>
 				))}
 			</div>
 			<div className="sidebarActions">
 				<button
 					className="green edit"
-					onClick={() =>toggleSidebar({mode: 'edit',location: location})}>
+					onClick={() =>
+						toggleSidebar({ mode: 'edit', location: location })
+					}>
 					Edit
 				</button>
 				<button
