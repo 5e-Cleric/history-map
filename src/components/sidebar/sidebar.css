@@ -36,6 +36,24 @@
             margin-top: 50px;
         }
 
+        .backToLocation {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: none;
+            border-radius: unset;
+            font-family: Merienda, sans-serif;
+            color: black;
+            font-size: 30px;
+            padding: 10px;
+            transition: scale 0.3s ease-in-out;
+
+            &:hover, &:focus-within {
+                background: none;
+                scale: 1.2;
+            }
+        }
+
         .closeButton {
             position: absolute;
             top: 10px;
@@ -51,11 +69,10 @@
             &:hover, &:focus-within {
                 background: none;
                 scale: 1.2;
-
             }
         }
 
-        .event {
+        >.event {
 
             &.view {
 
@@ -64,6 +81,21 @@
                 }
             }
 
+        }
+
+        >.location {
+            .events {
+                font-size:25px;
+                display:grid;
+                grid-template-columns: 1fr 1fr 1fr;
+
+                .eventPin {
+                    font-size:35px;
+                    width:auto;
+                    height:auto;
+                    translate:none !important;
+                }
+            }
         }
     }
 

@@ -1,17 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import Nav from '@components/nav/Nav';
 import './all.css';
+import { MainContext } from '../MainContext';
 
 function All() {
 	const [maps, setmaps] = useState(null);
 	const [searching, setSearching] = useState(null);
-	const [error, setError] = useState('');
+	const { error, setError } = useContext(MainContext);
 
 	useEffect(() => {
 		fetchMaps();
 	}, []);
 
 	const fetchMaps = () => {
+		setSearching(true);
 		console.log(`fetching to ${import.meta.env.VITE_API_URL}/api/map/all`);
 		fetch(`${import.meta.env.VITE_API_URL}/api/map/all`)
 			.then((response) => response.json())
@@ -22,7 +24,7 @@ function All() {
 			.catch((error) => {
 				console.log(error);
 				console.error(error);
-				setError('Error fetching maps');
+				setError({ errorCode: 1, errorText: 'Error fetching maps' });
 				setSearching(false);
 			});
 	};
@@ -50,14 +52,6 @@ function All() {
 			);
 		}
 
-		if (error) {
-			return (
-				<div className="error">
-					<h1>{error}</h1>
-				</div>
-			);
-		}
-
 		if (!maps || maps.length === 0) {
 			return (
 				<div className="nomaps">
@@ -78,8 +72,7 @@ function All() {
 							className="delete"
 							onClick={() => {
 								deleteMap(map.id);
-							}}
-						>
+							}}>
 							delete
 						</button>
 					</li>

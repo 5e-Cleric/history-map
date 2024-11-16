@@ -4,13 +4,16 @@ export const EditContext = createContext();
 
 export const EditProvider = ({ children }) => {
 	const [map, setMap] = useState(null);
+	const [locations, setLocations] = useState([]);
 	const [events, setEvents] = useState([]);
-	const [error, setError] = useState(null);
+	const [renderableEvents, setRenderableEvents] = useState([]);
+	const [error, setError] = useState({ errorCode: null, errorText: null });
 	const [sidebarState, setSidebar] = useState(false);
 	const [timelineState, setTimeline] = useState(false);
-	const [dropPosition, setDropPosition] = useState(null);
 	const [draggingEvent, setDraggingEvent] = useState(null);
 	const [zoomLevel, setZoomLevel] = useState(null);
+	const [mapPosition, setMapPosition] = useState({ x: 0, y: 0 });
+	const [mapTranslation, setMapTranslation] = useState({ x: 0, y: 0 });
 
 	const urlId = window.location.pathname.match(/\/([^/]+)\/?$/)[1];
 
@@ -18,6 +21,47 @@ export const EditProvider = ({ children }) => {
 		fetchMap();
 		setZoomLevel(100);
 	}, []);
+
+	useEffect(() => {
+		joinEventsWithLocations();
+	}, [events]);
+
+	const joinEventsWithLocations = () => {
+		// Margin of error for proximity check, 5%
+		const marginOfError = 5;
+
+		let updatedLocations = [...locations];
+		const filteredRenderableEvents = events.filter((ev) => {
+			
+			const coincidingLocation = updatedLocations.find((location) => {
+				const distance = Math.sqrt(
+					Math.pow(ev.position.y - location.position.y, 2) +
+						Math.pow(ev.position.x - location.position.x, 2)
+				);
+				return distance < marginOfError;
+			});
+
+			if (coincidingLocation) {
+				const updatedLocation = {
+					...coincidingLocation,
+					events: [...(coincidingLocation.events || []), ev.eventId],
+				};
+
+				updatedLocations = updatedLocations.map((location) =>
+					location.locationId === coincidingLocation.locationId
+						? updatedLocation
+						: location
+				);
+
+				return false;
+			}
+
+			return true;
+		});
+
+		setLocations(updatedLocations);
+		setRenderableEvents(filteredRenderableEvents);
+	};
 
 	const fetchMap = async () => {
 		if (urlId) {
@@ -30,7 +74,7 @@ export const EditProvider = ({ children }) => {
 			} catch (error) {
 				setError('Error fetching Maps');
 			}
-			fetchEvents();
+			fetchMapContents();
 		}
 	};
 
@@ -65,6 +109,85 @@ export const EditProvider = ({ children }) => {
 		}
 	};
 
+	const fetchLocations = async () => {
+		try {
+			const locationResponse = await fetch(
+				`${import.meta.env.VITE_API_URL}/api/location/${urlId}`
+			);
+			const locationData = await locationResponse.json();
+			setLocations(locationData);
+		} catch (error) {
+			console.error(error);
+			setError('Error fetching locations');
+		}
+	};
+
+	const saveNewLocation = async (location) => {
+		console.log(`${import.meta.env.VITE_API_URL}/api/location/${urlId}`);
+		try {
+			const response = await fetch(
+				`${import.meta.env.VITE_API_URL}/api/location/${urlId}`,
+				{
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify(location),
+				}
+			);
+			const data = await response.json();
+			fetchMapContents();
+		} catch (error) {
+			console.log(error);
+			console.error('Error creating location:', error);
+		}
+	};
+
+	const updateLocation = async (location) => {
+		try {
+			const response = await fetch(
+				`${import.meta.env.VITE_API_URL}/api/location/${urlId}/${
+					location.locationId
+				}`,
+				{
+					method: 'PUT',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify(location),
+				}
+			);
+			const data = await response.json();
+			fetchMapContents();
+		} catch (error) {
+			console.error('Error updating location position:', error);
+		}
+	};
+
+	const deleteLocation = async () => {
+		try {
+			await fetch(
+				`${import.meta.env.VITE_API_URL}/api/event/${location.mapId}/${
+					location.locationId
+				}`,
+				{ method: 'DELETE' }
+			);
+			fetchMapContents();
+			setSidebar(false);
+		} catch (error) {
+			setError('Error deleting location');
+		}
+	};
+
+	const deleteLocationsByMap = async () => {
+		try {
+			await fetch(
+				`${import.meta.env.VITE_API_URL}/api/location/${map.id}`,
+				{
+					method: 'DELETE',
+				}
+			);
+		} catch (error) {
+			console.error('Error deleting locations:', error);
+		}
+	};
+
 	const fetchEvents = async () => {
 		try {
 			const eventResponse = await fetch(
@@ -88,6 +211,7 @@ export const EditProvider = ({ children }) => {
 				}
 			);
 			const data = await response.json();
+			fetchEvents();
 		} catch (error) {
 			console.error('Error creating event:', error);
 		}
@@ -98,14 +222,15 @@ export const EditProvider = ({ children }) => {
 			const response = await fetch(
 				`${import.meta.env.VITE_API_URL}/api/event/${urlId}/${
 					event.eventId
-				}`, // Ensure the correct endpoint for updating
+				}`,
 				{
-					method: 'PUT', // Assuming you're using PUT for updating
+					method: 'PUT',
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify(event),
 				}
 			);
 			const data = await response.json();
+			fetchEvents();
 		} catch (error) {
 			console.error('Error updating event position:', error);
 		}
@@ -121,8 +246,11 @@ export const EditProvider = ({ children }) => {
 			);
 			fetchEvents();
 			setSidebar(false);
-		} catch (error) {}
+		} catch (error) {
+			setError('Error deleting event');
+		}
 	};
+
 	const deleteEventsByMap = async () => {
 		try {
 			await fetch(`${import.meta.env.VITE_API_URL}/api/event/${map.id}`, {
@@ -133,22 +261,15 @@ export const EditProvider = ({ children }) => {
 		}
 	};
 
-	const handleDragEnd = (index, newPosition) => {
-		const updatedEvents = [...events];
-		updatedEvents[index] = {
-			...updatedEvents[index],
-			position: newPosition,
-		};
-		setEvents(updatedEvents);
-		updateEvent(updatedEvents[index]);
+	const fetchMapContents = async () => {
+		fetchEvents();
+		fetchLocations();
 	};
 
 	const toggleSidebar = (newSidebarState) => {
-		if (sidebarState.mode === 'editEvent') fetchEvents();
 		if (JSON.stringify(newSidebarState) === JSON.stringify(sidebarState))
 			setSidebar(false);
 		else setSidebar(newSidebarState);
-		setDropPosition(null);
 	};
 
 	const toggleTimeline = () => {
@@ -159,8 +280,9 @@ export const EditProvider = ({ children }) => {
 		setZoomLevel(zoomLevel + 10);
 		setZoomLevel(Math.min(700, zoomLevel + 10));
 	};
+
 	const zoomOut = () => {
-		setZoomLevel(Math.max(100, zoomLevel - 10));
+		setZoomLevel(Math.max(10, zoomLevel - 10));
 	};
 
 	return (
@@ -170,28 +292,37 @@ export const EditProvider = ({ children }) => {
 				map,
 				setMap,
 				events,
+				renderableEvents,
 				setEvents,
+				locations,
+				setLocations,
+				fetchLocations,
+				saveNewLocation,
+				updateLocation,
+				deleteLocation,
+				deleteLocationsByMap,
 				error,
 				setError,
 				sidebarState,
 				setSidebar,
 				timelineState,
 				setTimeline,
-				dropPosition,
-				setDropPosition,
 				draggingEvent,
 				setDraggingEvent,
 				zoomLevel,
 				setZoomLevel,
 				zoomIn,
 				zoomOut,
-
-				handleDragEnd,
+				mapPosition,
+				setMapPosition,
+				mapTranslation,
+				setMapTranslation,
 
 				//CRUD functions
 				updateMap,
 				deleteMap,
 				fetchEvents,
+				fetchMapContents,
 				saveNewEvent,
 				updateEvent,
 				deleteEvent,
@@ -200,8 +331,7 @@ export const EditProvider = ({ children }) => {
 				//other functions
 				toggleSidebar,
 				toggleTimeline,
-			}}
-		>
+			}}>
 			{children}
 		</EditContext.Provider>
 	);

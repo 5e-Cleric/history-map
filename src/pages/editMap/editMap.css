@@ -1,7 +1,6 @@
 .edit {
 	.content {
 
-
 		.mapArticle {
 			position: fixed;
 			width: 100vw;
@@ -21,39 +20,84 @@
 					object-fit: contain;
 					-webkit-user-drag: none;
 				}
+
 				+.defaultAttribution {
 					position: fixed;
 					bottom: 50px;
 					left: 50%;
 					translate: -50%;
 					display: none;
+					filter: drop-shadow(0 0 2px rgb(255, 254, 254));
+					-webkit-text-stroke: 1px black;
+					paint-order: stroke;
+					letter-spacing: 0.1em;
 				}
 
-				&:has([src*="defaultMap"]) + .defaultAttribution {
+				&:has([src*="defaultMap"])+.defaultAttribution {
 					display: inline;
 				}
 
-				.eventPin {
-					color: #da3d3d;
+				.mapPoint {
 					font-size: 25px;
 					position: absolute;
 					cursor: pointer;
 					z-index: 5;
+					transition: all var(--transition-dets);
+
+					&::after {
+						position: absolute;
+						left: 50%;
+						top: 0;
+						font-size: 20px;
+						translate: -50% -100%;
+						width: fit-content;
+						min-width: 20ch;
+						display: block;
+						content: attr(data-title);
+						user-select: none;
+						pointer-events: none;
+						opacity: 0;
+						transition: opacity var(--transition-dets), top var(--transition-dets);
+						filter: drop-shadow(0 0 2px rgb(255, 254, 254));
+						-webkit-text-stroke: 1px black;
+						paint-order: stroke;
+					}
 
 					i {
 						filter: drop-shadow(0 0 2px #000);
 						transition: all 0.3s ease-in-out;
-
 					}
 
 					&.active i {
 						transform-origin: bottom center;
 						scale: 1.5;
-						color: #e22626;
 						filter: drop-shadow(0 0 2px #fff) drop-shadow(0 0 2px #fff) drop-shadow(0 0 10px #fff);
 					}
+
+					&:hover::after, &.active::after {
+						opacity: 1;
+					}
+
+					&.active::after {
+						top: -10px;
+					}
+
+					&.dragging {
+						pointer-events: none;
+					}
+
+					&.locationPin {
+						color: #b522b5;
+					}
+
+					&.eventPin {
+						color: #da3d3d;
+					}
 				}
+
+
 			}
 		}
+
 	}
 }
