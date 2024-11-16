@@ -320,7 +320,7 @@ export const EditProvider = ({ children }) => {
 				setMap,
 				updateMap,
 				deleteMap,
-	
+
 				// ########## LOCATIONS ##########
 				locations,
 				setLocations,
@@ -329,7 +329,7 @@ export const EditProvider = ({ children }) => {
 				updateLocation,
 				deleteLocation,
 				deleteLocationsByMap,
-	
+
 				// ########## EVENTS ##########
 				events,
 				renderableEvents,
@@ -339,7 +339,7 @@ export const EditProvider = ({ children }) => {
 				updateEvent,
 				deleteEvent,
 				deleteEventsByMap,
-	
+
 				// ########## SIDEBAR AND TIMELINE ##########
 				sidebarState,
 				setSidebar,
@@ -347,7 +347,7 @@ export const EditProvider = ({ children }) => {
 				timelineState,
 				setTimeline,
 				toggleTimeline,
-	
+
 				// ########## MISC ##########
 				fetchMapContents,
 				joinEventsWithLocations,
@@ -365,7 +365,6 @@ export const EditProvider = ({ children }) => {
 			{children}
 		</EditContext.Provider>
 	);
-	
 };
 
 export default EditProvider;
