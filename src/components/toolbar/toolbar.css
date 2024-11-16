@@ -15,6 +15,7 @@
         background: #e3c79d;
         padding: 5px 15px;
         box-shadow: 0 0 5px black;
+        list-style: none;
 
         &:first-of-type {
             padding:5px;

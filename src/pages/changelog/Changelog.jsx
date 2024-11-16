@@ -30,6 +30,7 @@ const Changelog = () => {
                         This is the first update of the application. It includes the following changes:
 
                         <ul>
+                            <li>addded zoom buttons</li>
                             <li>Added locations</li>
                             <li>Global error handling</li>
                             <li>Prevent movement of active point</li>
