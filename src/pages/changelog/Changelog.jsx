@@ -21,8 +21,8 @@ const Changelog = () => {
 				</div>
 				<h1>Change Log</h1>
 				<div className="card">
-					<h3>Update 2.1</h3>
-
+					<h3>Update 2.1 - Saturday, November 16th of 2024</h3>
+					
 					<br />
 					<br />
 
@@ -47,7 +47,7 @@ const Changelog = () => {
 					<hr />
 				</div>
 				<div className="card">
-					<h3>Update 2.0</h3>
+					<h3>Update 2.0 - Saturday, November 16th of 2024</h3>
 
 					<br />
 					<br />
