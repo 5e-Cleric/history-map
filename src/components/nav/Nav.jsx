@@ -26,6 +26,9 @@ const HamburgerMenu = () => {
 					<li>
 						<a href="/all">All maps</a>
 					</li>
+					<li>
+						<a href="/changelog">Change Log</a>
+					</li>
 				</ul>
 			</nav>
 		</>

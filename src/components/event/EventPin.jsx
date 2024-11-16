@@ -45,6 +45,7 @@ function EventPin({ event, timelineEventPosition, inLocation }) {
 	};
 
 	const handleClick = (e) => {
+		if (!event.eventId) return;
 		if (inLocation)
 			toggleSidebar({ mode: 'view', event, location: inLocation });
 		else toggleSidebar({ mode: 'view', event });

@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import './toolbar.css';
 import { EditContext } from '@pages/editMap/EditContext';
+import { MainContext } from '../../MainContext';
 
 const Toolbar = () => {
 	const {
@@ -10,12 +11,26 @@ const Toolbar = () => {
 		setMapPosition,
 		setMapTranslation,
 		setDraggingEvent,
+		sidebarState,
 		//other functions
 		toggleSidebar,
 		toggleTimeline,
 	} = useContext(EditContext);
 
+	const { setError } = useContext(MainContext);
+
 	const handleDragStart = (type) => {
+		if (
+			sidebarState &&
+			!sidebarState.event?.eventId &&
+			!sidebarState.location?.locationId
+		) {
+			setError({
+				errorCode: 12,
+				errorText: `You cannot create another event or location before saving the current`,
+			});
+			return;
+		}
 		setDraggingEvent([type, 'new']);
 		// Optional: style adjustments for the drag image, like transparency.
 		// event.currentTarget.style.opacity = '1';
@@ -34,7 +49,7 @@ const Toolbar = () => {
 						className="locationDrag"
 						title="drag to add a location"
 						draggable
-						onDragStart={()=>handleDragStart('location')}
+						onDragStart={() => handleDragStart('location')}
 						onDragEnd={handleDragEnd}>
 						<i className="fa-solid fa-map-pin"></i>
 					</button>
@@ -44,7 +59,7 @@ const Toolbar = () => {
 						className="eventDrag"
 						title="drag to add an event"
 						draggable
-						onDragStart={()=>handleDragStart('event')}
+						onDragStart={() => handleDragStart('event')}
 						onDragEnd={handleDragEnd}>
 						<i className="fa-solid fa-location-dot"></i>
 					</button>

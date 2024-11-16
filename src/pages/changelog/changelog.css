@@ -1,0 +1,11 @@
+.changelog {
+    .card {
+        text-align: left;
+    }
+
+    ul, ol {
+        margin-block:20px;
+        padding-left: 20px;
+        line-height:1.8em;
+    }
+}

@@ -9,7 +9,7 @@ import EditLocation from './sidebarContents/EditLocation';
 import ViewLocation from './sidebarContents/ViewLocation';
 
 function Sidebar() {
-	const { sidebarState, toggleSidebar } =
+	const { fetchMapContents, sidebarState, toggleSidebar } =
 		useContext(EditContext);
 
 	const mode = sidebarState.mode;
@@ -34,8 +34,12 @@ function Sidebar() {
 			<div className="sidebarContent">
 				<button
 					className="closeButton"
-					onClick={() => toggleSidebar({ mode: mode, event: event })}>
-					X
+					onClick={() => {
+						toggleSidebar(sidebarState);
+						//filter out events without an id
+						if (mode === 'edit') fetchMapContents();
+					}}>
+					<i className="fa-solid fa-xmark"></i>
 				</button>
 				{renderContent()}
 			</div>

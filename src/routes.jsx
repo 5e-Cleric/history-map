@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from '@pages/home/Home';
 import Create from '@pages/create/Create';
+import Changelog from '@pages/changelog/changelog';
 import All from '@pages/All';
 import Edit from '@pages/editMap/EditMap';
 import EditProvider from '@pages/editMap/EditContext';
@@ -16,6 +17,7 @@ const AppRoutes = () => {
 					<Route path="/" element={<Home />} />
 					<Route path="/create" element={<Create />} />
 					<Route path="/all" element={<All />} />
+					<Route path="/changelog" element={<Changelog />} />
 					<Route
 						path="/map/:id"
 						element={
