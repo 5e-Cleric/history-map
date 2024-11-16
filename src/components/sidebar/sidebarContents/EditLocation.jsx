@@ -4,9 +4,9 @@ import { EditContext } from '@pages/editMap/EditContext';
 function EditLocation() {
 	const {
 		sidebarState,
-        fetchLocations,
-        saveNewLocation,
-        updateLocation,
+		locations,
+		saveNewLocation,
+		updateLocation,
 
 		toggleSidebar,
 	} = useContext(EditContext);
@@ -36,14 +36,11 @@ function EditLocation() {
 		};
 
 		if (location.locationId) {
-            console.log(locationData);
 			updateLocation(locationData);
+			toggleSidebar({ mode: 'view', location: locationData });
 		} else {
 			saveNewLocation(locationData);
 		}
-
-		fetchLocations();
-		toggleSidebar({ mode: 'view', location: location });
 	};
 
 	return (

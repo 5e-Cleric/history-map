@@ -6,7 +6,7 @@ import { MainContext } from '../MainContext';
 function All() {
 	const [maps, setmaps] = useState(null);
 	const [searching, setSearching] = useState(null);
-	const { error, setError } = useContext(MainContext);
+	const { setError } = useContext(MainContext);
 
 	useEffect(() => {
 		fetchMaps();
@@ -14,7 +14,6 @@ function All() {
 
 	const fetchMaps = () => {
 		setSearching(true);
-		console.log(`fetching to ${import.meta.env.VITE_API_URL}/api/map/all`);
 		fetch(`${import.meta.env.VITE_API_URL}/api/map/all`)
 			.then((response) => response.json())
 			.then((data) => {
@@ -22,9 +21,8 @@ function All() {
 				setSearching(false);
 			})
 			.catch((error) => {
-				console.log(error);
 				console.error(error);
-				setError({ errorCode: 1, errorText: 'Error fetching maps' });
+				setError({ errorCode: 3, errorText: 'Error fetching maps' });
 				setSearching(false);
 			});
 	};
@@ -39,7 +37,26 @@ function All() {
 			});
 			fetchMaps();
 		} catch (error) {
+			setError({ errorCode: 5, errorText: 'Error deleting map' });
 			console.error(error);
+		}
+
+		try {
+			await fetch(`${import.meta.env.VITE_API_URL}/api/event/${id}`, {
+				method: 'DELETE',
+			});
+		} catch (error) {
+			setError({ errorCode: 24, errorText: 'Error deleting events' });
+			console.error('Error deleting events:', error);
+		}
+
+		try {
+			await fetch(`${import.meta.env.VITE_API_URL}/api/location/${id}`, {
+				method: 'DELETE',
+			});
+		} catch (error) {
+			setError({ errorCode: 24, errorText: 'Error deleting locations' });
+			console.error('Error deleting locations:', error);
 		}
 	};
 

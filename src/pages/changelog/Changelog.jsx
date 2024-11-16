@@ -21,27 +21,57 @@ const Changelog = () => {
 				</div>
 				<h1>Change Log</h1>
 				<div className="card">
-					<h3>Update 1.0</h3>
-
-					<br />
-					<br />
+					<h3>Update 2.1 - Saturday, November 16th of 2024</h3>
 					
-                    <p>
-                        This is the first update of the application. It includes the following changes:
+					<br />
+					<br />
 
-                        <ul>
-                            <li>addded zoom buttons</li>
-                            <li>Added locations</li>
-                            <li>Global error handling</li>
-                            <li>Prevent movement of active point</li>
-                            <li>Prevent duplication of new points</li>
-                            <li>Fix crash when clicking on new event</li>
-                            <li>separated sidebar content in separate components</li>
-                            <li>Correct deletion of new point when closing sidebar</li>
-                            <li>Added Changelog</li>
-                        </ul>
-                    </p>
-                    
+					<p>
+						It includes the following changes:
+						<ul>
+							<li>Error code reference</li>
+							<li>Fixed error with date when creating events</li>
+							<li>Reduced amount of fetching</li>
+							<li>
+								Correct toggle of sidebar when creting points
+							</li>
+							<li>Adding animation to location pin on toolbar</li>
+							<li>
+								Adding drop to join area on locations when
+								dragging
+							</li>
+							<li>Deleting points on map deletion in all page</li>
+							<li>Reordered map context</li>
+						</ul>
+					</p>
+					<hr />
+				</div>
+				<div className="card">
+					<h3>Update 2.0 - Saturday, November 16th of 2024</h3>
+
+					<br />
+					<br />
+
+					<p>
+						This is the first update of the application. It includes
+						the following changes:
+						<ul>
+							<li>addded zoom buttons</li>
+							<li>Added locations</li>
+							<li>Global error handling</li>
+							<li>Prevent movement of active point</li>
+							<li>Prevent duplication of new points</li>
+							<li>Fix crash when clicking on new event</li>
+							<li>
+								separated sidebar content in separate components
+							</li>
+							<li>
+								Correct deletion of new point when closing
+								sidebar
+							</li>
+							<li>Added Changelog</li>
+						</ul>
+					</p>
 				</div>
 			</main>
 		</div>

@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from '@pages/home/Home';
 import Create from '@pages/create/Create';
-import Changelog from '@pages/changelog/changelog';
+import Changelog from '@pages/changelog/Changelog';
 import All from '@pages/All';
 import Edit from '@pages/editMap/EditMap';
 import EditProvider from '@pages/editMap/EditContext';

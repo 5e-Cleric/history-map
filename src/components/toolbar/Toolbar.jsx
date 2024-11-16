@@ -46,7 +46,7 @@ const Toolbar = () => {
 			<ul>
 				<li>
 					<button
-						className="locationDrag"
+						className="pointDrag"
 						title="drag to add a location"
 						draggable
 						onDragStart={() => handleDragStart('location')}
@@ -56,7 +56,7 @@ const Toolbar = () => {
 				</li>
 				<li>
 					<button
-						className="eventDrag"
+						className="pointDrag"
 						title="drag to add an event"
 						draggable
 						onDragStart={() => handleDragStart('event')}
