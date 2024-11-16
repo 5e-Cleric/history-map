@@ -13,15 +13,12 @@ function Timeline() {
 	const {
 		map,
 		events,
-		fetchEvents,
-		sidebarState,
 		timelineState,
 		updateEvent,
 		draggingEvent,
 		setDraggingEvent,
 
 		//other functions
-		toggleSidebar,
 		toggleTimeline,
 	} = useContext(EditContext);
 
@@ -148,11 +145,8 @@ function Timeline() {
 			...events[index],
 			date: newDate,
 		};
-		updateEvent(events[index]);
 		setDraggingEvent(null);
-		if (sidebarState?.event?.eventId === events[index].eventId)
-			toggleSidebar({ mode: 'view', event: events[index] });
-		fetchEvents();
+		updateEvent(events[index]);
 	};
 
 	return (

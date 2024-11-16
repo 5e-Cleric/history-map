@@ -126,6 +126,7 @@ function Edit() {
 
 	const addNewLocation = (position) => {
 		setLocations((prevLocations) => [...prevLocations, { position }]);
+		console.log(sidebarState);
 		toggleSidebar({
 			mode: 'edit',
 			location: { position },
@@ -136,11 +137,9 @@ function Edit() {
 		const index = locations.findIndex(
 			(loc) => loc.locationId === locationId
 		);
-		console.log(locations[index].events);
 		if (locations[index].events && locations[index].events?.length !== 0) {
-			console.log('a');
 			setError({
-				errorCode: 10,
+				errorCode: 25,
 				errorText: 'Locations with events cannot be moved!',
 			});
 		} else {
@@ -174,6 +173,15 @@ function Edit() {
 	};
 
 	const handleImageError = (event) => {
+		if (event.target.src.split('/').pop() !== 'default') {
+			console.log(event.target.src);
+			setError({
+				errorCode: 40,
+				errorText:
+					"We couldn't find your map, here is the default instead",
+			});
+		}
+
 		event.target.src = defaultMap;
 	};
 
