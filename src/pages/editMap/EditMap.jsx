@@ -126,6 +126,7 @@ function Edit() {
 
 	const addNewLocation = (position) => {
 		setLocations((prevLocations) => [...prevLocations, { position }]);
+		console.log(sidebarState);
 		toggleSidebar({
 			mode: 'edit',
 			location: { position },
@@ -180,7 +181,7 @@ function Edit() {
 					"We couldn't find your map, here is the default instead",
 			});
 		}
-			
+
 		event.target.src = defaultMap;
 	};
 

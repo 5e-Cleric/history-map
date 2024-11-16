@@ -40,11 +40,10 @@ function EditEvent() {
 
 		if (event.eventId) {
 			updateEvent(eventData);
+			toggleSidebar({ mode: 'view', event: eventData });
 		} else {
 			saveNewEvent(eventData);
 		}
-
-		toggleSidebar({ mode: 'view', event: event });
 	};
 
 	return (

@@ -21,7 +21,7 @@ const Changelog = () => {
 				</div>
 				<h1>Change Log</h1>
 				<div className="card">
-					<h3>Update 1.0</h3>
+					<h3>Update 2.0</h3>
 
 					<br />
 					<br />
@@ -39,6 +39,21 @@ const Changelog = () => {
                             <li>separated sidebar content in separate components</li>
                             <li>Correct deletion of new point when closing sidebar</li>
                             <li>Added Changelog</li>
+                        </ul>
+                    </p>
+                    <hr />
+				</div>
+				<div className="card">
+					<h3>Update 2.1</h3>
+
+					<br />
+					<br />
+					
+                    <p>
+                        This is the first update of the application. It includes the following changes:
+
+                        <ul>
+                            <li>addded zoom buttons</li>
                         </ul>
                     </p>
                     

@@ -26,7 +26,30 @@ export const EditProvider = ({ children }) => {
 
 	useEffect(() => {
 		joinEventsWithLocations();
+		if (events.length !== 0) {
+			const lastEvent = [...events].pop();
+			if (
+				sidebarState.event &&
+				lastEvent?.eventId &&
+				!sidebarState.event?.eventId
+			) {
+				setSidebar({ mode: 'view', event: lastEvent });
+			}
+		}
 	}, [events]);
+
+	useEffect(() => {
+		if (locations.length !== 0) {
+			const lastLocation = [...locations].pop();
+			if (
+				sidebarState.location &&
+				lastLocation?.locationId &&
+				!sidebarState.location?.locationId
+			) {
+				setSidebar({ mode: 'view', location: lastLocation });
+			}
+		}
+	}, [locations]);
 
 	//   ###########################    MAP    #####################
 
@@ -96,7 +119,6 @@ export const EditProvider = ({ children }) => {
 	};
 
 	const saveNewLocation = async (location) => {
-		console.log(`${import.meta.env.VITE_API_URL}/api/location/${urlId}`);
 		try {
 			const response = await fetch(
 				`${import.meta.env.VITE_API_URL}/api/location/${urlId}`,
@@ -134,16 +156,16 @@ export const EditProvider = ({ children }) => {
 		}
 	};
 
-	const deleteLocation = async () => {
+	const deleteLocation = async (location) => {
 		try {
 			await fetch(
-				`${import.meta.env.VITE_API_URL}/api/event/${location.mapId}/${
-					location.locationId
-				}`,
+				`${import.meta.env.VITE_API_URL}/api/location/${
+					location.mapId
+				}/${location.locationId}`,
 				{ method: 'DELETE' }
 			);
 			fetchMapContents();
-			setSidebar(false);
+			toggleSidebar(sidebarState);
 		} catch (error) {
 			setError({ errorCode: 23, errorText: 'Error deleting location' });
 			console.error(error);
@@ -230,7 +252,7 @@ export const EditProvider = ({ children }) => {
 				{ method: 'DELETE' }
 			);
 			fetchEvents();
-			setSidebar(false);
+			toggleSidebar(sidebarState);
 		} catch (error) {
 			setError({ errorCode: 23, errorText: 'Error deleting event' });
 			console.error(error);
@@ -342,7 +364,6 @@ export const EditProvider = ({ children }) => {
 
 				// ########## SIDEBAR AND TIMELINE ##########
 				sidebarState,
-				setSidebar,
 				toggleSidebar,
 				timelineState,
 				setTimeline,
