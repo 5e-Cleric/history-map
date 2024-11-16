@@ -32,7 +32,6 @@ export const EditProvider = ({ children }) => {
 
 		let updatedLocations = [...locations];
 		const filteredRenderableEvents = events.filter((ev) => {
-			
 			const coincidingLocation = updatedLocations.find((location) => {
 				const distance = Math.sqrt(
 					Math.pow(ev.position.y - location.position.y, 2) +
@@ -72,7 +71,8 @@ export const EditProvider = ({ children }) => {
 				const mapData = await mapResponse.json();
 				setMap(mapData);
 			} catch (error) {
-				setError('Error fetching Maps');
+				setError({ errorCode: 3, errorText: 'Error fetching map' });
+				console.error(error);
 			}
 			fetchMapContents();
 		}
@@ -90,6 +90,7 @@ export const EditProvider = ({ children }) => {
 			});
 			fetchMap();
 		} catch (error) {
+			setError({ errorCode: 4, errorText: 'Error updating Map' });
 			console.error(error);
 		}
 	};
@@ -105,6 +106,7 @@ export const EditProvider = ({ children }) => {
 			deleteEventsByMap();
 			window.location.href = `/`;
 		} catch (error) {
+			setError({ errorCode: 5, errorText: 'Error deleting map' });
 			console.error(error);
 		}
 	};
@@ -118,7 +120,7 @@ export const EditProvider = ({ children }) => {
 			setLocations(locationData);
 		} catch (error) {
 			console.error(error);
-			setError('Error fetching locations');
+			setError({ errorCode: 20, errorText: 'Error fetching locations' });
 		}
 	};
 
@@ -136,7 +138,7 @@ export const EditProvider = ({ children }) => {
 			const data = await response.json();
 			fetchMapContents();
 		} catch (error) {
-			console.log(error);
+			setError({ errorCode: 21, errorText: 'Error creating location' });
 			console.error('Error creating location:', error);
 		}
 	};
@@ -156,6 +158,7 @@ export const EditProvider = ({ children }) => {
 			const data = await response.json();
 			fetchMapContents();
 		} catch (error) {
+			setError({ errorCode: 22, errorText: 'Error updating location' });
 			console.error('Error updating location position:', error);
 		}
 	};
@@ -171,7 +174,8 @@ export const EditProvider = ({ children }) => {
 			fetchMapContents();
 			setSidebar(false);
 		} catch (error) {
-			setError('Error deleting location');
+			setError({ errorCode: 23, errorText: 'Error deleting location' });
+			console.error(error);
 		}
 	};
 
@@ -183,7 +187,12 @@ export const EditProvider = ({ children }) => {
 					method: 'DELETE',
 				}
 			);
+			window.location.href = '/home';
 		} catch (error) {
+			setError({
+				errorCode: 24,
+				errorText: 'Error deleting locations by map',
+			});
 			console.error('Error deleting locations:', error);
 		}
 	};
@@ -196,7 +205,8 @@ export const EditProvider = ({ children }) => {
 			const eventData = await eventResponse.json();
 			setEvents(eventData);
 		} catch (error) {
-			setError('Error fetching Events');
+			setError({ errorCode: 20, errorText: 'Error fetching events' });
+			console.error(error);
 		}
 	};
 
@@ -213,6 +223,7 @@ export const EditProvider = ({ children }) => {
 			const data = await response.json();
 			fetchEvents();
 		} catch (error) {
+			setError({ errorCode: 21, errorText: 'Error saving new event' });
 			console.error('Error creating event:', error);
 		}
 	};
@@ -232,6 +243,7 @@ export const EditProvider = ({ children }) => {
 			const data = await response.json();
 			fetchEvents();
 		} catch (error) {
+			setError({ errorCode: 22, errorText: 'Error updating event' });
 			console.error('Error updating event position:', error);
 		}
 	};
@@ -247,7 +259,8 @@ export const EditProvider = ({ children }) => {
 			fetchEvents();
 			setSidebar(false);
 		} catch (error) {
-			setError('Error deleting event');
+			setError({ errorCode: 23, errorText: 'Error deleting event' });
+			console.error(error);
 		}
 	};
 
@@ -257,6 +270,7 @@ export const EditProvider = ({ children }) => {
 				method: 'DELETE',
 			});
 		} catch (error) {
+			setError({ errorCode: 24, errorText: 'Error deleting events' });
 			console.error('Error deleting events:', error);
 		}
 	};
@@ -327,7 +341,6 @@ export const EditProvider = ({ children }) => {
 				updateEvent,
 				deleteEvent,
 
-				//other functions
 				//other functions
 				toggleSidebar,
 				toggleTimeline,

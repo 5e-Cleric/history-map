@@ -23,8 +23,8 @@ function ViewEvent() {
 			)}
 			<h2 className="title">{event.title}</h2>
 			<small className="date">
-				{event.date.year || '0'}/{event.date.month || '0'}/
-				{event.date.week || '0'}/{event.date.day || '0'}
+				{event.date?.year || '0'}/{event.date?.month || '0'}/
+				{event.date?.week || '0'}/{event.date?.day || '0'}
 			</small>
 			<p className="description">
 				{event.description || 'No description.'}

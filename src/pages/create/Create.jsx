@@ -12,14 +12,14 @@ function Create() {
 	const dateEquivalencesRef = useRef(null);
 	const dateStartRef = useRef(null);
 
-	const { error, setError } = useContext(MainContext);
+	const { setError } = useContext(MainContext);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
 		if (titleRef.current?.value.trim() === '') {
 			setError({
-				errorCode: 2,
+				errorCode: 1,
 				errorText: 'Empty field when submitting',
 			});
 			return;
@@ -29,9 +29,11 @@ function Create() {
 			const pattern = /\.\w+$/;
 			const isLink = pattern.test(map);
 
+			console.log(map);
 			if (!map || !isLink) {
 				return 'default';
 			}
+			console.log(map);
 			return map;
 		};
 
@@ -55,12 +57,10 @@ function Create() {
 				}
 			);
 			const resultMap = await response.json();
-			console.log('map created:', resultMap);
 			window.location.href = `/map/${resultMap.id}`;
 		} catch (error) {
-			setError(error);
-			console.error('Error creating map:', error);
-			console.error(map);
+			setError({errorCode: 2, errorText: 'Error creating map'});
+			console.error('Error creating map: ', error, '; map: ', map);
 		}
 	};
 
