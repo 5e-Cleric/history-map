@@ -29,11 +29,9 @@ function Create() {
 			const pattern = /\.\w+$/;
 			const isLink = pattern.test(map);
 
-			console.log(map);
 			if (!map || !isLink) {
 				return 'default';
 			}
-			console.log(map);
 			return map;
 		};
 
