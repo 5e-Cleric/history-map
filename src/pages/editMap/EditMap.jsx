@@ -9,6 +9,7 @@ import Timeline from '../../components/timeline/Timeline';
 import ErrorWarning from '../../components/errorWarning/ErrorWarning';
 import defaultMap from '@assets/defaultMap.jpg';
 import { EditContext } from './EditContext';
+import { MainContext } from '../../MainContext';
 
 function Edit() {
 	const {
@@ -21,8 +22,6 @@ function Edit() {
 		setLocations,
 		updateLocation,
 
-		error,
-		setError,
 		sidebarState,
 		draggingEvent,
 		setDraggingEvent,
@@ -37,11 +36,12 @@ function Edit() {
 		toggleSidebar,
 	} = useContext(EditContext);
 
+	const {error, setError} = useContext(MainContext);
+
 	// State to handle the map's position
 
 	const [isDragging, setIsDragging] = useState(false);
 	const [lastMousePosition, setLastMousePosition] = useState({ x: 0, y: 0 });
-	const [renderableLocations, setRenderableLocations] = useState(null);
 
 	const mapArticleRef = useRef(null);
 
@@ -269,7 +269,6 @@ function Edit() {
 		<div className="page edit">
 			<Nav />
 			<main className="content">
-				<ErrorWarning error={error} />
 				<Toolbar />
 				{renderMap()}
 				<Sidebar />
