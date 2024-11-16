@@ -1,4 +1,5 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
+import { MainContext } from '../../MainContext';
 
 export const EditContext = createContext();
 
@@ -7,13 +8,14 @@ export const EditProvider = ({ children }) => {
 	const [locations, setLocations] = useState([]);
 	const [events, setEvents] = useState([]);
 	const [renderableEvents, setRenderableEvents] = useState([]);
-	const [error, setError] = useState({ errorCode: null, errorText: null });
 	const [sidebarState, setSidebar] = useState(false);
 	const [timelineState, setTimeline] = useState(false);
 	const [draggingEvent, setDraggingEvent] = useState(null);
 	const [zoomLevel, setZoomLevel] = useState(null);
 	const [mapPosition, setMapPosition] = useState({ x: 0, y: 0 });
 	const [mapTranslation, setMapTranslation] = useState({ x: 0, y: 0 });
+
+	const { setError } = useContext(MainContext);
 
 	const urlId = window.location.pathname.match(/\/([^/]+)\/?$/)[1];
 
@@ -26,41 +28,7 @@ export const EditProvider = ({ children }) => {
 		joinEventsWithLocations();
 	}, [events]);
 
-	const joinEventsWithLocations = () => {
-		// Margin of error for proximity check, 5%
-		const marginOfError = 5;
-
-		let updatedLocations = [...locations];
-		const filteredRenderableEvents = events.filter((ev) => {
-			const coincidingLocation = updatedLocations.find((location) => {
-				const distance = Math.sqrt(
-					Math.pow(ev.position.y - location.position.y, 2) +
-						Math.pow(ev.position.x - location.position.x, 2)
-				);
-				return distance < marginOfError;
-			});
-
-			if (coincidingLocation) {
-				const updatedLocation = {
-					...coincidingLocation,
-					events: [...(coincidingLocation.events || []), ev.eventId],
-				};
-
-				updatedLocations = updatedLocations.map((location) =>
-					location.locationId === coincidingLocation.locationId
-						? updatedLocation
-						: location
-				);
-
-				return false;
-			}
-
-			return true;
-		});
-
-		setLocations(updatedLocations);
-		setRenderableEvents(filteredRenderableEvents);
-	};
+	//   ###########################    MAP    #####################
 
 	const fetchMap = async () => {
 		if (urlId) {
@@ -111,6 +79,8 @@ export const EditProvider = ({ children }) => {
 			console.error(error);
 		}
 	};
+
+	//   ###########################    LOCATIONS    #####################
 
 	const fetchLocations = async () => {
 		try {
@@ -198,6 +168,8 @@ export const EditProvider = ({ children }) => {
 		}
 	};
 
+	//   ###########################    EVENTS    #####################
+
 	const fetchEvents = async () => {
 		try {
 			const eventResponse = await fetch(
@@ -276,10 +248,7 @@ export const EditProvider = ({ children }) => {
 		}
 	};
 
-	const fetchMapContents = async () => {
-		fetchEvents();
-		fetchLocations();
-	};
+	//   ###########################    SIDEBAR AND TIMELINE    #####################
 
 	const toggleSidebar = (newSidebarState) => {
 		if (JSON.stringify(newSidebarState) === JSON.stringify(sidebarState))
@@ -289,6 +258,49 @@ export const EditProvider = ({ children }) => {
 
 	const toggleTimeline = () => {
 		setTimeline(!timelineState);
+	};
+
+	//   ###########################    MISC    #####################
+
+	const fetchMapContents = async () => {
+		fetchEvents();
+		fetchLocations();
+	};
+
+	const joinEventsWithLocations = () => {
+		// Margin of error for proximity check, 5%
+		const marginOfError = 5;
+
+		let updatedLocations = [...locations];
+		const filteredRenderableEvents = events.filter((ev) => {
+			const coincidingLocation = updatedLocations.find((location) => {
+				const distance = Math.sqrt(
+					Math.pow(ev.position.y - location.position.y, 2) +
+						Math.pow(ev.position.x - location.position.x, 2)
+				);
+				return distance < marginOfError;
+			});
+
+			if (coincidingLocation) {
+				const updatedLocation = {
+					...coincidingLocation,
+					events: [...(coincidingLocation.events || []), ev.eventId],
+				};
+
+				updatedLocations = updatedLocations.map((location) =>
+					location.locationId === coincidingLocation.locationId
+						? updatedLocation
+						: location
+				);
+
+				return false;
+			}
+
+			return true;
+		});
+
+		setLocations(updatedLocations);
+		setRenderableEvents(filteredRenderableEvents);
 	};
 
 	const zoomIn = () => {
@@ -303,12 +315,13 @@ export const EditProvider = ({ children }) => {
 	return (
 		<EditContext.Provider
 			value={{
-				//state
+				// ########## MAP ##########
 				map,
 				setMap,
-				events,
-				renderableEvents,
-				setEvents,
+				updateMap,
+				deleteMap,
+	
+				// ########## LOCATIONS ##########
 				locations,
 				setLocations,
 				fetchLocations,
@@ -316,39 +329,43 @@ export const EditProvider = ({ children }) => {
 				updateLocation,
 				deleteLocation,
 				deleteLocationsByMap,
-				error,
-				setError,
+	
+				// ########## EVENTS ##########
+				events,
+				renderableEvents,
+				setEvents,
+				fetchEvents,
+				saveNewEvent,
+				updateEvent,
+				deleteEvent,
+				deleteEventsByMap,
+	
+				// ########## SIDEBAR AND TIMELINE ##########
 				sidebarState,
 				setSidebar,
+				toggleSidebar,
 				timelineState,
 				setTimeline,
-				draggingEvent,
-				setDraggingEvent,
+				toggleTimeline,
+	
+				// ########## MISC ##########
+				fetchMapContents,
+				joinEventsWithLocations,
 				zoomLevel,
 				setZoomLevel,
 				zoomIn,
 				zoomOut,
+				draggingEvent,
+				setDraggingEvent,
 				mapPosition,
 				setMapPosition,
 				mapTranslation,
 				setMapTranslation,
-
-				//CRUD functions
-				updateMap,
-				deleteMap,
-				fetchEvents,
-				fetchMapContents,
-				saveNewEvent,
-				updateEvent,
-				deleteEvent,
-
-				//other functions
-				toggleSidebar,
-				toggleTimeline,
 			}}>
 			{children}
 		</EditContext.Provider>
 	);
+	
 };
 
 export default EditProvider;
