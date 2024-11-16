@@ -1,7 +1,8 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useContext } from 'react';
 import './create.css';
 import Nav from '@components/nav/Nav';
 import CustomDate from '@components/customDate/CustomDate';
+import { MainContext } from '../../MainContext';
 
 function Create() {
 	const titleRef = useRef(null);
@@ -11,13 +12,16 @@ function Create() {
 	const dateEquivalencesRef = useRef(null);
 	const dateStartRef = useRef(null);
 
-	const [error, setError] = useState(null);
+	const { error, setError } = useContext(MainContext);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
 		if (titleRef.current?.value.trim() === '') {
-			setError('please fill the title before submiting');
+			setError({
+				errorCode: 2,
+				errorText: 'Empty field when submitting',
+			});
 			return;
 		}
 		const mapLink = () => {
@@ -138,8 +142,7 @@ function Create() {
 						Map description:
 						<textarea
 							ref={descriptionRef}
-							name="mapDescription"
-						></textarea>
+							name="mapDescription"></textarea>
 					</label>
 					<small>
 						Note: you will be able to modify all of these later!
@@ -147,7 +150,6 @@ function Create() {
 					<button type="submit" className="green">
 						Create Map
 					</button>
-					<div className="error">{error}</div>
 				</form>
 			</main>
 		</div>

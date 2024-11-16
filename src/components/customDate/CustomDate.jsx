@@ -35,7 +35,7 @@ const CustomDate = forwardRef(({ dataType }, ref) => {
 			if (dataType !== 'names') {
 				for (const key in dateRefs) {
 					values[key] =
-						parseInt(dateRefs[key].current?.value || 0) ||
+						parseInt(Math.round(dateRefs[key].current?.value) || 0) ||
 						parseInt(getDefaultValue(key) || 0);
 				}
 			} else {
@@ -48,11 +48,21 @@ const CustomDate = forwardRef(({ dataType }, ref) => {
 			return values;
 		},
 		setValues: (date) => {
-			dateRefs.year.current.value = date.year || '0';
-			dateRefs.month.current.value = date.month || '0';
-			dateRefs.week.current.value = date.week || '0';
-			dateRefs.day.current.value = date.day || '0';
+			if (dateRefs.year.current) {
+				dateRefs.year.current.value = date.year || '0';
+			}
+			if (dateRefs.month.current) {
+				dateRefs.month.current.value = date.month || '0';
+			}
+			if (dateRefs.week.current) {
+				dateRefs.week.current.value = date.week || '0';
+			}
+			if (dateRefs.day.current) {
+				dateRefs.day.current.value = date.day || '0';
+			}
 		},
+		
+		
 	}));
 
 	if (dataType === 'equivalences') {

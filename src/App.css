@@ -32,6 +32,8 @@ a:hover, a:focus {
 }
 
 :where(body) {
+  height:100vh;
+  width:100vw;
   margin: 0;
   display: flex;
   place-items: center;
@@ -61,6 +63,33 @@ a:hover, a:focus {
         height: 100%;
       }
     }
+    .error-warning {
+			background: #da3d3d;
+			color: white;
+			z-index: 100;
+			position: absolute;
+			top: 50px;
+			right: 100px;
+			padding: 5px 10px;
+
+			.close {
+				position: absolute;
+				top: 0px;
+				right: 10px;
+				background: none;
+				border-radius: unset;
+				font-family: Merienda, sans-serif;
+				font-size: 20px;
+				padding: 0;
+				transition: scale 0.3s ease-in-out;
+
+				&:hover, &:focus-within {
+					background: none;
+					scale: 1.2;
+
+				}
+			}
+		}
   }
 
 }
