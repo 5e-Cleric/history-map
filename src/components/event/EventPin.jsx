@@ -1,9 +1,12 @@
 import { useState, useContext } from 'react';
 import { EditContext } from '@pages/editMap/EditContext';
+import { MainContext } from '../../MainContext';
 
 function EventPin({ event, timelineEventPosition, inLocation }) {
 	const { setDraggingEvent, sidebarState, setZoomLevel, toggleSidebar } =
 		useContext(EditContext);
+
+	const { setError } = useContext(MainContext);
 
 	const [timelinePosition, setTimelinePosition] = useState(
 		timelineEventPosition
@@ -23,22 +26,28 @@ function EventPin({ event, timelineEventPosition, inLocation }) {
 	};
 
 	const handleDragStart = (e) => {
-		setDraggingEvent(['event', event.eventId]);
-		document
-			.querySelectorAll(
-				`.mapWrapper .mapPoint:not(#event-${event.eventId})`
-			)
-			.forEach((ev) => {
-				ev.classList.add('dragging');
+		if (active) {
+			setError({
+				errorCode: 11,
+				errorText: "Can't move events while they are active",
 			});
+		} else {
+			setDraggingEvent(['event', event.eventId]);
+			document
+				.querySelectorAll(
+					`.mapWrapper .mapPoint:not(#event-${event.eventId})`
+				)
+				.forEach((ev) => {
+					ev.classList.add('dragging');
+				});
+		}
 		e.stopPropagation();
 	};
 
-	
 	const handleClick = (e) => {
-		console.log(inLocation);
-		if(inLocation) toggleSidebar({ mode: 'view', event, location : inLocation }) 
-			else toggleSidebar({ mode: 'view', event });
+		if (inLocation)
+			toggleSidebar({ mode: 'view', event, location: inLocation });
+		else toggleSidebar({ mode: 'view', event });
 		setZoomLevel(150);
 		e.stopPropagation();
 	};

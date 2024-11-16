@@ -6,7 +6,6 @@ import EventPin from '@components/event/EventPin';
 import LocationPin from '../../components/event/LocationPin';
 import Sidebar from '@components/sidebar/Sidebar';
 import Timeline from '../../components/timeline/Timeline';
-import ErrorWarning from '../../components/errorWarning/ErrorWarning';
 import defaultMap from '@assets/defaultMap.jpg';
 import { EditContext } from './EditContext';
 import { MainContext } from '../../MainContext';
@@ -36,7 +35,7 @@ function Edit() {
 		toggleSidebar,
 	} = useContext(EditContext);
 
-	const {error, setError} = useContext(MainContext);
+	const { setError } = useContext(MainContext);
 
 	// State to handle the map's position
 
@@ -139,7 +138,7 @@ function Edit() {
 		);
 		console.log(locations[index].events);
 		if (locations[index].events && locations[index].events?.length !== 0) {
-			console.log('a')
+			console.log('a');
 			setError({
 				errorCode: 10,
 				errorText: 'Locations with events cannot be moved!',
@@ -179,12 +178,14 @@ function Edit() {
 	};
 
 	const handleMouseDown = (e) => {
+		if (e.target.className !== 'map') return;
 		setIsDragging(true);
 		setLastMousePosition({ x: e.clientX, y: e.clientY });
 	};
 
 	const handleMouseMove = (e) => {
-		if (!isDragging || draggingEvent) return;
+		if (!isDragging || draggingEvent || e.target.className !== 'map')
+			return;
 		const deltaX = e.clientX - lastMousePosition.x;
 		const deltaY = e.clientY - lastMousePosition.y;
 		setMapPosition((prevPosition) => ({
