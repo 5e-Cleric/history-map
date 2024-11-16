@@ -4,7 +4,6 @@ import { EditContext } from '@pages/editMap/EditContext';
 function EditLocation() {
 	const {
 		sidebarState,
-        fetchLocations,
         saveNewLocation,
         updateLocation,
 
@@ -42,7 +41,6 @@ function EditLocation() {
 			saveNewLocation(locationData);
 		}
 
-		fetchLocations();
 		toggleSidebar({ mode: 'view', location: location });
 	};
 

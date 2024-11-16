@@ -104,6 +104,7 @@ export const EditProvider = ({ children }) => {
 				},
 			});
 			deleteEventsByMap();
+			deleteLocationsByMap();
 			window.location.href = `/`;
 		} catch (error) {
 			setError({ errorCode: 5, errorText: 'Error deleting map' });

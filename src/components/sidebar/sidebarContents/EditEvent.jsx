@@ -5,7 +5,6 @@ import { EditContext } from '@pages/editMap/EditContext';
 function EditEvent() {
 	const {
 		sidebarState,
-		fetchEvents,
 		updateEvent,
 		saveNewEvent,
 
@@ -45,7 +44,6 @@ function EditEvent() {
 			saveNewEvent(eventData);
 		}
 
-		fetchEvents();
 		toggleSidebar({ mode: 'view', event: event });
 	};
 

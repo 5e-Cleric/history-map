@@ -55,7 +55,7 @@ function All() {
 				method: 'DELETE',
 			});
 		} catch (error) {
-			setError({ errorCode: 24, errorText: 'Error deleting map' });
+			setError({ errorCode: 24, errorText: 'Error deleting locations' });
 			console.error('Error deleting locations:', error);
 		}
 	};
