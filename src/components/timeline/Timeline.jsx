@@ -42,14 +42,10 @@ function Timeline() {
 
 	const equivalences = map.dateSystem.dateEquivalences;
 	const getLastDate = () => {
-		const eventsToCheck =
-			timelineEvents && timelineEvents.length > 0
-				? timelineEvents
-				: events;
+		const eventsToCheck = timelineEvents && timelineEvents.length > 0 ? timelineEvents : events;
 
 		const lastEvent = eventsToCheck.reduce((latest, current) =>
-			convertToTotalDays(current.date, equivalences) >
-			convertToTotalDays(latest.date, equivalences)
+			convertToTotalDays(current.date, equivalences) > convertToTotalDays(latest.date, equivalences)
 				? current
 				: latest
 		);
@@ -60,40 +56,25 @@ function Timeline() {
 	const startDate = map.dateSystem.dateStart;
 	const lastDate = getLastDate();
 
-	const totalTimelineDays =
-		convertToTotalDays(lastDate, equivalences) -
-		convertToTotalDays(startDate, equivalences);
+	const totalTimelineDays = convertToTotalDays(lastDate, equivalences) - convertToTotalDays(startDate, equivalences);
 
 	if (totalTimelineDays === 0)
 		return (
 			<article className={`timeline ${timelineState ? 'open' : ''}`}>
-				<h2>
-					All your events have the same date, so there is no timeline
-					to show
-				</h2>
+				<h2>All your events have the same date, so there is no timeline to show</h2>
 				<div className="bar"></div>
 			</article>
 		);
 
 	const getDivisionsArray = () => {
 		const divisions = [];
-		const intervalDays = calculateDynamicInterval(
-			totalTimelineDays,
-			equivalences
-		);
+		const intervalDays = calculateDynamicInterval(totalTimelineDays, equivalences);
 
 		let currentDate = { ...startDate };
 
-		while (
-			convertToTotalDays(currentDate, equivalences) <=
-			convertToTotalDays(lastDate, equivalences)
-		) {
+		while (convertToTotalDays(currentDate, equivalences) <= convertToTotalDays(lastDate, equivalences)) {
 			divisions.push(currentDate);
-			currentDate = incrementToNextRoundDate(
-				currentDate,
-				intervalDays,
-				equivalences
-			);
+			currentDate = incrementToNextRoundDate(currentDate, intervalDays, equivalences);
 		}
 
 		return divisions;
@@ -109,25 +90,10 @@ function Timeline() {
 				onDrop={handleDrop}>
 				<div className="events">
 					{timelineEvents.map((event, index) => {
-						const eventDays = convertToTotalDays(
-							event.date,
-							equivalences
-						);
-						const startDateDays = convertToTotalDays(
-							startDate,
-							equivalences
-						);
-						const eventPositionPercent =
-							((eventDays - startDateDays) / totalTimelineDays) * 100;
-						return (
-							<EventPin
-								key={index}
-								event={event}
-								timelineEventPosition={
-									eventPositionPercent || 0
-								}
-							/>
-						);
+						const eventDays = convertToTotalDays(event.date, equivalences);
+						const startDateDays = convertToTotalDays(startDate, equivalences);
+						const eventPositionPercent = ((eventDays - startDateDays) / totalTimelineDays) * 100;
+						return <EventPin key={index} event={event} timelineEventPosition={eventPositionPercent || 0} />;
 					})}
 				</div>
 			</div>
@@ -137,22 +103,16 @@ function Timeline() {
 	const handleDrop = (e) => {
 		e.preventDefault();
 		stopDrag();
-		if ( draggingEvent[0] === 'location') {
+		if (draggingEvent[0] === 'location') {
 			setDraggingEvent(null);
 			return;
 		}
-		
+
 		const timelineRect = timelineBarRef.current.getBoundingClientRect();
-		const newPosition =
-			((e.clientX - timelineRect.left) / timelineRect.width) * 100;
+		const newPosition = ((e.clientX - timelineRect.left) / timelineRect.width) * 100;
 		const index = events.findIndex((e) => e.eventId === draggingEvent[1]);
 
-		const newDate = positionToTime(
-			newPosition,
-			startDate,
-			totalTimelineDays,
-			equivalences
-		);
+		const newDate = positionToTime(newPosition, startDate, totalTimelineDays, equivalences);
 
 		if (index !== -1) {
 			events[index] = { ...events[index], date: newDate };
@@ -165,15 +125,9 @@ function Timeline() {
 			<div className="bar" ref={timelineBarRef}>
 				<div className="years">
 					{getDivisionsArray().map((division, index) => {
-						const divisionDays = convertToTotalDays(
-							division,
-							equivalences
-						);
+						const divisionDays = convertToTotalDays(division, equivalences);
 						const divisionPositionPercent =
-							((divisionDays -
-								convertToTotalDays(startDate, equivalences)) /
-								totalTimelineDays) *
-							100;
+							((divisionDays - convertToTotalDays(startDate, equivalences)) / totalTimelineDays) * 100;
 
 						return (
 							<div
@@ -182,17 +136,15 @@ function Timeline() {
 								style={{
 									left: `${divisionPositionPercent}%`,
 								}}>
-								{division.year || '0'}/{division.month || '0'}/
-								{division.week || '0'}/{division.day || '0'}
+								{division.year || '0'}/{division.month || '0'}/{division.week || '0'}/
+								{division.day || '0'}
 							</div>
 						);
 					})}
 				</div>
 			</div>
 			{rendertimelineEvents()}
-			<button
-				className="closeButton"
-				onClick={() => toggleTimeline(false)}>
+			<button className="closeButton" onClick={() => toggleTimeline(false)}>
 				X
 			</button>
 		</article>

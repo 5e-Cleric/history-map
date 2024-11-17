@@ -111,6 +111,7 @@
 						color: #da3d3d;
 					}
 				}
+
 				/*set the droppable area just when dragging an event*/
 				&:has(.eventPin:not(.dragging)) .locationPin.dragging::before {
 					width: 80px;

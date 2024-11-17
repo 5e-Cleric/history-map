@@ -2,20 +2,14 @@ import { useContext } from 'react';
 import { EditContext } from '@pages/editMap/EditContext';
 
 function LocationPin({ location }) {
-	const { setDraggingEvent, toggleSidebar, sidebarState, setZoomLevel } =
-		useContext(EditContext);
-	const active =
-		JSON.stringify(location) === JSON.stringify(sidebarState.location);
+	const { setDraggingEvent, toggleSidebar, sidebarState, setZoomLevel } = useContext(EditContext);
+	const active = JSON.stringify(location) === JSON.stringify(sidebarState.location);
 
 	const handleDragStart = (e) => {
 		setDraggingEvent(['location', location.locationId]);
-		document
-			.querySelectorAll(
-				`.mapWrapper .mapPoint:not(#location-${location.locationId})`
-			)
-			.forEach((ev) => {
-				ev.classList.add('dragging');
-			});
+		document.querySelectorAll(`.mapWrapper .mapPoint:not(#location-${location.locationId})`).forEach((ev) => {
+			ev.classList.add('dragging');
+		});
 		e.stopPropagation();
 	};
 

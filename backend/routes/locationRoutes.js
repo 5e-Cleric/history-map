@@ -38,9 +38,7 @@ router.put('/:mapId/:locationId', async (req, res) => {
 		// Find the location by locationId and mapId
 		const location = await Location.findOne({ locationId, mapId });
 		if (!location) {
-			return res
-				.status(404)
-				.json({ error: 'Location not found for this map' });
+			return res.status(404).json({ error: 'Location not found for this map' });
 		}
 		Object.assign(location, updatedData);
 		await location.save();

@@ -1,8 +1,7 @@
 const convertToTotalDays = (date, equivalences) => {
 	if (!date) return 0;
 
-	const daysInYear =
-		equivalences.month * equivalences.week * equivalences.day; // Total days in one year
+	const daysInYear = equivalences.month * equivalences.week * equivalences.day; // Total days in one year
 	const daysInMonth = equivalences.week * equivalences.day; // Total days in one month
 	const daysInWeek = equivalences.day; // Total days in one week
 
@@ -17,8 +16,7 @@ const convertToTotalDays = (date, equivalences) => {
 };
 
 const convertTotalDaysToDate = (totalDays, equivalences) => {
-	const daysInYear =
-		equivalences.month * equivalences.week * equivalences.day;
+	const daysInYear = equivalences.month * equivalences.week * equivalences.day;
 	const daysInMonth = equivalences.week * equivalences.day;
 	const daysInWeek = equivalences.day;
 
@@ -43,12 +41,7 @@ const convertTotalDaysToDate = (totalDays, equivalences) => {
 	return date;
 };
 
-const positionToTime = (
-	positionPercent,
-	startDate,
-	totalTimelineDays,
-	equivalences
-) => {
+const positionToTime = (positionPercent, startDate, totalTimelineDays, equivalences) => {
 	// Calculate the number of days from the start date corresponding to the position
 	const daysFromStart = (positionPercent / 100) * totalTimelineDays;
 	//round date to not use decimals
@@ -63,8 +56,7 @@ const positionToTime = (
 
 // Dynamic interval calculation based on equivalences
 const calculateDynamicInterval = (totalDays, equivalences) => {
-	const daysInYear =
-		equivalences.month * equivalences.week * equivalences.day;
+	const daysInYear = equivalences.month * equivalences.week * equivalences.day;
 	const daysInMonth = equivalences.week * equivalences.day;
 	const daysInWeek = equivalences.day;
 
@@ -74,9 +66,7 @@ const calculateDynamicInterval = (totalDays, equivalences) => {
 
 	// Calculate intervals in years, months, weeks, and days
 	const yearsInterval = Math.floor(totalDays / daysInYear / targetIntervals);
-	const monthsInterval = Math.floor(
-		totalDays / daysInMonth / targetIntervals
-	);
+	const monthsInterval = Math.floor(totalDays / daysInMonth / targetIntervals);
 	const weeksInterval = Math.floor(totalDays / daysInWeek / targetIntervals);
 	const daysInterval = Math.floor(totalDays / targetIntervals);
 
@@ -92,8 +82,7 @@ const calculateDynamicInterval = (totalDays, equivalences) => {
 
 // Increment a date object to the next "round" date based on the interval
 const incrementToNextRoundDate = (currentDate, intervalDays, equivalences) => {
-	const daysInYear =
-		equivalences.month * equivalences.week * equivalences.day;
+	const daysInYear = equivalences.month * equivalences.week * equivalences.day;
 	const daysInMonth = equivalences.week * equivalences.day;
 	const daysInWeek = equivalences.day;
 

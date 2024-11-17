@@ -23,15 +23,14 @@ Error Code Reference:
 
 */
 
-
 export const MainProvider = ({ children }) => {
 	const [error, setError] = useState({ errorCode: null, errorText: null });
 
 	return (
 		<MainContext.Provider
 			value={{
-                error,
-                setError,
+				error,
+				setError,
 			}}>
 			{children}
 		</MainContext.Provider>

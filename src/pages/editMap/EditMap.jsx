@@ -59,24 +59,14 @@ function Edit() {
 	}, [sidebarState]);
 
 	const updateMapPosition = () => {
-		if (
-			(sidebarState.event || sidebarState.location) &&
-			mapArticleRef.current
-		) {
-			const mapWrapper =
-				mapArticleRef.current.querySelector('.mapWrapper');
+		if ((sidebarState.event || sidebarState.location) && mapArticleRef.current) {
+			const mapWrapper = mapArticleRef.current.querySelector('.mapWrapper');
 			const { width, height } = mapWrapper.getBoundingClientRect();
 			const wrapperWidth = Math.round(width);
 			const wrapperHeight = Math.round(height);
 
-			const eventX =
-				sidebarState.event?.position?.x ??
-				sidebarState.location?.position?.x ??
-				0;
-			const eventY =
-				sidebarState.event?.position?.y ??
-				sidebarState.location?.position?.y ??
-				0;
+			const eventX = sidebarState.event?.position?.x ?? sidebarState.location?.position?.x ?? 0;
+			const eventY = sidebarState.event?.position?.y ?? sidebarState.location?.position?.y ?? 0;
 
 			setMapPosition({
 				x: wrapperWidth / (2 * 1.5),
@@ -138,9 +128,7 @@ function Edit() {
 	};
 
 	const updateExistingLocation = (locationId, position) => {
-		const index = locations.findIndex(
-			(loc) => loc.locationId === locationId
-		);
+		const index = locations.findIndex((loc) => loc.locationId === locationId);
 		if (locations[index].events && locations[index].events?.length !== 0) {
 			setError({
 				errorCode: 25,
@@ -181,8 +169,7 @@ function Edit() {
 			console.log(event.target.src);
 			setError({
 				errorCode: 40,
-				errorText:
-					"We couldn't find your map, here is the default instead",
+				errorText: "We couldn't find your map, here is the default instead",
 			});
 		}
 
@@ -198,8 +185,7 @@ function Edit() {
 	};
 
 	const handleMouseMove = (e) => {
-		if (!isDragging || draggingEvent || e.target.className !== 'map')
-			return;
+		if (!isDragging || draggingEvent || e.target.className !== 'map') return;
 		const deltaX = e.clientX - lastMousePosition.x;
 		const deltaY = e.clientY - lastMousePosition.y;
 		setMapPosition((prevPosition) => ({
@@ -236,12 +222,7 @@ function Edit() {
 							transform: `translate(${mapPosition.x}px, ${mapPosition.y}px) translate(${mapTranslation.x}%, ${mapTranslation.y}%) `,
 							cursor: `${isDragging ? 'grabbing' : 'grab'}`,
 						}}>
-						<img
-							src={map.map}
-							onError={handleImageError}
-							alt="your map"
-							className="map"
-						/>
+						<img src={map.map} onError={handleImageError} alt="your map" className="map" />
 						{renderLocations()}
 						{renderEvents()}
 					</div>
@@ -262,18 +243,14 @@ function Edit() {
 		if (!renderableEvents.length) {
 			return null;
 		}
-		return renderableEvents.map((ev, index) => (
-			<EventPin key={index} event={ev} />
-		));
+		return renderableEvents.map((ev, index) => <EventPin key={index} event={ev} />);
 	};
 
 	const renderLocations = () => {
 		if (!locations.length) {
 			return null;
 		}
-		return locations.map((location, index) => (
-			<LocationPin key={index} location={location} />
-		));
+		return locations.map((location, index) => <LocationPin key={index} location={location} />);
 	};
 
 	if (!map) {

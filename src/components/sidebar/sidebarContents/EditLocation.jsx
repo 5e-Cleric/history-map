@@ -15,7 +15,7 @@ function EditLocation() {
 	const [description, setDescription] = useState('');
 	const [position, setPosition] = useState({ y: null, x: null });
 
-	const location = locations.find((loc)=> loc.locationId === sidebarState.location?.locationId);
+	const location = locations.find((loc) => loc.locationId === sidebarState.location?.locationId);
 
 	useEffect(() => {
 		if (location.locationId) {
@@ -48,19 +48,11 @@ function EditLocation() {
 			<form className="form" onSubmit={handleSubmit}>
 				<label className="fieldGroup">
 					Location title:
-					<input
-						type="text"
-						value={title}
-						onChange={(e) => setTitle(e.target.value)}
-						required
-					/>
+					<input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
 				</label>
 				<label className="fieldGroup">
 					Description:
-					<textarea
-						value={description}
-						onChange={(e) => setDescription(e.target.value)}
-						required></textarea>
+					<textarea value={description} onChange={(e) => setDescription(e.target.value)} required></textarea>
 				</label>
 				<button type="submit" className="green">
 					{!location ? 'Create location' : 'Save location'}

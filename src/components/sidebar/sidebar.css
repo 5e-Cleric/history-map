@@ -85,15 +85,15 @@
 
         >.location {
             .events {
-                font-size:25px;
-                display:grid;
+                font-size: 25px;
+                display: grid;
                 grid-template-columns: 1fr 1fr 1fr;
 
                 .eventPin {
-                    font-size:35px;
-                    width:auto;
-                    height:auto;
-                    translate:none !important;
+                    font-size: 35px;
+                    width: auto;
+                    height: auto;
+                    translate: none !important;
                 }
             }
         }

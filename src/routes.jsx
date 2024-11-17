@@ -11,7 +11,7 @@ import ErrorWarning from '@components/errorWarning/ErrorWarning';
 const AppRoutes = () => {
 	return (
 		<MainProvider>
-							<ErrorWarning/>
+			<ErrorWarning />
 			<Router>
 				<Routes>
 					<Route path="/" element={<Home />} />

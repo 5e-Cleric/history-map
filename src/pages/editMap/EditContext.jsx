@@ -24,7 +24,8 @@ export const EditProvider = ({ children }) => {
 
 	useEffect(() => {
 		fetchMap();
-		setZoomLevel(100);
+		if (hash) setZoomLevel(150);
+		else setZoomLevel(100);
 		setIsDataLoaded(true);
 	}, []);
 

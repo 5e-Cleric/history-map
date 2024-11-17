@@ -46,18 +46,15 @@ function Create() {
 			},
 		};
 		try {
-			const response = await fetch(
-				`${import.meta.env.VITE_API_URL}/api/map/new`,
-				{
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify(map),
-				}
-			);
+			const response = await fetch(`${import.meta.env.VITE_API_URL}/api/map/new`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(map),
+			});
 			const resultMap = await response.json();
 			window.location.href = `/map/${resultMap.id}`;
 		} catch (error) {
-			setError({errorCode: 2, errorText: 'Error creating map'});
+			setError({ errorCode: 2, errorText: 'Error creating map' });
 			console.error('Error creating map: ', error, '; map: ', map);
 		}
 	};
@@ -76,17 +73,12 @@ function Create() {
 					</label>
 					<label className="fieldGroup">
 						Paste a link to your map:
-						<input
-							ref={mapRef}
-							defaultValue={'default'}
-							type="text"
-						/>
+						<input ref={mapRef} defaultValue={'default'} type="text" />
 						<div className="tip">
 							<i className="fa-solid fa-question"></i>
 							<div className="tipDetails">
-								Enter a link to a map hosted online (sites like
-								imgur or imgbb are best), or use our default map
-								to try things around
+								Enter a link to a map hosted online (sites like imgur or imgbb are best), or use our
+								default map to try things around
 							</div>
 						</div>
 					</label>
@@ -96,23 +88,18 @@ function Create() {
 						<div className="tip">
 							<i className="fa-solid fa-question"></i>
 							<div className="tipDetails">
-								Here add the names of your calendar, such as
-								years, months, weeks and days
+								Here add the names of your calendar, such as years, months, weeks and days
 							</div>
 						</div>
 					</label>
 					<label className="fieldGroup">
 						Date system equivalences:
-						<CustomDate
-							ref={dateEquivalencesRef}
-							dataType="equivalences"
-						/>
+						<CustomDate ref={dateEquivalencesRef} dataType="equivalences" />
 						<div className="tip">
 							<i className="fa-solid fa-question"></i>
 							<div className="tipDetails">
-								Here add the equivalences of your calendar, such
-								as how many months in a year, how many weeks in
-								a month, etcetera
+								Here add the equivalences of your calendar, such as how many months in a year, how many
+								weeks in a month, etcetera
 							</div>
 						</div>
 					</label>
@@ -131,20 +118,16 @@ function Create() {
 						<div className="tip">
 							<i className="fa-solid fa-question"></i>
 							<div className="tipDetails">
-								Add the starting date of your world, in years,
-								months, weeks and days, or your equivalent
+								Add the starting date of your world, in years, months, weeks and days, or your
+								equivalent
 							</div>
 						</div>
 					</label>
 					<label className="fieldGroup">
 						Map description:
-						<textarea
-							ref={descriptionRef}
-							name="mapDescription"></textarea>
+						<textarea ref={descriptionRef} name="mapDescription"></textarea>
 					</label>
-					<small>
-						Note: you will be able to modify all of these later!
-					</small>
+					<small>Note: you will be able to modify all of these later!</small>
 					<button type="submit" className="green">
 						Create Map
 					</button>

@@ -51,19 +51,11 @@ function EditEvent() {
 			<form className="form" onSubmit={handleSubmit}>
 				<label className="fieldGroup">
 					Event title:
-					<input
-						type="text"
-						value={title}
-						onChange={(e) => setTitle(e.target.value)}
-						required
-					/>
+					<input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
 				</label>
 				<label className="fieldGroup">
 					Description:
-					<textarea
-						value={description}
-						onChange={(e) => setDescription(e.target.value)}
-						required></textarea>
+					<textarea value={description} onChange={(e) => setDescription(e.target.value)} required></textarea>
 				</label>
 				<label className="fieldGroup">
 					Event Date:

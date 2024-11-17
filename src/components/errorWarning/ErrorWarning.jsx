@@ -9,9 +9,7 @@ const ErrorWarning = () => {
 	return (
 		<div className="error-warning">
 			<h4 className="errorTitle">Error code: {error.errorCode}</h4>
-			<button
-				className="close"
-				onClick={() => setError({ errorCode: null, errorText: null })}>
+			<button className="close" onClick={() => setError({ errorCode: null, errorText: null })}>
 				<i className="fa-solid fa-xmark"></i>
 			</button>
 			<hr />

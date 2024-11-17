@@ -7,10 +7,7 @@ const Changelog = () => {
 			<Nav />
 			<main className="content">
 				<div className="logoWrapper">
-					<svg
-						className="logo"
-						xmlns="http://www.w3.org/2000/svg"
-						viewBox="0 0 738.76 678.24">
+					<svg className="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 738.76 678.24">
 						<g>
 							<path d="M737.36,346.77c0,81.54.16,150.66-.05,219.78-.16,50.39-23.87,79.25-73.24,87.72-48.97,8.4-98.17,15.5-147.26,23.19-16.28,2.55-31.81-1.53-47.3-5.49-70.83-18.13-141.68-36.17-212.39-54.76-15.32-4.03-30.16-4.58-45.67-1.82-35.99,6.41-72.05,12.42-108.16,18.1-57.34,9.01-102.08-26.28-102.54-84.13C-.36,411.68-.08,274.01.61,136.35c.23-46.11,26.76-76.32,72.04-84.61,38.2-6.99,108.37-8.72,146.77-14.54,15.9-2.41,24.38-.76,19.05,15.24s-18.15,26.44-24,27.43c-34.92,5.91-75.89,4.64-110.83,10.4-6.76,1.12-13.54,2.19-20.24,3.6-25.57,5.38-38.42,19.19-38.49,44.91-.36,137.66-.47,275.33.05,413,.12,31.88,20.39,47.98,51.98,43.17,37.83-5.75,75.6-11.98,113.27-18.72,19.57-3.5,38.47-2.45,57.62,2.56,69.07,18.06,138.33,35.44,207.35,53.7,19.72,5.22,38.93,6.75,59.17,3.17,38.8-6.87,77.88-12.11,116.77-18.49,35.19-5.77,45.06-17.31,45.09-52.51.11-132.53.14-265.05-.02-397.58-.05-42.35-16.86-56.18-59.3-49.68-34.44,5.28-74.79,8.88-83.74-.27s-11.78-22.86-10.67-30.29c1.32-8.77,24.93-5.93,34.39-6.67,23.14-2.47,43.9-4.19,56.29-5.49,33.76-4.81,65.15-1.85,89.15,26.46,10.78,12.72,17.14,27.14,16.42,43.87-3.09,71.38-.13,142.78-1.34,201.75Z" />
 							<path d="M525.91,143.34c.47,46.61-13.44,82.93-42.64,113.21-29.31,30.39-48.08,67.8-69.1,103.71-4.9,8.37-9.44,16.97-14.74,25.09-13.13,20.11-31.94,20.42-44.8-.07-13.94-22.22-26.98-45.04-39.59-68.05-12.72-23.21-28.72-43.65-46.59-63.12-46.37-50.52-53.75-121.49-19.75-179.27C282.48,17.43,350.02-11.28,415.01,4.12c66.84,15.84,111.37,73.62,110.9,139.22ZM378.19,88.44c-34.47.07-62.19,27.54-62.32,61.74-.13,34.77,27.72,62.62,62.56,62.55,34.45-.07,62.17-27.54,62.32-61.75.15-34.77-27.7-62.61-62.56-62.54Z" />
@@ -22,7 +19,7 @@ const Changelog = () => {
 				<h1>Change Log</h1>
 				<div className="card">
 					<h3>Update 2.1 - Saturday, November 16th of 2024</h3>
-					
+
 					<br />
 					<br />
 
@@ -32,14 +29,9 @@ const Changelog = () => {
 							<li>Error code reference</li>
 							<li>Fixed error with date when creating events</li>
 							<li>Reduced amount of fetching</li>
-							<li>
-								Correct toggle of sidebar when creting points
-							</li>
+							<li>Correct toggle of sidebar when creting points</li>
 							<li>Adding animation to location pin on toolbar</li>
-							<li>
-								Adding drop to join area on locations when
-								dragging
-							</li>
+							<li>Adding drop to join area on locations when dragging</li>
 							<li>Deleting points on map deletion in all page</li>
 							<li>Reordered map context</li>
 						</ul>
@@ -53,8 +45,7 @@ const Changelog = () => {
 					<br />
 
 					<p>
-						This is the first update of the application. It includes
-						the following changes:
+						This is the first update of the application. It includes the following changes:
 						<ul>
 							<li>addded zoom buttons</li>
 							<li>Added locations</li>
@@ -62,13 +53,8 @@ const Changelog = () => {
 							<li>Prevent movement of active point</li>
 							<li>Prevent duplication of new points</li>
 							<li>Fix crash when clicking on new event</li>
-							<li>
-								separated sidebar content in separate components
-							</li>
-							<li>
-								Correct deletion of new point when closing
-								sidebar
-							</li>
+							<li>separated sidebar content in separate components</li>
+							<li>Correct deletion of new point when closing sidebar</li>
 							<li>Added Changelog</li>
 						</ul>
 					</p>

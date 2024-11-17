@@ -15,13 +15,7 @@ const CustomDate = forwardRef(({ dataType }, ref) => {
 			case 'names':
 				return key.charAt(0) + key.slice(1);
 			case 'equivalences':
-				return key === 'year'
-					? '1'
-					: key === 'month'
-					? '30'
-					: key === 'week'
-					? '4'
-					: '7';
+				return key === 'year' ? '1' : key === 'month' ? '30' : key === 'week' ? '4' : '7';
 			case 'date':
 				return '0';
 			default:
@@ -35,13 +29,11 @@ const CustomDate = forwardRef(({ dataType }, ref) => {
 			if (dataType !== 'names') {
 				for (const key in dateRefs) {
 					values[key] =
-						parseInt(Math.round(dateRefs[key].current?.value) || 0) ||
-						parseInt(getDefaultValue(key) || 0);
+						parseInt(Math.round(dateRefs[key].current?.value) || 0) || parseInt(getDefaultValue(key) || 0);
 				}
 			} else {
 				for (const key in dateRefs) {
-					values[key] =
-						dateRefs[key].current.value || getDefaultValue(key);
+					values[key] = dateRefs[key].current.value || getDefaultValue(key);
 				}
 			}
 
@@ -61,26 +53,20 @@ const CustomDate = forwardRef(({ dataType }, ref) => {
 				dateRefs.day.current.value = date.day || '0';
 			}
 		},
-		
-		
 	}));
 
 	if (dataType === 'equivalences') {
 		return (
 			<div className="customDate">
 				<span className="year">
-					<input type="text" value='1' disabled/>/
+					<input type="text" value="1" disabled />/
 				</span>
 				{['month', 'week', 'day'].map((key) => (
 					<span key={key}>
 						<input
 							ref={dateRefs[key]}
 							type="text"
-							pattern={
-								dataType === 'names'
-									? '^[A-Za-z]+$'
-									: '^[0-9]{1,4}$'
-							}
+							pattern={dataType === 'names' ? '^[A-Za-z]+$' : '^[0-9]{1,4}$'}
 							defaultValue={getDefaultValue(key)}
 						/>
 						{key !== 'day' && '/'}
@@ -97,11 +83,7 @@ const CustomDate = forwardRef(({ dataType }, ref) => {
 					<input
 						ref={dateRefs[key]}
 						type="text"
-						pattern={
-							dataType === 'names'
-								? '^[A-Za-z]+$'
-								: '^[0-9]{1,4}$'
-						}
+						pattern={dataType === 'names' ? '^[A-Za-z]+$' : '^[0-9]{1,4}$'}
 						defaultValue={getDefaultValue(key)}
 					/>
 					{key !== 'day' && '/'}
