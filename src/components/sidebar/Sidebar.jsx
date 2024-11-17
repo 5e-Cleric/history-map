@@ -15,6 +15,8 @@ function Sidebar() {
 	const event = sidebarState.event;
 	const location = sidebarState.location;
 
+	if (!sidebarState) return;
+
 	const renderContent = () => {
 		if (mode === 'edit') {
 			if (event) return <EditEvent />;
@@ -30,7 +32,19 @@ function Sidebar() {
 
 	return (
 		<aside className={`sidebar ${mode ? 'open' : ''}`}>
-			<div className="sidebarContent">
+			<div className="sidebarWrapper">
+				{sidebarState.location && sidebarState.event && (
+					<button
+						className="backToLocation"
+						onClick={() => {
+							toggleSidebar({
+								mode: 'view',
+								location: sidebarState.location,
+							});
+						}}>
+						<i className="fas fa-arrow-left" />
+					</button>
+				)}
 				<button
 					className="closeButton"
 					onClick={() => {
@@ -40,7 +54,7 @@ function Sidebar() {
 					}}>
 					<i className="fa-solid fa-xmark"></i>
 				</button>
-				{renderContent()}
+				<div className="sidebarContent">{renderContent()}</div>
 			</div>
 		</aside>
 	);

@@ -13,8 +13,22 @@ function ViewLocation() {
 
 	return (
 		<div className="location view">
-			<h2 className="title">{location.title}</h2>
+			<div className="titleWrapper">
+				<h2 className="title">{location.title}</h2>
+				<button
+					onClick={() => {
+						//replace hash with location.locationId
+						const newHash = window.location.split('#')[0] + '#' + location.locationId;
+						navigator.clipboard.writeText(newHash);
+					}}
+					className="share"
+					title="copy direct link to location">
+					<i className="fa-solid fa-link"></i>
+				</button>
+			</div>
+
 			<p className="description">{location.description || 'No description.'}</p>
+			<br />
 			<h3>Events in this location:</h3>
 			<div className="events">
 				{locationEvents?.map((ev, index) => (
@@ -24,9 +38,7 @@ function ViewLocation() {
 					</div>
 				))}
 			</div>
-			<small>
-				Location id: <a href={`/map/${mapId}#${location.locationId}`}>{location.locationId}</a>
-			</small>
+
 			<div className="sidebarActions">
 				<button className="green edit" onClick={() => toggleSidebar({ mode: 'edit', location: location })}>
 					Edit

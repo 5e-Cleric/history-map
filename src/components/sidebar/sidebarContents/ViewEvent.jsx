@@ -8,19 +8,20 @@ function ViewEvent() {
 
 	return (
 		<div className="event view">
-			{sidebarState.location && (
+			<div className="titleWrapper">
+				<h2 className="title">{event.title}</h2>
 				<button
-					className="backToLocation"
 					onClick={() => {
-						toggleSidebar({
-							mode: 'view',
-							location: sidebarState.location,
-						});
-					}}>
-					<i className="fas fa-arrow-left" />
+						//replace hash with location.locationId
+						const newHash = window.location.split('#')[0] + '#' + event.locationId;
+						navigator.clipboard.writeText(newHash);
+					}}
+					className="share"
+					title="copy direct link to event">
+					<i className="fa-solid fa-link"></i>
 				</button>
-			)}
-			<h2 className="title">{event.title}</h2>
+			</div>
+
 			<small className="date">
 				{event.date?.year || '0'}/{event.date?.month || '0'}/{event.date?.week || '0'}/{event.date?.day || '0'}
 			</small>

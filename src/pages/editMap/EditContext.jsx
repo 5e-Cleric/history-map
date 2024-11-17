@@ -20,17 +20,16 @@ export const EditProvider = ({ children }) => {
 
 	const mapId = window.location.pathname.match(/\/([^/]+)\/?$/)[1];
 
-	const hash = window.location.hash;
+	const [hash, setHash] = useState(window.location.hash);
 
 	useEffect(() => {
 		fetchMap();
-		if (hash) setZoomLevel(150);
-		else setZoomLevel(100);
+		setZoomLevel(100);
 		setIsDataLoaded(true);
 	}, []);
 
 	useEffect(() => {
-		if (isDataLoaded && hash) {
+		if (isDataLoaded && hash && (events.length !== 0 || locations.length !== 0)) {
 			const id = hash.match(/#([^#]+)$/)?.[1];
 			if (id) {
 				const event = events.find((ev) => ev.eventId === id);
@@ -41,36 +40,42 @@ export const EditProvider = ({ children }) => {
 						event: event || null,
 						location: location || null,
 					});
+					setZoomLevel(150);
+					setHash(null);
 				}
 			}
 		}
 	}, [isDataLoaded, events, locations, hash]);
 
 	useEffect(() => {
-		const updatedEvent = events.find((loc) => loc.eventId === sidebarState.event?.eventId);
-		if (updatedEvent !== sidebarState.event) toggleSidebar({ mode: sidebarState.mode, event: updatedEvent });
+		if (events.length === 0) return;
 		joinEventsWithLocations();
-		if (events.length !== 0) {
-			const lastEvent = [...events].pop();
-			if (sidebarState.event && lastEvent?.eventId && !sidebarState.event?.eventId) {
-				setSidebar({ mode: 'view', event: lastEvent });
-			}
-		}
+		if (!sidebarState || !sidebarState.event) return;
+
+		// If an event is updated and is not active, toggleSidebar to it
+		const updatedEvent = events.find((ev) => ev.eventId === sidebarState.event?.eventId);
+		const updatedIsNotActive =
+			updatedEvent &&
+			updatedEvent.eventId === sidebarState.event.eventId &&
+			updatedEvent.position !== sidebarState.event?.position;
+		if (updatedIsNotActive) toggleSidebar({ mode: sidebarState.mode, event: updatedEvent });
+
+		// if a new event saved, toggle sidebar to it
+		const lastEvent = events[events.length - 1];
+		const isLastActive = !sidebarState.event?.eventId && lastEvent?.eventId;
+		if (isLastActive) toggleSidebar({ mode: 'view', event: lastEvent });
 	}, [events]);
 
 	useEffect(() => {
+		if (locations.length === 0 || !sidebarState || sidebarState.event) return;
+
 		const updatedLocation = locations.find((loc) => loc.locationId === sidebarState.location?.locationId);
-		if (updatedLocation !== sidebarState.location)
-			toggleSidebar({
-				mode: sidebarState.mode,
-				location: updatedLocation,
-			});
-		if (locations.length !== 0) {
-			const lastLocation = [...locations].pop();
-			if (sidebarState.location && lastLocation?.locationId && !sidebarState.location?.locationId) {
-				setSidebar({ mode: 'view', location: lastLocation });
-			}
-		}
+		const updatedIsNotActive = updatedLocation && updatedLocation.position !== sidebarState.location?.position;
+		if (updatedIsNotActive) toggleSidebar({ mode: sidebarState.mode, location: updatedLocation });
+
+		const lastLocation = locations[locations.length - 1];
+		const isLastActive = !sidebarState.location?.locationId && lastLocation?.locationId;
+		if (isLastActive) toggleSidebar({ mode: 'view', location: lastLocation });
 	}, [locations]);
 
 	//   ###########################    MAP    #####################
