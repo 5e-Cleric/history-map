@@ -3,10 +3,10 @@ import { EditContext } from '@pages/editMap/EditContext';
 import EventPin from '@components/event/EventPin';
 
 function ViewLocation() {
-	const { events, sidebarState, deleteLocation, toggleSidebar } =
+	const { events, sidebarState, locations, deleteLocation, toggleSidebar } =
 		useContext(EditContext);
 
-	const location = sidebarState.location;
+	const location = locations.find((loc)=> loc.locationId === sidebarState.location?.locationId);
 
 	const locationEvents = events.filter((ev) => {
 		return location.events?.some((locEv) => locEv === ev.eventId);

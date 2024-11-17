@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useContext } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { EditContext } from '@pages/editMap/EditContext';
 
 function EditLocation() {
@@ -15,7 +15,7 @@ function EditLocation() {
 	const [description, setDescription] = useState('');
 	const [position, setPosition] = useState({ y: null, x: null });
 
-	const location = sidebarState.location;
+	const location = locations.find((loc)=> loc.locationId === sidebarState.location?.locationId);
 
 	useEffect(() => {
 		if (location.locationId) {

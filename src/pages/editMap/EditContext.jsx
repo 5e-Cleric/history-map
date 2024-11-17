@@ -224,6 +224,7 @@ export const EditProvider = ({ children }) => {
 	};
 
 	const updateEvent = async (event) => {
+		console.log(event);
 		try {
 			const response = await fetch(
 				`${import.meta.env.VITE_API_URL}/api/event/${urlId}/${
@@ -290,40 +291,39 @@ export const EditProvider = ({ children }) => {
 	};
 
 	const joinEventsWithLocations = () => {
-		// Margin of error for proximity check, 5%
 		const marginOfError = 5;
-
-		let updatedLocations = [...locations];
-		const filteredRenderableEvents = events.filter((ev) => {
-			const coincidingLocation = updatedLocations.find((location) => {
+	
+		let updatedLocations = locations.map((location) => ({
+			...location,
+			events: [],
+		}));
+	
+		const filteredRenderableEvents = events.filter((event) => {
+			const matchingLocation = updatedLocations.find((location) => {
 				const distance = Math.sqrt(
-					Math.pow(ev.position.y - location.position.y, 2) +
-						Math.pow(ev.position.x - location.position.x, 2)
+					Math.pow(event.position.y - location.position.y, 2) +
+					Math.pow(event.position.x - location.position.x, 2)
 				);
 				return distance < marginOfError;
 			});
-
-			if (coincidingLocation) {
-				const updatedLocation = {
-					...coincidingLocation,
-					events: [...(coincidingLocation.events || []), ev.eventId],
-				};
-
-				updatedLocations = updatedLocations.map((location) =>
-					location.locationId === coincidingLocation.locationId
-						? updatedLocation
-						: location
-				);
-
+	
+			if (matchingLocation) {
+				matchingLocation.events.push(event.eventId);
 				return false;
 			}
-
+	
 			return true;
 		});
-
+	
 		setLocations(updatedLocations);
 		setRenderableEvents(filteredRenderableEvents);
 	};
+	
+	const stopDrag = () =>{
+		document.querySelectorAll('.mapWrapper .mapPoint').forEach((el) => {
+			el.classList.remove('dragging');
+		});
+	}
 
 	const zoomIn = () => {
 		setZoomLevel(zoomLevel + 10);
@@ -372,6 +372,7 @@ export const EditProvider = ({ children }) => {
 				// ########## MISC ##########
 				fetchMapContents,
 				joinEventsWithLocations,
+				stopDrag,
 				zoomLevel,
 				setZoomLevel,
 				zoomIn,

@@ -12,32 +12,38 @@ import { MainContext } from '../../MainContext';
 
 function Edit() {
 	const {
+		// ########## MAP ##########
 		map,
-		events,
-		renderableEvents,
-		setEvents,
-		updateEvent,
+
+		// ########## LOCATIONS ##########
 		locations,
 		setLocations,
 		updateLocation,
 
+		// ########## EVENTS ##########
+		events,
+		renderableEvents,
+		setEvents,
+		updateEvent,
+
+		// ########## SIDEBAR AND TIMELINE ##########
 		sidebarState,
-		draggingEvent,
-		setDraggingEvent,
+		toggleSidebar,
+
+		// ########## MISC ##########
+		stopDrag,
 		zoomLevel,
 		zoomIn,
 		zoomOut,
+		draggingEvent,
+		setDraggingEvent,
 		mapPosition,
 		setMapPosition,
 		mapTranslation,
 		setMapTranslation,
-
-		toggleSidebar,
 	} = useContext(EditContext);
 
 	const { setError } = useContext(MainContext);
-
-	// State to handle the map's position
 
 	const [isDragging, setIsDragging] = useState(false);
 	const [lastMousePosition, setLastMousePosition] = useState({ x: 0, y: 0 });
@@ -91,9 +97,7 @@ function Edit() {
 	const handleDrop = (e) => {
 		e.preventDefault();
 
-		document.querySelectorAll('.mapWrapper .mapPoint').forEach((el) => {
-			el.classList.remove('dragging');
-		});
+		stopDrag();
 
 		const { left, top, width, height } = e.target.getBoundingClientRect();
 		const newPosition = {
@@ -187,6 +191,8 @@ function Edit() {
 
 	const handleMouseDown = (e) => {
 		if (e.target.className !== 'map') return;
+		stopDrag();
+		setDraggingEvent(null);
 		setIsDragging(true);
 		setLastMousePosition({ x: e.clientX, y: e.clientY });
 	};

@@ -19,6 +19,7 @@ function Timeline() {
 		setDraggingEvent,
 
 		//other functions
+		stopDrag,
 		toggleTimeline,
 	} = useContext(EditContext);
 
@@ -129,10 +130,16 @@ function Timeline() {
 
 	const handleDrop = (e) => {
 		e.preventDefault();
+		stopDrag();
+		if (draggingEvent[0] === 'location') {
+			setDraggingEvent(null);
+			return;
+		}
+
 		const timelineRect = e.currentTarget.getBoundingClientRect();
 		const newPosition =
 			((e.clientX - timelineRect.left) / timelineRect.width) * 100;
-		const index = events.findIndex((e) => e.eventId === draggingEvent);
+		const index = events.findIndex((e) => e.eventId === draggingEvent[1]);
 
 		const newDate = positionToTime(
 			newPosition,
@@ -141,11 +148,10 @@ function Timeline() {
 			equivalences
 		);
 
-		events[index] = {
-			...events[index],
-			date: newDate,
-		};
-		setDraggingEvent(null);
+		if (index !== -1) {
+			events[index] = { ...events[index], date: newDate };
+			updateEvent(events[index]);
+		}
 		updateEvent(events[index]);
 	};
 
