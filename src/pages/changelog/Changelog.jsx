@@ -18,6 +18,27 @@ const Changelog = () => {
 				</div>
 				<h1>Change Log</h1>
 				<div className="card">
+					<h3>Update 2.2 - Sunday, November 17th of 2024</h3>
+
+					<br />
+					<br />
+
+					<p>
+						It includes the following changes:
+						<ul>
+							<li>Revert block to moving points while active</li>
+							<li>fix timeline positioning issues</li>
+							<li>Prevent unnecessary sidebar rerenders</li>
+							<li>Point hash navigation</li>
+							<li>Added hash link copy to points</li>
+							<li>Fixed many issues with sidebar not updating correctly</li>
+							<li>refactored sidebar structure</li>
+							<li>linted the whole project</li>
+						</ul>
+					</p>
+					<hr />
+				</div>
+				<div className="card">
 					<h3>Update 2.1 - Saturday, November 16th of 2024</h3>
 
 					<br />
