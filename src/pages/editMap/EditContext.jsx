@@ -7,6 +7,7 @@ export const EditProvider = ({ children }) => {
 	const [map, setMap] = useState(null);
 	const [locations, setLocations] = useState([]);
 	const [events, setEvents] = useState([]);
+	const [isDataLoaded, setIsDataLoaded] = useState(false);
 	const [renderableEvents, setRenderableEvents] = useState([]);
 	const [sidebarState, setSidebar] = useState(false);
 	const [timelineState, setTimeline] = useState(false);
@@ -17,35 +18,55 @@ export const EditProvider = ({ children }) => {
 
 	const { setError } = useContext(MainContext);
 
-	const urlId = window.location.pathname.match(/\/([^/]+)\/?$/)[1];
+	const mapId = window.location.pathname.match(/\/([^/]+)\/?$/)[1];
+
+	const hash = window.location.hash;
 
 	useEffect(() => {
 		fetchMap();
 		setZoomLevel(100);
+		setIsDataLoaded(true);
 	}, []);
 
 	useEffect(() => {
+		if (isDataLoaded && hash) {
+			const id = hash.match(/#([^#]+)$/)?.[1];
+			if (id) {
+				const event = events.find((ev) => ev.eventId === id);
+				const location = locations.find((loc) => loc.locationId === id);
+				if (event || location) {
+					toggleSidebar({
+						mode: 'view',
+						event: event || null,
+						location: location || null,
+					});
+				}
+			}
+		}
+	}, [isDataLoaded, events, locations, hash]);
+
+	useEffect(() => {
+		const updatedEvent = events.find((loc) => loc.eventId === sidebarState.event?.eventId);
+		if (updatedEvent !== sidebarState.event) toggleSidebar({ mode: sidebarState.mode, event: updatedEvent });
 		joinEventsWithLocations();
 		if (events.length !== 0) {
 			const lastEvent = [...events].pop();
-			if (
-				sidebarState.event &&
-				lastEvent?.eventId &&
-				!sidebarState.event?.eventId
-			) {
+			if (sidebarState.event && lastEvent?.eventId && !sidebarState.event?.eventId) {
 				setSidebar({ mode: 'view', event: lastEvent });
 			}
 		}
 	}, [events]);
 
 	useEffect(() => {
+		const updatedLocation = locations.find((loc) => loc.locationId === sidebarState.location?.locationId);
+		if (updatedLocation !== sidebarState.location)
+			toggleSidebar({
+				mode: sidebarState.mode,
+				location: updatedLocation,
+			});
 		if (locations.length !== 0) {
 			const lastLocation = [...locations].pop();
-			if (
-				sidebarState.location &&
-				lastLocation?.locationId &&
-				!sidebarState.location?.locationId
-			) {
+			if (sidebarState.location && lastLocation?.locationId && !sidebarState.location?.locationId) {
 				setSidebar({ mode: 'view', location: lastLocation });
 			}
 		}
@@ -54,11 +75,9 @@ export const EditProvider = ({ children }) => {
 	//   ###########################    MAP    #####################
 
 	const fetchMap = async () => {
-		if (urlId) {
+		if (mapId) {
 			try {
-				const mapResponse = await fetch(
-					`${import.meta.env.VITE_API_URL}/api/map/${urlId}`
-				);
+				const mapResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/map/${mapId}`);
 				const mapData = await mapResponse.json();
 				setMap(mapData);
 			} catch (error) {
@@ -72,7 +91,7 @@ export const EditProvider = ({ children }) => {
 	const updateMap = async (newMap) => {
 		console.log(newMap);
 		try {
-			await fetch(`${import.meta.env.VITE_API_URL}/api/map/${urlId}`, {
+			await fetch(`${import.meta.env.VITE_API_URL}/api/map/${mapId}`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json',
@@ -107,9 +126,7 @@ export const EditProvider = ({ children }) => {
 
 	const fetchLocations = async () => {
 		try {
-			const locationResponse = await fetch(
-				`${import.meta.env.VITE_API_URL}/api/location/${urlId}`
-			);
+			const locationResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/location/${mapId}`);
 			const locationData = await locationResponse.json();
 			setLocations(locationData);
 		} catch (error) {
@@ -120,14 +137,11 @@ export const EditProvider = ({ children }) => {
 
 	const saveNewLocation = async (location) => {
 		try {
-			const response = await fetch(
-				`${import.meta.env.VITE_API_URL}/api/location/${urlId}`,
-				{
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify(location),
-				}
-			);
+			const response = await fetch(`${import.meta.env.VITE_API_URL}/api/location/${mapId}`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(location),
+			});
 			const data = await response.json();
 			fetchMapContents();
 		} catch (error) {
@@ -139,9 +153,7 @@ export const EditProvider = ({ children }) => {
 	const updateLocation = async (location) => {
 		try {
 			const response = await fetch(
-				`${import.meta.env.VITE_API_URL}/api/location/${urlId}/${
-					location.locationId
-				}`,
+				`${import.meta.env.VITE_API_URL}/api/location/${mapId}/${location.locationId}`,
 				{
 					method: 'PUT',
 					headers: { 'Content-Type': 'application/json' },
@@ -158,12 +170,9 @@ export const EditProvider = ({ children }) => {
 
 	const deleteLocation = async (location) => {
 		try {
-			await fetch(
-				`${import.meta.env.VITE_API_URL}/api/location/${
-					location.mapId
-				}/${location.locationId}`,
-				{ method: 'DELETE' }
-			);
+			await fetch(`${import.meta.env.VITE_API_URL}/api/location/${location.mapId}/${location.locationId}`, {
+				method: 'DELETE',
+			});
 			fetchMapContents();
 			toggleSidebar(sidebarState);
 		} catch (error) {
@@ -174,12 +183,9 @@ export const EditProvider = ({ children }) => {
 
 	const deleteLocationsByMap = async () => {
 		try {
-			await fetch(
-				`${import.meta.env.VITE_API_URL}/api/location/${map.id}`,
-				{
-					method: 'DELETE',
-				}
-			);
+			await fetch(`${import.meta.env.VITE_API_URL}/api/location/${map.id}`, {
+				method: 'DELETE',
+			});
 			window.location.href = '/home';
 		} catch (error) {
 			setError({
@@ -194,9 +200,7 @@ export const EditProvider = ({ children }) => {
 
 	const fetchEvents = async () => {
 		try {
-			const eventResponse = await fetch(
-				`${import.meta.env.VITE_API_URL}/api/event/${urlId}`
-			);
+			const eventResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/event/${mapId}`);
 			const eventData = await eventResponse.json();
 			setEvents(eventData);
 		} catch (error) {
@@ -207,14 +211,11 @@ export const EditProvider = ({ children }) => {
 
 	const saveNewEvent = async (event) => {
 		try {
-			const response = await fetch(
-				`${import.meta.env.VITE_API_URL}/api/event/${urlId}`,
-				{
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify(event),
-				}
-			);
+			const response = await fetch(`${import.meta.env.VITE_API_URL}/api/event/${mapId}`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(event),
+			});
 			const data = await response.json();
 			fetchEvents();
 		} catch (error) {
@@ -224,18 +225,12 @@ export const EditProvider = ({ children }) => {
 	};
 
 	const updateEvent = async (event) => {
-		console.log(event);
 		try {
-			const response = await fetch(
-				`${import.meta.env.VITE_API_URL}/api/event/${urlId}/${
-					event.eventId
-				}`,
-				{
-					method: 'PUT',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify(event),
-				}
-			);
+			const response = await fetch(`${import.meta.env.VITE_API_URL}/api/event/${mapId}/${event.eventId}`, {
+				method: 'PUT',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(event),
+			});
 			const data = await response.json();
 			fetchEvents();
 		} catch (error) {
@@ -246,12 +241,9 @@ export const EditProvider = ({ children }) => {
 
 	const deleteEvent = async (event) => {
 		try {
-			await fetch(
-				`${import.meta.env.VITE_API_URL}/api/event/${event.mapId}/${
-					event.eventId
-				}`,
-				{ method: 'DELETE' }
-			);
+			await fetch(`${import.meta.env.VITE_API_URL}/api/event/${event.mapId}/${event.eventId}`, {
+				method: 'DELETE',
+			});
 			fetchEvents();
 			toggleSidebar(sidebarState);
 		} catch (error) {
@@ -274,8 +266,7 @@ export const EditProvider = ({ children }) => {
 	//   ###########################    SIDEBAR AND TIMELINE    #####################
 
 	const toggleSidebar = (newSidebarState) => {
-		if (JSON.stringify(newSidebarState) === JSON.stringify(sidebarState))
-			setSidebar(false);
+		if (JSON.stringify(newSidebarState) === JSON.stringify(sidebarState)) setSidebar(false);
 		else setSidebar(newSidebarState);
 	};
 
@@ -292,38 +283,38 @@ export const EditProvider = ({ children }) => {
 
 	const joinEventsWithLocations = () => {
 		const marginOfError = 5;
-	
+
 		let updatedLocations = locations.map((location) => ({
 			...location,
 			events: [],
 		}));
-	
+
 		const filteredRenderableEvents = events.filter((event) => {
 			const matchingLocation = updatedLocations.find((location) => {
 				const distance = Math.sqrt(
 					Math.pow(event.position.y - location.position.y, 2) +
-					Math.pow(event.position.x - location.position.x, 2)
+						Math.pow(event.position.x - location.position.x, 2)
 				);
 				return distance < marginOfError;
 			});
-	
+
 			if (matchingLocation) {
 				matchingLocation.events.push(event.eventId);
 				return false;
 			}
-	
+
 			return true;
 		});
-	
+
 		setLocations(updatedLocations);
 		setRenderableEvents(filteredRenderableEvents);
 	};
-	
-	const stopDrag = () =>{
+
+	const stopDrag = () => {
 		document.querySelectorAll('.mapWrapper .mapPoint').forEach((el) => {
 			el.classList.remove('dragging');
 		});
-	}
+	};
 
 	const zoomIn = () => {
 		setZoomLevel(zoomLevel + 10);
@@ -339,6 +330,7 @@ export const EditProvider = ({ children }) => {
 			value={{
 				// ########## MAP ##########
 				map,
+				mapId,
 				setMap,
 				updateMap,
 				deleteMap,

@@ -38,7 +38,7 @@ function EditMap() {
 			},
 		};
 		updateMap(mapData);
-		toggleSidebar({ mode: 'view', event: null });
+		toggleSidebar({ mode: 'view' });
 	};
 
 	return (
@@ -46,19 +46,11 @@ function EditMap() {
 			<form className="form" onSubmit={handleSubmit} id="editmap">
 				<label className="fieldGroup">
 					Map title:
-					<input
-						value={title}
-						onChange={(e) => setTitle(e.target.value)}
-						type="text"
-					/>
+					<input value={title} onChange={(e) => setTitle(e.target.value)} type="text" />
 				</label>
 				<label className="fieldGroup">
 					Paste a link to your map:
-					<input
-						value={mapLink}
-						onChange={(e) => setMapLink(e.target.value)}
-						type="text"
-					/>
+					<input value={mapLink} onChange={(e) => setMapLink(e.target.value)} type="text" />
 				</label>
 				<label className="fieldGroup">
 					Date system names:
@@ -66,10 +58,7 @@ function EditMap() {
 				</label>
 				<label className="fieldGroup">
 					Date system equivalences:
-					<CustomDate
-						ref={dateEquivalencesRef}
-						dataType="equivalences"
-					/>
+					<CustomDate ref={dateEquivalencesRef} dataType="equivalences" />
 				</label>
 				<label className="fieldGroup">
 					Starting Date:
@@ -80,9 +69,7 @@ function EditMap() {
 					<textarea
 						name="mapDescription"
 						value={description}
-						onChange={(e) =>
-							setDescription(e.target.value)
-						}></textarea>
+						onChange={(e) => setDescription(e.target.value)}></textarea>
 				</label>
 				<button type="submit" onSubmit={handleSubmit} className="green">
 					Save map

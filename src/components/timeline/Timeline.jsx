@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useRef } from 'react';
 import './timeline.css';
 import EventPin from '../event/EventPin';
 import { EditContext } from '@pages/editMap/EditContext';
@@ -25,21 +25,16 @@ function Timeline() {
 
 	const [timelineEvents, setTimelineEvents] = useState(events);
 
+	const timelineBarRef = useRef(null);
+
 	useEffect(() => {
 		if (events) setTimelineEvents(events.filter((event) => event.date));
 	}, [events]);
 
-	if (
-		!map ||
-		!map.dateSystem ||
-		!map.dateSystem.dateStart ||
-		!map.dateSystem.dateEquivalences ||
-		!events ||
-		events.length < 2
-	) {
+	if (!events || events.length < 3) {
 		return (
 			<article className={`timeline ${timelineState ? 'open' : ''}`}>
-				<h2>You need at least two events to use the timeline</h2>
+				<h2>You need at least three events to use the timeline</h2>
 				<div className="bar"></div>
 			</article>
 		);
@@ -68,6 +63,17 @@ function Timeline() {
 	const totalTimelineDays =
 		convertToTotalDays(lastDate, equivalences) -
 		convertToTotalDays(startDate, equivalences);
+
+	if (totalTimelineDays === 0)
+		return (
+			<article className={`timeline ${timelineState ? 'open' : ''}`}>
+				<h2>
+					All your events have the same date, so there is no timeline
+					to show
+				</h2>
+				<div className="bar"></div>
+			</article>
+		);
 
 	const getDivisionsArray = () => {
 		const divisions = [];
@@ -107,12 +113,12 @@ function Timeline() {
 							event.date,
 							equivalences
 						);
+						const startDateDays = convertToTotalDays(
+							startDate,
+							equivalences
+						);
 						const eventPositionPercent =
-							((eventDays -
-								convertToTotalDays(startDate, equivalences)) /
-								totalTimelineDays) *
-							100;
-
+							((eventDays - startDateDays) / totalTimelineDays) * 100;
 						return (
 							<EventPin
 								key={index}
@@ -131,12 +137,12 @@ function Timeline() {
 	const handleDrop = (e) => {
 		e.preventDefault();
 		stopDrag();
-		if (draggingEvent[0] === 'location') {
+		if ( draggingEvent[0] === 'location') {
 			setDraggingEvent(null);
 			return;
 		}
-
-		const timelineRect = e.currentTarget.getBoundingClientRect();
+		
+		const timelineRect = timelineBarRef.current.getBoundingClientRect();
 		const newPosition =
 			((e.clientX - timelineRect.left) / timelineRect.width) * 100;
 		const index = events.findIndex((e) => e.eventId === draggingEvent[1]);
@@ -152,12 +158,11 @@ function Timeline() {
 			events[index] = { ...events[index], date: newDate };
 			updateEvent(events[index]);
 		}
-		updateEvent(events[index]);
 	};
 
 	return (
 		<article className={`timeline ${timelineState ? 'open' : ''}`}>
-			<div className="bar">
+			<div className="bar" ref={timelineBarRef}>
 				<div className="years">
 					{getDivisionsArray().map((division, index) => {
 						const divisionDays = convertToTotalDays(

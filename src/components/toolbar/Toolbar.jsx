@@ -20,11 +20,7 @@ const Toolbar = () => {
 	const { setError } = useContext(MainContext);
 
 	const handleDragStart = (type) => {
-		if (
-			sidebarState &&
-			!sidebarState.event?.eventId &&
-			!sidebarState.location?.locationId
-		) {
+		if (sidebarState && !sidebarState.event?.eventId && !sidebarState.location?.locationId) {
 			setError({
 				errorCode: 12,
 				errorText: `You cannot create another event or location before saving the current`,
@@ -72,10 +68,7 @@ const Toolbar = () => {
 		return (
 			<ul>
 				<li>
-					<button
-						className="zoomOut"
-						title="zoom out"
-						onClick={() => zoomOut()}>
+					<button className="zoomOut" title="zoom out" onClick={() => zoomOut()}>
 						<i className="fa-solid fa-magnifying-glass-minus"></i>
 					</button>
 				</li>
@@ -92,10 +85,7 @@ const Toolbar = () => {
 					</button>
 				</li>
 				<li>
-					<button
-						className="zoomIn"
-						title="zoom in"
-						onClick={() => zoomIn()}>
+					<button className="zoomIn" title="zoom in" onClick={() => zoomIn()}>
 						<i className="fa-solid fa-magnifying-glass-plus"></i>
 					</button>
 				</li>
@@ -110,9 +100,7 @@ const Toolbar = () => {
 					<button
 						title="open map sidebar"
 						className="sidebarButton"
-						onClick={() =>
-							toggleSidebar({ mode: 'view', event: null })
-						}>
+						onClick={() => toggleSidebar({ mode: 'view' })}>
 						<i className="fa-solid fa-earth-americas"></i>
 					</button>
 				</li>
@@ -124,10 +112,7 @@ const Toolbar = () => {
 					</div>
 				</li>
 				<li>
-					<button
-						title="open timeline"
-						className="timelineButton"
-						onClick={toggleTimeline}>
+					<button title="open timeline" className="timelineButton" onClick={toggleTimeline}>
 						<i className="fa-solid fa-timeline"></i>
 					</button>
 				</li>

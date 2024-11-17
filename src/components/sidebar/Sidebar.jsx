@@ -9,8 +9,7 @@ import EditLocation from './sidebarContents/EditLocation';
 import ViewLocation from './sidebarContents/ViewLocation';
 
 function Sidebar() {
-	const { fetchMapContents, sidebarState, toggleSidebar } =
-		useContext(EditContext);
+	const { fetchMapContents, sidebarState, toggleSidebar } = useContext(EditContext);
 
 	const mode = sidebarState.mode;
 	const event = sidebarState.event;

@@ -1,31 +1,21 @@
 import { useContext } from 'react';
 import { EditContext } from '@pages/editMap/EditContext';
-import { MainContext } from '../../MainContext';
 
 function LocationPin({ location }) {
 	const { setDraggingEvent, toggleSidebar, sidebarState, setZoomLevel } =
 		useContext(EditContext);
-
-	const { setError } = useContext(MainContext);
 	const active =
 		JSON.stringify(location) === JSON.stringify(sidebarState.location);
 
 	const handleDragStart = (e) => {
-		if (active) {
-			setError({
-				errorCode: 11,
-				errorText: "Can't move locations while they are active",
+		setDraggingEvent(['location', location.locationId]);
+		document
+			.querySelectorAll(
+				`.mapWrapper .mapPoint:not(#location-${location.locationId})`
+			)
+			.forEach((ev) => {
+				ev.classList.add('dragging');
 			});
-		} else {
-			setDraggingEvent(['location', location.locationId]);
-			document
-				.querySelectorAll(
-					`.mapWrapper .mapPoint:not(#location-${location.locationId})`
-				)
-				.forEach((ev) => {
-					ev.classList.add('dragging');
-				});
-		}
 		e.stopPropagation();
 	};
 
