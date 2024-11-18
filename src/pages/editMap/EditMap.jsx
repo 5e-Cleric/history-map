@@ -9,6 +9,8 @@ import Timeline from '../../components/timeline/Timeline';
 import defaultMap from '@assets/defaultMap.jpg';
 import { EditContext } from './EditContext';
 import { MainContext } from '../../MainContext';
+import { ContextMenuTrigger } from 'rctx-contextmenu';
+import MultiContextMenuComponent from '../../components/contextMenus/ContextMenus';
 
 function Edit() {
 	const {
@@ -43,7 +45,7 @@ function Edit() {
 		setMapTranslation,
 	} = useContext(EditContext);
 
-	const { setError } = useContext(MainContext);
+	const { setError, setContextMenuProps } = useContext(MainContext);
 
 	const [isDragging, setIsDragging] = useState(false);
 	const [lastMousePosition, setLastMousePosition] = useState({ x: 0, y: 0 });
@@ -120,7 +122,6 @@ function Edit() {
 
 	const addNewLocation = (position) => {
 		setLocations((prevLocations) => [...prevLocations, { position }]);
-		console.log(sidebarState);
 		toggleSidebar({
 			mode: 'edit',
 			location: { position },
@@ -222,7 +223,14 @@ function Edit() {
 							transform: `translate(${mapPosition.x}px, ${mapPosition.y}px) translate(${mapTranslation.x}%, ${mapTranslation.y}%) `,
 							cursor: `${isDragging ? 'grabbing' : 'grab'}`,
 						}}>
-						<img src={map.map} onError={handleImageError} alt="your map" className="map" />
+						<ContextMenuTrigger
+							id="menu-map"
+							onClick={() => {
+								setContextMenuProps({ map: map });
+							}}>
+							<img src={map.map} onError={handleImageError} alt="your map" className="map" />
+						</ContextMenuTrigger>
+
 						{renderLocations()}
 						{renderEvents()}
 					</div>
@@ -250,7 +258,7 @@ function Edit() {
 		if (!locations.length) {
 			return null;
 		}
-		return locations.map((location, index) => <LocationPin key={index} location={location} />);
+		return locations.map((loc, index) => <LocationPin key={index} location={loc} />);
 	};
 
 	if (!map) {
@@ -265,6 +273,7 @@ function Edit() {
 				{renderMap()}
 				<Sidebar />
 				<Timeline />
+				<MultiContextMenuComponent />
 			</main>
 		</div>
 	);

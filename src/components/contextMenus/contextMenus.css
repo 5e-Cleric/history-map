@@ -1,0 +1,9 @@
+.page .contextmenu {
+    background: var(--color-primary);
+    color: var(--color-secondary);
+
+    .contextmenu__item:hover:not(.contextmenu__item--disabled) {
+        background: var(--color-secondary);
+        color: var(--color-primary);
+    }
+}

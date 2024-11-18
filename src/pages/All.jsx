@@ -78,7 +78,11 @@ function All() {
 		}
 
 		return (
-			<ul className="mapList">
+			<ul
+				className="mapList"
+				onContextMenu={() => {
+					console.log('a');
+				}}>
 				{maps.map((map) => (
 					<li key={map.id} className="mapItem">
 						<h3>Title: {map.title}</h3>

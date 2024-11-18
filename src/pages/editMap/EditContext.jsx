@@ -63,14 +63,19 @@ export const EditProvider = ({ children }) => {
 		// if a new event saved, toggle sidebar to it
 		const lastEvent = events[events.length - 1];
 		const isLastActive = !sidebarState.event?.eventId && lastEvent?.eventId;
-		if (isLastActive) toggleSidebar({ mode: 'view', event: lastEvent });
+		console.log(sidebarState);
+		if (isLastActive) toggleSidebar({ mode: 'view', event: lastEvent, location: sidebarState.location });
+
 	}, [events]);
 
 	useEffect(() => {
 		if (locations.length === 0 || !sidebarState || sidebarState.event) return;
 
 		const updatedLocation = locations.find((loc) => loc.locationId === sidebarState.location?.locationId);
-		const updatedIsNotActive = updatedLocation && updatedLocation.position !== sidebarState.location?.position;
+		const updatedIsNotActive =
+			updatedLocation &&
+			updatedLocation.locationId === updatedLocation.locationId &&
+			updatedLocation.position !== sidebarState.location?.position;
 		if (updatedIsNotActive) toggleSidebar({ mode: sidebarState.mode, location: updatedLocation });
 
 		const lastLocation = locations[locations.length - 1];

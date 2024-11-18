@@ -1,8 +1,11 @@
 import { useContext } from 'react';
 import { EditContext } from '@pages/editMap/EditContext';
+import { ContextMenuTrigger } from 'rctx-contextmenu';
+import { MainContext } from '../../MainContext';
 
 function LocationPin({ location }) {
 	const { setDraggingEvent, toggleSidebar, sidebarState, setZoomLevel } = useContext(EditContext);
+	const { setContextMenuProps } = useContext(MainContext);
 	const active = JSON.stringify(location) === JSON.stringify(sidebarState.location);
 
 	const handleDragStart = (e) => {
@@ -10,13 +13,13 @@ function LocationPin({ location }) {
 		document.querySelectorAll(`.mapWrapper .mapPoint:not(#location-${location.locationId})`).forEach((ev) => {
 			ev.classList.add('dragging');
 		});
-		e.stopPropagation();
+		//e.stopPropagation();
 	};
 
 	const handleClick = (e) => {
 		toggleSidebar({ mode: 'view', location: location });
 		setZoomLevel(150);
-		e.stopPropagation();
+		//e.stopPropagation();
 	};
 
 	return (
@@ -27,12 +30,18 @@ function LocationPin({ location }) {
 			draggable
 			onDragStart={handleDragStart}
 			onClick={handleClick}
+			onContextMenu={() => {
+				console.log('a');
+			}}
 			style={{
 				top: `${location.position.y}%`,
 				left: `${location.position.x}%`,
 				translate: `-50% -80%`,
 			}}>
-			<i className="fa-solid fa-map-pin"></i>
+			<ContextMenuTrigger
+				id="menu-location">
+				<i className="fa-solid fa-map-pin"></i>
+			</ContextMenuTrigger>
 		</div>
 	);
 }

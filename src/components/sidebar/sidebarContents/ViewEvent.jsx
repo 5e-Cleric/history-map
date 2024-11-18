@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { EditContext } from '@pages/editMap/EditContext';
 
 function ViewEvent() {

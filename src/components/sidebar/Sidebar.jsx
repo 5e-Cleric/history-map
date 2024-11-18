@@ -33,7 +33,7 @@ function Sidebar() {
 	return (
 		<aside className={`sidebar ${mode ? 'open' : ''}`}>
 			<div className="sidebarWrapper">
-				{sidebarState.location && sidebarState.event && (
+				{sidebarState.location && sidebarState.event && mode === 'view' && (
 					<button
 						className="backToLocation"
 						onClick={() => {

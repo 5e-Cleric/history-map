@@ -18,11 +18,13 @@ function EditLocation() {
 	const location = locations.find((loc) => loc.locationId === sidebarState.location?.locationId);
 
 	useEffect(() => {
-		if (location.locationId) {
-			setTitle(location.title);
-			setDescription(location.description);
+		if (location) {
+			if (location.locationId) {
+				setTitle(location.title);
+				setDescription(location.description);
+			}
+			setPosition(location.position);
 		}
-		setPosition(location.position);
 	}, [location]);
 
 	const handleSubmit = (e) => {

@@ -7,17 +7,19 @@ function ViewLocation() {
 
 	const location = locations.find((loc) => loc.locationId === sidebarState.location?.locationId);
 
-	const locationEvents = events.filter((ev) => {
-		return location.events?.some((locEv) => locEv === ev.eventId);
-	});
+	const locationEvents = events
+		? events.filter((ev) => {
+				return location?.events?.some((locEv) => locEv === ev.eventId);
+		  })
+		: [];
 
+	if (!location) return;
 	return (
 		<div className="location view">
 			<div className="titleWrapper">
 				<h2 className="title">{location.title}</h2>
 				<button
 					onClick={() => {
-						//replace hash with location.locationId
 						const newHash = window.location.split('#')[0] + '#' + location.locationId;
 						navigator.clipboard.writeText(newHash);
 					}}

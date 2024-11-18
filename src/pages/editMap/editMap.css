@@ -37,6 +37,12 @@
 					display: inline;
 				}
 
+				.menuTrigger:has(.mapPoint) {
+					position:absolute;
+					width:2ch;
+					height:2ch;
+				}
+
 				.mapPoint {
 					font-size: 25px;
 					position: absolute;

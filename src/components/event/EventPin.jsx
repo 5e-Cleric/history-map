@@ -1,8 +1,11 @@
 import { useState, useContext, useEffect } from 'react';
 import { EditContext } from '@pages/editMap/EditContext';
+import { ContextMenuTrigger } from 'rctx-contextmenu';
+import { MainContext } from '../../MainContext';
 
 function EventPin({ events, event, timelineEventPosition, inLocation }) {
 	const { setDraggingEvent, sidebarState, setZoomLevel, toggleSidebar } = useContext(EditContext);
+	const { setContextMenuProps } = useContext(MainContext);
 
 	const [timelinePosition, setTimelinePosition] = useState(null);
 
@@ -57,7 +60,9 @@ function EventPin({ events, event, timelineEventPosition, inLocation }) {
 			onDragStart={handleDragStart}
 			onClick={handleClick}
 			style={positionStyles}>
-			<i className="fa-solid fa-sun"></i>
+			<ContextMenuTrigger onClick={() => setContextMenuProps({ event: event })} id="menu-event">
+				<i className="fa-solid fa-sun"></i>
+			</ContextMenuTrigger>
 		</div>
 	);
 }
