@@ -1,6 +1,16 @@
 .changelog {
+    overflow-y: auto;
+
+    .content {
+        margin-inline:auto;
+        padding-block: 70px;
+        justify-content: flex-start;
+        width: clamp(300px, 40%, 1000px);
+    }
+
     .card {
         text-align: left;
+        width: 100%;
     }
 
     ul, ol {

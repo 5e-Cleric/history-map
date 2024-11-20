@@ -9,7 +9,7 @@ import EditLocation from './sidebarContents/EditLocation';
 import ViewLocation from './sidebarContents/ViewLocation';
 
 function Sidebar() {
-	const { fetchMapContents, sidebarState, toggleSidebar } = useContext(EditContext);
+	const { events, setEvents, locations, setLocations, fetchMapContents, sidebarState, toggleSidebar } = useContext(EditContext);
 
 	const mode = sidebarState.mode;
 	const event = sidebarState.event;
@@ -50,7 +50,10 @@ function Sidebar() {
 					onClick={() => {
 						toggleSidebar(sidebarState);
 						//filter out events without an id
-						if (mode === 'edit') fetchMapContents();
+						const filteredEvents = events.filter((ev) => ev.id);
+						const filteredLocations = locations.filter((loc) => loc.id)
+						setEvents(filteredEvents);
+						setLocations(filteredLocations);
 					}}>
 					<i className="fa-solid fa-xmark"></i>
 				</button>

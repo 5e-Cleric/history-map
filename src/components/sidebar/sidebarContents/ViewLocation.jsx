@@ -1,9 +1,13 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { EditContext } from '@pages/editMap/EditContext';
 import EventPin from '@components/event/EventPin';
 
 function ViewLocation() {
 	const { mapId, events, sidebarState, locations, deleteLocation, toggleSidebar } = useContext(EditContext);
+
+	const [descriptionState, setDescriptionState] = useState(null);
+
+	useEffect(() => location.description.length > 200 && setDescriptionState(true), []);
 
 	const location = locations.find((loc) => loc.locationId === sidebarState.location?.locationId);
 
@@ -29,8 +33,19 @@ function ViewLocation() {
 				</button>
 			</div>
 
-			<p className="description">{location.description || 'No description.'}</p>
-			<br />
+			<p className={`description ${descriptionState ? 'hidden' : ''}`}>
+				{location.description || 'No description.'}
+			</p>
+			{descriptionState ? (
+				<button className="textButton" onClick={() => setDescriptionState(false)}>
+					Show more
+				</button>
+			) : (
+				<button className="textButton" onClick={() => setDescriptionState(true)}>
+					Show less
+				</button>
+			)}
+			<hr />
 			<h3>Events in this location:</h3>
 			<div className="events">
 				{locationEvents?.map((ev, index) => (

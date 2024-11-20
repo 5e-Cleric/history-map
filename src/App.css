@@ -42,12 +42,12 @@ a:hover, a:focus {
   background: var(--color-primary);
 
 
-  #root {
+  :where(#root) {
     width: 100%;
     height: 100%;
     margin: 0 auto;
 
-    .page {
+    :where(.page) {
       width: 100%;
       height: 100%;
 
@@ -140,6 +140,14 @@ button, input:is([type="submit"], [type="button"]) {
       background: #0d6d25;
     }
   }
+
+  &.textButton {
+    background: none;
+    color: inherit;
+    opacity: .6;
+    text-decoration: underline;
+    font-style: italic;
+  }
 }
 
 :where(.form) {
@@ -190,6 +198,13 @@ dl {
     font-family: "Merriweather Sans", sans-serif;
     text-wrap: pretty;
   }
+}
+
+hr {
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  margin-block: 1.5em;
 }
 
 /*

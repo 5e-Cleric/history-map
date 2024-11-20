@@ -68,11 +68,27 @@
 
 
         .sidebarContent {
+            height: 100%;
+
+            overflow-y: auto;
             padding-top: 50px;
 
+            /*remove scrollbars*/
+            scrollbar-width: none;
+
             h2 {
-                text-decoration:underline;
-                margin-bottom:10px;
+                text-decoration: underline;
+                margin-bottom: 10px;
+            }
+
+            .description.hidden {
+                height: 6lh;
+                display: -webkit-box;
+                line-clamp: 3;
+                -webkit-line-clamp: 6;
+                -webkit-box-orient: vertical;
+                text-overflow: ellipsis;
+                overflow: hidden;
             }
 
             .sidebarActions {
@@ -90,14 +106,14 @@
                     justify-content: space-between;
 
                     h2 {
-                        border:none;
+                        border: none;
                     }
 
                     button {
                         background: none;
                         border-radius: unset;
-                        color:black;
-                        font-size:20px;
+                        color: black;
+                        font-size: 20px;
                     }
                 }
             }
@@ -115,15 +131,27 @@
 
             >.location {
                 .events {
-                    font-size: 25px;
-                    display: grid;
-                    grid-template-columns: 1fr 1fr 1fr;
+                    font-size: 15px;
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-evenly;
+                    gap: 10px;
+
+                    .event {
+                        width: 33%;
+                    }
 
                     .eventPin {
                         font-size: 35px;
                         width: auto;
                         height: auto;
                         translate: none !important;
+                        cursor: pointer;
+                        transition: scale var(--transition-dets);
+
+                        &:hover {
+                            scale: 1.2;
+                        }
                     }
                 }
             }
