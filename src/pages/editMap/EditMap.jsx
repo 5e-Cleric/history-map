@@ -45,7 +45,7 @@ function Edit() {
 		setMapTranslation,
 	} = useContext(EditContext);
 
-	const { setError, setContextMenuProps } = useContext(MainContext);
+	const { setError } = useContext(MainContext);
 
 	const [isDragging, setIsDragging] = useState(false);
 	const [lastMousePosition, setLastMousePosition] = useState({ x: 0, y: 0 });
@@ -93,8 +93,8 @@ function Edit() {
 
 		const { left, top, width, height } = e.target.getBoundingClientRect();
 		const newPosition = {
-			x: ((e.clientX - left) / width) * 100,
-			y: ((e.clientY - top) / height) * 100,
+			x: Math.round(((e.clientX - left) / width) * 100),
+			y: Math.round(((e.clientY - top) / height) * 100),
 		};
 
 		if (draggingEvent) {
@@ -223,11 +223,7 @@ function Edit() {
 							transform: `translate(${mapPosition.x}px, ${mapPosition.y}px) translate(${mapTranslation.x}%, ${mapTranslation.y}%) `,
 							cursor: `${isDragging ? 'grabbing' : 'grab'}`,
 						}}>
-						<ContextMenuTrigger
-							id="menu-map"
-							onClick={() => {
-								setContextMenuProps({ map: map });
-							}}>
+						<ContextMenuTrigger id="menu-map">
 							<img src={map.map} onError={handleImageError} alt="your map" className="map" />
 						</ContextMenuTrigger>
 

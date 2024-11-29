@@ -69,8 +69,10 @@
 
         .sidebarContent {
             height: 100%;
+            width:100%;
 
             overflow-y: auto;
+            padding-inline:2px;
             padding-top: 50px;
 
             /*remove scrollbars*/

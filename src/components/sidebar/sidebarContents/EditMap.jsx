@@ -54,15 +54,15 @@ function EditMap() {
 				</label>
 				<label className="fieldGroup">
 					Date system names:
-					<CustomDate ref={dateNamesRef} dataType="names" />
+					<CustomDate ref={dateNamesRef} type="names" />
 				</label>
 				<label className="fieldGroup">
 					Date system equivalences:
-					<CustomDate ref={dateEquivalencesRef} dataType="equivalences" />
+					<CustomDate ref={dateEquivalencesRef} type="equivalences" />
 				</label>
 				<label className="fieldGroup">
 					Starting Date:
-					<CustomDate ref={dateStartRef} dataType="date" />
+					<CustomDate ref={dateStartRef} type="date" />
 				</label>
 				<label className="fieldGroup">
 					Map description:

@@ -18,6 +18,7 @@ Error Code Reference:
 	23 Error deleting point
 	24 Error deleting all points per map
 	25 Error moving point
+	26 Error field creating/editing
 40-59 Other errors
 	40 Error finding resource
 

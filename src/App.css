@@ -164,7 +164,7 @@ button, input:is([type="submit"], [type="button"]) {
     :where(input:is([type="text"], [type="number"]), textarea) {
       box-shadow: 0 0 3px;
       border-radius: 5px;
-      background: #fffaf3;
+      background: #fff0cc;
       padding: 5px;
       font-family: monospace;
       width: 100%;

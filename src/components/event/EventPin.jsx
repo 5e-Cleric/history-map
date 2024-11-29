@@ -5,7 +5,7 @@ import { MainContext } from '../../MainContext';
 
 function EventPin({ events, event, timelineEventPosition, inLocation }) {
 	const { setDraggingEvent, sidebarState, setZoomLevel, toggleSidebar } = useContext(EditContext);
-	const { setContextMenuProps } = useContext(MainContext);
+
 
 	const [timelinePosition, setTimelinePosition] = useState(null);
 
@@ -19,6 +19,7 @@ function EventPin({ events, event, timelineEventPosition, inLocation }) {
 	const isTimelineMode = timelineEventPosition !== undefined;
 
 	const handleDrag = (e) => {
+		if (!event.eventId) return;
 		e.preventDefault();
 		const timelineRect = e.target.parentElement.getBoundingClientRect();
 		const newPosition = ((e.clientX - timelineRect.left) / timelineRect.width) * 100;
@@ -26,6 +27,7 @@ function EventPin({ events, event, timelineEventPosition, inLocation }) {
 	};
 
 	const handleDragStart = (e) => {
+		if (!event.eventId) return;
 		setDraggingEvent(['event', event.eventId]);
 		document.querySelectorAll(`.mapWrapper .mapPoint:not(#event-${event.eventId})`).forEach((ev) => {
 			ev.classList.add('dragging');
@@ -60,7 +62,7 @@ function EventPin({ events, event, timelineEventPosition, inLocation }) {
 			onDragStart={handleDragStart}
 			onClick={handleClick}
 			style={positionStyles}>
-			<ContextMenuTrigger onClick={() => setContextMenuProps({ event: event })} id="menu-event">
+			<ContextMenuTrigger id="menu-event">
 				<i className="fa-solid fa-sun"></i>
 			</ContextMenuTrigger>
 		</div>

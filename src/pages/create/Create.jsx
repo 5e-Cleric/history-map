@@ -84,7 +84,7 @@ function Create() {
 					</label>
 					<label className="fieldGroup">
 						Date system names:
-						<CustomDate ref={dateNamesRef} dataType="names" />
+						<CustomDate ref={dateNamesRef} type="names" />
 						<div className="tip">
 							<i className="fa-solid fa-question"></i>
 							<div className="tipDetails">
@@ -94,7 +94,7 @@ function Create() {
 					</label>
 					<label className="fieldGroup">
 						Date system equivalences:
-						<CustomDate ref={dateEquivalencesRef} dataType="equivalences" />
+						<CustomDate ref={dateEquivalencesRef} type="equivalences" />
 						<div className="tip">
 							<i className="fa-solid fa-question"></i>
 							<div className="tipDetails">
@@ -114,7 +114,7 @@ function Create() {
 					*/}
 					<label className="fieldGroup">
 						Starting Date:
-						<CustomDate ref={dateStartRef} dataType="date" />
+						<CustomDate ref={dateStartRef} type="date" />
 						<div className="tip">
 							<i className="fa-solid fa-question"></i>
 							<div className="tipDetails">

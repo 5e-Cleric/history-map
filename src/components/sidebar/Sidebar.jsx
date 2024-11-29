@@ -50,8 +50,8 @@ function Sidebar() {
 					onClick={() => {
 						toggleSidebar(sidebarState);
 						//filter out events without an id
-						const filteredEvents = events.filter((ev) => ev.id);
-						const filteredLocations = locations.filter((loc) => loc.id)
+						const filteredEvents = events.filter((ev) => ev.eventId);
+						const filteredLocations = locations.filter((loc) => loc.locationId);
 						setEvents(filteredEvents);
 						setLocations(filteredLocations);
 					}}>

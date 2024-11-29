@@ -2,7 +2,7 @@ import { useRef, forwardRef, useImperativeHandle } from 'react';
 import PropTypes from 'prop-types';
 import './customDate.css';
 
-const CustomDate = forwardRef(({ dataType }, ref) => {
+const CustomDate = forwardRef(({ type }, ref) => {
 	const dateRefs = {
 		year: useRef(null),
 		month: useRef(null),
@@ -11,7 +11,7 @@ const CustomDate = forwardRef(({ dataType }, ref) => {
 	};
 
 	const getDefaultValue = (key) => {
-		switch (dataType) {
+		switch (type) {
 			case 'names':
 				return key.charAt(0) + key.slice(1);
 			case 'equivalences':
@@ -26,7 +26,7 @@ const CustomDate = forwardRef(({ dataType }, ref) => {
 	useImperativeHandle(ref, () => ({
 		getValues: () => {
 			const values = {};
-			if (dataType !== 'names') {
+			if (type !== 'names') {
 				for (const key in dateRefs) {
 					values[key] =
 						parseInt(Math.round(dateRefs[key].current?.value) || 0) || parseInt(getDefaultValue(key) || 0);
@@ -55,7 +55,7 @@ const CustomDate = forwardRef(({ dataType }, ref) => {
 		},
 	}));
 
-	if (dataType === 'equivalences') {
+	if (type === 'equivalences') {
 		return (
 			<div className="customDate">
 				<span className="year">
@@ -66,7 +66,7 @@ const CustomDate = forwardRef(({ dataType }, ref) => {
 						<input
 							ref={dateRefs[key]}
 							type="text"
-							pattern={dataType === 'names' ? '^[A-Za-z]+$' : '^[0-9]{1,4}$'}
+							pattern={type === 'names' ? '^[A-Za-z]+$' : '^[0-9]{1,4}$'}
 							defaultValue={getDefaultValue(key)}
 						/>
 						{key !== 'day' && '/'}
@@ -83,7 +83,7 @@ const CustomDate = forwardRef(({ dataType }, ref) => {
 					<input
 						ref={dateRefs[key]}
 						type="text"
-						pattern={dataType === 'names' ? '^[A-Za-z]+$' : '^[0-9]{1,4}$'}
+						pattern={type === 'names' ? '^[A-Za-z]+$' : '^[0-9]{1,4}$'}
 						defaultValue={getDefaultValue(key)}
 					/>
 					{key !== 'day' && '/'}
@@ -98,7 +98,7 @@ CustomDate.displayName = 'CustomDate';
 
 // Define propTypes for prop validation
 CustomDate.propTypes = {
-	dataType: PropTypes.string.isRequired,
+	type: PropTypes.string.isRequired,
 };
 
 export default CustomDate;

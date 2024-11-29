@@ -5,10 +5,10 @@ import { MainContext } from '../../MainContext';
 
 function LocationPin({ location }) {
 	const { setDraggingEvent, toggleSidebar, sidebarState, setZoomLevel } = useContext(EditContext);
-	const { setContextMenuProps } = useContext(MainContext);
 	const active = JSON.stringify(location) === JSON.stringify(sidebarState.location);
 
 	const handleDragStart = (e) => {
+		if (!location.locationId) return;
 		setDraggingEvent(['location', location.locationId]);
 		document.querySelectorAll(`.mapWrapper .mapPoint:not(#location-${location.locationId})`).forEach((ev) => {
 			ev.classList.add('dragging');
@@ -17,6 +17,7 @@ function LocationPin({ location }) {
 	};
 
 	const handleClick = (e) => {
+		if (!location.locationId) return;
 		toggleSidebar({ mode: 'view', location: location });
 		setZoomLevel(150);
 		//e.stopPropagation();

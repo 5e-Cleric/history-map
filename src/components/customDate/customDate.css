@@ -1,3 +1,5 @@
+
+
 .customDate {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -9,7 +11,7 @@
     padding: 0px 5px 5px 5px;
     box-shadow: 0 0 3px black;
     font-size: 20px;
-    background: #fffaf3;
+    background: #fff0cc;
 
     input {
         font-size: 16px;
