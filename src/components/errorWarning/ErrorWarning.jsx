@@ -4,10 +4,10 @@ import { MainContext } from '../../MainContext';
 const ErrorWarning = () => {
 	const { error, setError } = useContext(MainContext);
 
-	if (!error.errorCode) return null;
+	if (!error.errorCode) return <div className="error-warning"></div>;
 
 	return (
-		<div className="error-warning">
+		<div className="error-warning active">
 			<h4 className="errorTitle">Error code: {error.errorCode}</h4>
 			<button className="close" onClick={() => setError({ errorCode: null, errorText: null })}>
 				<i className="fa-solid fa-xmark"></i>
